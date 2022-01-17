@@ -1,0 +1,12 @@
+.bloop
+.bsp
+.idea
+.idea_modules
+.classpath
+.project
+.settings
+.aws-sam
+.vscode
+.metals
+target
+RUNNING_PID
