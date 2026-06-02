@@ -27,8 +27,8 @@ $ sbt
  - 実行したい指定のクラスを指定します
 
 ```
-[SBT] net.ixias@education-book-answer: > runMain education.section1.Sample
-[info] running (fork) education.section1.Sample
+[SBT] net.ixias@education-book-answer: > runMain education.section1.sample
+[info] running (fork) education.section1.sample
 [info] [OK] processing....
 [success] Total time: 1 s, completed 2022/01/17 12:27:23
 ```

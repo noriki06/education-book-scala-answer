@@ -7,12 +7,8 @@
 
 package education.section1
 
-object Sample {
-
-  /**
-   * Execute process
-   */
-  def main(args: Array[String]): Unit = {
-    println("[OK] processing....")
-  }
-}
+/**
+ * Execute process
+ */
+@main def sample: Unit =
+  println("[OK] processing....")

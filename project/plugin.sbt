@@ -5,4 +5,4 @@
  * please view the LICENSE file that was distributed with this source code.
  */
 
-addSbtPlugin("com.scalapenos" % "sbt-prompt" % "1.0.2")
+addSbtPlugin("com.scalapenos" % "sbt-prompt" % "2.0.0")
