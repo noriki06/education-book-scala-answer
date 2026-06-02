@@ -8,7 +8,7 @@
 import com.scalapenos.sbt.prompt._
 
 organization := "net.ixias"
-name         := "education-book-answer"
+name         := "education-book-scala-answer"
 scalaVersion := "3.6.4"
 
 resolvers ++= Seq(

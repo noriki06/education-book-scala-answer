@@ -18,13 +18,13 @@
 ```
 $ sbt
   [info] welcome to sbt 1.12.11 (Amazon.com Inc. Java 21.0.7)
-  [info] loading settings for project education-book-answer-build from plugin.sbt ...
-  [info] loading project definition from /Volumes/dev/git-dev/EDU/education-book-answer/project
+  [info] loading settings for project education-book-scala-answer-build from plugin.sbt ...
+  [info] loading project definition from /Volumes/dev/git-dev/EDU/education-book-scala-answer/project
   [info] loading settings for project root from build.sbt ...
-  [info] set current project to education-book-answer (in build file:/Volumes/dev/git-dev/EDU/education-book-answer/)
+  [info] set current project to education-book-scala-answer (in build file:/Volumes/dev/git-dev/EDU/education-book-scala-answer/)
   [info] sbt server started at local:///Users/yoshinobu.kinugasa/.sbt/1.0/server/767e416845b11ce566d4/sock
   [info] started sbt server
-  [SBT] net.ixias@education-book-answer:[main] >
+  [SBT] net.ixias@education-book-scala-answer:[main] >
 ```
 のような感じで立ち上がります。ここで Java が 21系を利用していることを確認してください
 
@@ -33,7 +33,7 @@ $ sbt
 `compile` を実行すると、`src` 配下に格納されたソースコード（`.scala`）を全てコンパイルします。
 
 ```
-[SBT] net.ixias@education-book-answer:[main] > compile
+[SBT] net.ixias@education-book-scala-answer:[main] > compile
 [info] compiling 1 Scala source to .../target/scala-3.6.4/classes ...
 [info] done compiling
 [success] Total time: 1 s, completed 2026/06/03 08:15:01
@@ -60,7 +60,7 @@ PHP や Ruby は「**インタプリタ型**（スクリプト言語）」で、
 `runMain <完全修飾名>` で、実行したいエントリポイント（`main` / `@main`）を **明示的に指定** して実行します。研修では回答ファイルが増えてエントリポイントが複数になるため、基本はこちらを使います。
 
 ```
-[SBT] net.ixias@education-book-answer:[main] > runMain education.section1.sample
+[SBT] net.ixias@education-book-scala-answer:[main] > runMain education.section1.sample
 [info] running (fork) education.section1.sample
 [info] [OK] processing....
 [success] Total time: 1 s, completed 2026/06/03 08:15:01
@@ -72,7 +72,7 @@ Scala 3 では、ソース内の `@main def sample` のように書いたメソ�
 `run` は、プロジェクト内のエントリポイントを実行します。エントリポイントが 1 つだけなら自動的にそれを実行し、**複数ある場合は一覧から番号で選択** するよう促されます。
 
 ```
-[SBT] net.ixias@education-book-answer:[main] > run
+[SBT] net.ixias@education-book-scala-answer:[main] > run
 
 Multiple main classes detected. Select one to run:
  [1] education.section1.sample
