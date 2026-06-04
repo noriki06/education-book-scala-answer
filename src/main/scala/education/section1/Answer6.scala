@@ -1,4 +1,4 @@
- package education.section1
+package education.section1
 
 object Answer6:
   val r = Rectangle(3, 4)
@@ -6,7 +6,4 @@ object Answer6:
     println(r.area)
 
   class Rectangle(width: Int, height: Int):
-
     def area: Int = width * height
-
-
