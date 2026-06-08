@@ -9,4 +9,3 @@ object Answer4:
 
   def main(args: Array[String]): Unit =
     println(seqQuestion4(Seq("a", "bb", "ccc")))
-    println(Seq("bbx", "cccx"))
