@@ -6,7 +6,10 @@ object AnswerEx2_1:
   def sortedLabels(cards: Seq[Card]): Seq[String]  =
     cards.sortBy(_.number).map(t => s"${t.suit}${t.number}")
       //数値で昇順でならぶ＞suit, numberをs"${suit}${number}"
-      //seq[String]
+      //seq[String
+  def totalNumber(cards: Seq[Card]): Int = 
+    cards.map(_.number).sum
+
   def main(args: Array[String]): Unit =
     val hand: Seq[Card] = Seq(
       Card("♠", 10),
@@ -15,3 +18,4 @@ object AnswerEx2_1:
     )
       //seq[Card]
     println(sortedLabels(hand))
+    println(totalNumber(hand))
