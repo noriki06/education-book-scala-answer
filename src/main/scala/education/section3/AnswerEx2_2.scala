@@ -22,4 +22,4 @@ object AnswerEx2_2:
 
     println(ranking(students))
     println(averageScore(students))
-
+    println(averageScore(Seq()))
