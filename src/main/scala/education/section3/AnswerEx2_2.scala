@@ -1,4 +1,4 @@
-package education.section3
+
 
 class Student(val name: String, val score: Int)
 
