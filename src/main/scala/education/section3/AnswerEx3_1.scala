@@ -62,4 +62,5 @@ object AnswerEx3_1:
     println(showAllSkills(trainers))
 
   def showAllSkills(trainers: Seq[Trainer]): Unit =
-    trainers.flatMap(t => t.holdsPokemon).flatMap(p => p.rememberedTechniques).distinct.sortBy(s => s.skillName)
+    trainers.flatMap(t => t.holdsPokemon).flatMap(p => p.rememberedTechniques).sortBy(s => s.skillName).distinct
+
