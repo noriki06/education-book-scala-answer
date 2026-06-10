@@ -1,19 +1,22 @@
 package education.section3
 
+//問1
+//------------------------------------------
 class Skill(
   val skillName: String,//技名
-  val pronunciation: String,//よみがな
+  val skillPronunciation: String,//よみがな
   val kind: String,//種別
   val power: Int//威力
 )
 
 class Pokemon(
   val pokemonName: String,//ポケモン名
-  val pronunciation: String,//よみがな
+  val pokemonPronunciation: String,//よみがな
   val maxHP: Int,//最大 HP
   val currentHP : Int,//現在 HP
   val rememberedTechniques: Seq[Skill]//覚えている技
 )
+
 
 class Trainer(
   val trainerName: String,//トレーナー名
@@ -59,8 +62,15 @@ object AnswerEx3_1:
               Skill("落石", "らくせき", "攻撃",50),
               Skill("治療", "ちりょう", "回復", 30)
     ) ) ) ) )
+//問2
+//-----------------------------------
     println(showAllSkills(trainers))
 
   def showAllSkills(trainers: Seq[Trainer]): Unit =
-    trainers.flatMap(t => t.holdsPokemon).flatMap(p => p.rememberedTechniques).sortBy(s => s.skillName).distinct
-
+    println(
+      trainers.
+      flatMap(t => t.holdsPokemon).//トレーナーのポケモンを出す
+      flatMap(p => p.rememberedTechniques).//ポケモンの技を出す
+      sortBy(s => s.skillPronunciation).//読み仮名順に入れ替え
+      map(s => println(s.skillName)).//技名を出す
+      distinct)//技名を出す
