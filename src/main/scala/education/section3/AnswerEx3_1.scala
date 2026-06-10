@@ -72,5 +72,6 @@ object AnswerEx3_1:
       flatMap(t => t.holdsPokemon).//トレーナーのポケモンを出す
       flatMap(p => p.rememberedTechniques).//ポケモンの技を出す
       sortBy(s => s.skillPronunciation).//読み仮名順に入れ替え
-      map(s => println(s.skillName)).//技名を出す
-      distinct)//技名を出す
+      map(s => s.skillName).//技だけにする
+      distinct.//重複を消す
+      map(s => println(s)))//技名を返す
