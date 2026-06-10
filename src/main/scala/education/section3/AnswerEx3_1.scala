@@ -64,14 +64,14 @@ object AnswerEx3_1:
     ) ) ) ) )
 //問2
 //-----------------------------------
-    println(showAllSkills(trainers))
+    showAllSkills(trainers)
 
   def showAllSkills(trainers: Seq[Trainer]): Unit =
-    println(
+    println(  
       trainers.
       flatMap(t => t.holdsPokemon).//トレーナーのポケモンを出す
       flatMap(p => p.rememberedTechniques).//ポケモンの技を出す
       sortBy(s => s.skillPronunciation).//読み仮名順に入れ替え
       map(s => s.skillName).//技だけにする
       distinct.//重複を消す
-      map(s => println(s)))//技名を返す
+      mkString("\n"))
