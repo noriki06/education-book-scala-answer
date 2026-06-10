@@ -1,7 +1,5 @@
 package education.section3
 
-//問1
-//------------------------------------------
 class PokemonSkill(
   val name: String,//技名
   val pronunciation: String,//よみがな
@@ -12,7 +10,7 @@ class PokemonSkill(
 class Pokemon(
   val name: String,//ポケモン名
   val pronunciation: String,//よみがな
-  val hpmax: Int,//最大 HP
+  val hpMax: Int,//最大 HP
   val hp: Int,//現在 HP
   val skill: Seq[PokemonSkill]//覚えている技
 )
@@ -24,55 +22,101 @@ class Trainer(
 )
 
 object AnswerEx3_1:
+  val trainers: Seq[Trainer] = Seq(
+    Trainer("サトシ",Seq(
+      Pokemon("ピカチュウ", "ぴかちゅう", 35, 35, Seq(
+        PokemonSkill("電光石火", "でんこうせっか", "攻撃",40),
+        PokemonSkill("自己再生", "じこさいせい", "回復", 50)
+      ) ),
+      Pokemon("リザードン", "りざーどん", 78, 78, Seq(
+          PokemonSkill("火炎放射", "かえんほうしゃ", "攻撃",90),
+          PokemonSkill("破壊光線", "はかいこうせん", "攻撃", 150)
+      ) ),
+      Pokemon("カビゴン", "かびごん", 160, 160,Seq(
+          PokemonSkill("地震", "じしん", "攻撃",100),
+          PokemonSkill("回復", "かいふく", "回復", 60)
+    ) ) ) ),
+    Trainer("カスミ", Seq(
+      Pokemon("ゼニガメ", "ぜにがめ", 44, 44, Seq(
+          PokemonSkill("水鉄砲", "みずでっぽう", "攻撃",45),
+          PokemonSkill("甲羅休め", "こうらやすめ", "回復", 50)
+      ) ),
+      Pokemon("フシギバナ", "ふしぎばな", 80, 80, Seq(
+          PokemonSkill("草結び", "くさむすび", "攻撃",65),
+          PokemonSkill("光合成", "こうごうせい", "回復", 70)
+    ) ) ) ),
+    Trainer("タケシ", Seq(
+      Pokemon("ゼニガメ", "ぜにがめ", 44, 44, Seq(
+          PokemonSkill("水鉄砲", "みずでっぽう	", "攻撃",45),
+          PokemonSkill("甲羅休め", "こうらやすめ", "回復", 40)
+      ) ),
+      Pokemon("イワーク", "いわーく", 55, 55, Seq(
+        PokemonSkill("岩石封じ", "がんせきふうじ", "攻撃",60),
+        PokemonSkill("地割れ", "じわれ", "攻撃", 120)
+      ) ),
+      Pokemon("イシツブテ", "いしつぶて", 40, 40, Seq(
+        PokemonSkill("落石", "らくせき", "攻撃",50),
+        PokemonSkill("治療", "ちりょう", "回復", 30)
+  ) ) ) ) )
 
   def main(args: Array[String]): Unit =
-    val trainers: Seq[Trainer] = Seq(
-      Trainer("サトシ",Seq(
-          Pokemon("ピカチュウ", "ぴかちゅう", 35, 35, Seq(
-            PokemonSkill("電光石火", "でんこうせっか", "攻撃",40),
-            PokemonSkill("自己再生", "じこさいせい", "回復", 50)
-          ) ),
-          Pokemon("リザードン", "りざーどん", 78, 78, Seq(
-              PokemonSkill("火炎放射", "かえんほうしゃ", "攻撃",90),
-              PokemonSkill("破壊光線", "はかいこうせん", "攻撃", 150)
-          ) ),
-          Pokemon("カビゴン", "かびごん", 160, 160,Seq(
-              PokemonSkill("地震", "じしん", "攻撃",100),
-              PokemonSkill("回復", "かいふく", "回復", 60)
-      ) ) ) ),
-      Trainer("カスミ", Seq(
-          Pokemon("ゼニガメ", "ぜにがめ", 44, 44, Seq(
-              PokemonSkill("水鉄砲", "みずでっぽう", "攻撃",45),
-              PokemonSkill("甲羅休め", "こうらやすめ", "回復", 50)
-          ) ),
-          Pokemon("フシギバナ", "ふしぎばな", 80, 80, Seq(
-              PokemonSkill("草結び", "くさむすび", "攻撃",65),
-              PokemonSkill("光合成", "こうごうせい", "回復", 70)
-      ) ) ) ),
-      Trainer("タケシ", Seq(
-          Pokemon("ゼニガメ", "ぜにがめ", 44, 44, Seq(
-              PokemonSkill("水鉄砲", "みずでっぽう	", "攻撃",45),
-              PokemonSkill("甲羅休め", "こうらやすめ", "回復", 40)
-          ) ),
-          Pokemon("イワーク", "いわーく", 55, 55, Seq(
-              PokemonSkill("岩石封じ", "がんせきふうじ", "攻撃",60),
-              PokemonSkill("地割れ", "じわれ", "攻撃", 120)
-          ) ),
-          Pokemon("イシツブテ", "いしつぶて", 40, 40, Seq(
-              PokemonSkill("落石", "らくせき", "攻撃",50),
-              PokemonSkill("治療", "ちりょう", "回復", 30)
-    ) ) ) ) )
+    //showAllSkills(trainers)
 
-    showAllSkills(trainers)//問2
+  //def showAllSkills(trainers: Seq[Trainer]): Unit =
+    //println(  
+      //trainers.
+      //flatMap(t => t.holdsPokemon).//トレーナーのポケモンを出す
+      //flatMap(p => p.skill).//ポケモンの技を出す
+      //sortBy(s => s.pronunciation).//読み仮名順に入れ替え
+      //map(s => s.name).//技だけにする
+      //distinct.//重複を消す
+      //mkString("\n"))
+  showHierarchy(trainers)
 
 
-//問2--------------------
-  def showAllSkills(trainers: Seq[Trainer]): Unit =
-    println(  
-      trainers.
-      flatMap(t => t.holdsPokemon).//トレーナーのポケモンを出す
-      flatMap(p => p.skill).//ポケモンの技を出す
-      sortBy(s => s.pronunciation).//読み仮名順に入れ替え
-      map(s => s.name).//技だけにする
-      distinct.//重複を消す
-      mkString("\n"))
+  def showHierarchy(trainers: Seq[Trainer]): Unit =
+    trainers.foreach(t => println(t.name))
+      trainers.flatMap(t => t.holdsPokemon).foreach(t => println(s"  ${t.name} (HP${t.hpMax})"))
+        trainers.flatMap(t => t.holdsPokemon).flatMap(p => p.skill).foreach(v => println(s"    ${v.name} (${v.kind} / 威力${v.power})"))
+
+
+   
+    //flatMap(t => t.holdsPokemon).
+    //sortBy(p => p.name).
+    //foreach(p => println(s"  ${p.name} (HP${p.hpMax})")).
+    //flatMap(t => t.holdsPokemon).
+    //flatMap(p => p.skill).
+    //sortBy(s => -s.power).
+    //map(s => s"${s.name} (${s.kind} / 威力${s.power})").
+    //foreach(println)
+
+
+
+
+
+        //flatMap(p => p.skill).
+        //sortBy(s => -s.power).
+        //map(s => s"${s.name} (${s.kind} / 威力${s.power})").
+        //foreach(println)
+
+
+
+   // val trainer =
+     // trainers.
+      //sortBy(t => t.name).
+      //foreach(t => println(t.name))
+
+    //val pokemon =
+      //trainers.
+      //flatMap(t => t.holdsPokemon).
+      //sortBy(p => p.name).
+      //map(p => s"${p.name} (HP${p.hpMax})").
+      //foreach(println)
+
+    //val skill =
+      //trainers.
+      //flatMap(t => t.holdsPokemon).
+      //flatMap(p => p.skill).
+      //sortBy(s => -s.power).
+      //map(s => s"${s.name} (${s.kind} / 威力${s.power})").
+      //foreach(println)
