@@ -47,7 +47,7 @@ object AnswerEx3_1:
     ) ) ) ),
     Trainer("タケシ", Seq(
       Pokemon("ゼニガメ", "ぜにがめ", 44, 44, Seq(
-          PokemonSkill("水鉄砲", "みずでっぽう	", "攻撃",45),
+          PokemonSkill("水鉄砲", "みずでっぽう", "攻撃",45),
           PokemonSkill("甲羅休め", "こうらやすめ", "回復", 40)
       ) ),
       Pokemon("イワーク", "いわーく", 55, 55, Seq(
