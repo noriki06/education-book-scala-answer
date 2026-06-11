@@ -1,0 +1,10 @@
+package education.section4
+
+object AnswerEx4:
+  case class Student(name: String, score: Int)
+
+  def ccEx4(pairs: Seq[(String, Int)]): Seq[Student] =
+    pairs.map { case (name, score) => Student(name, score) }
+
+  def main(args: Array[String]): Unit =
+    println(ccEx4(Seq(("Alice", 80), ("Bob", 95))))
