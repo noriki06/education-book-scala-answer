@@ -7,4 +7,4 @@ object Answer4:
     Item("apple", 120)
 
   def main(args: Array[String]): Unit =
-    println(println(caseClassQuestion1()))
+    println(caseClassQuestion1())
