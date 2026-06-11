@@ -76,18 +76,37 @@ object AnswerEx3_4:
 
 
   def randomDamage(trainer: Trainer): Trainer =
-    val index = MATH_RANDOM.nextInt(trainer.holdsPokemon.size)
+    //val index = MATH_RANDOM.nextInt(trainer.holdsPokemon.size)
     //トレーナーが持っているポケモンをランダムに選ぶ
-    val target = trainer.holdsPokemon(index)
-    //index番目ポケモンを取り出す
-    val damage = MATH_RANDOM.nextInt(100)
-    //100以下のダメージをランダムで生成
-    val damagedPokemon = target.copy(hp = math.max(0, target.hp - damage))
-    //選ばれたポケモンの情報をコピーし新しいポケモンのhpをdamageの値引く、0以下にはならない
-    val newPokemons = trainer.holdsPokemon.updated(index, damagedPokemon)
-    //選ばれたポケモンの情報をdamagedPokemonの情報に書き換える
-    trainer.copy(holdsPokemon = newPokemons)
-    //新しいトレーナーにnewPokemonの情報を入れる
+    //val target = trainer.holdsPokemon(index)
+   //index番目ポケモンを取り出す
+   //val damage = MATH_RANDOM.nextInt(100)
+   //100以下のダメージをランダムで生成
+   //val damagedPokemon = target.copy(hp = math.max(0, target.hp - damage))
+   ////選ばれたポケモンの情報をコピーし新しいポケモンのhpをdamageの値引く、0以下にはならない
+   //val newPokemons = trainer.holdsPokemon.updated(index, damagedPokemon)
+   //選ばれたポケモンの情報をdamagedPokemonの情報に書き換える
+   //trainer.copy(holdsPokemon = newPokemons)
+   //新しいトレーナーにnewPokemonの情報を入れる
+   //トレーナを受け取り、その手持ちからランダムに１体選ぶ
+   val index = MATH_RANDOM.nextInt(trainer.holdsPokemon.size)
+   //
+   val target = trainer.holdsPokemon(index)
+   //ダメージ
+   val damage = MATH_RANDOM.nextInt(100)
+   //hpが減ったポケモン
+   val damagePokemon = target.copy(hp = math.max(0, target.hp - damage))
+   //選ばれたポケモンの情報をdamagepokemonに変える
+   val newPokemon = trainer.holdsPokemon.updated(index, damagePokemon)
+   //
+   trainer.copy(holdsPokemon = newPokemon)
+
+
+   
+
+
+
+
 
 
   def showHierarchy(trainers: Seq[Trainer]): Unit =
