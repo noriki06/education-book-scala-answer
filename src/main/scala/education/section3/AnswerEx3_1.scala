@@ -76,17 +76,34 @@ object AnswerEx3_1:
 
   def showHierarchy(trainers: Seq[Trainer]): Unit =
     trainers
-      .sortBy(t => t.name)
-      .foreach(t => println(t.name))
-    trainers
-      .flatMap(t => t.holdsPokemon)
-      .sortBy(p => p.pronunciation)
-      .foreach(p => println(s"  ${p.name} (HP${p.hpMax})"))
-    trainers
-      .flatMap(t => t.holdsPokemon)
-      .flatMap(p => p.skill)
-      .sortBy(s => -s.power)
-      .foreach(v => println(s"    ${v.name} (${v.kind} / 威力${v.power})"))
+      .sortBy(_.name)
+      .foreach { trainer =>
+
+        println(trainer.name)
+
+        trainer.holdsPokemon
+          .sortBy(_.pronunciation)
+          .foreach { pokemon =>
+
+            println(s"  ${pokemon.name} (HP${pokemon.hpMax})")
+
+            pokemon.skill
+              .sortBy(_.power)
+              .foreach(v => println(s"    ${v.name} (${v.kind} / 威力${v.power})"))
+          }
+      }
+    //trainers
+      //.sortBy(t => t.name)
+      //.foreach(t => println(t.name))
+    //trainers
+      //.flatMap(t => t.holdsPokemon)
+      //.sortBy(p => p.pronunciation)
+      //.foreach(p => println(s"  ${p.name} (HP${p.hpMax})"))
+    //trainers
+      //.flatMap(t => t.holdsPokemon)
+      //.flatMap(p => p.skill)
+      //.sortBy(s => -s.power)
+      //.foreach(v => println(s"    ${v.name} (${v.kind} / 威力${v.power})"))
 
 
    

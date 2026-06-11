@@ -1,0 +1,9 @@
+package education.section4
+
+object Answer3:
+  def tupleQuestion3(pair: (String, Int)): (Int, String) =
+    val (name, score) = pair
+      pair(score, name) 
+  
+  def main(args: Array[String]): Unit =
+    println(tupleQuestion3(("Alice", 80)))
