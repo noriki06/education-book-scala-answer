@@ -7,6 +7,8 @@ object Answer6:
     item.copy(price = item.price * 2)
 
   def main(args: Array[String]): Unit =
-    println(caseClassQuestion3(Item("apple", 120)))
-    println(caseClassQuestion3(Item("apple", 120)))
+    val original = Item("apple", 120)
+    println(caseClassQuestion3(original))
+    println(original)
+
 
