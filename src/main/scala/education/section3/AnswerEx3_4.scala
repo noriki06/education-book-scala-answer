@@ -1,27 +1,28 @@
 package education.section3
 
-class PokemonSkill(
-  val name: String,//技名
-  val pronunciation: String,//よみがな
-  val kind: String,//種別
-  val power: Int//威力
-)
-
-class Pokemon(
-  val name: String,//ポケモン名
-  val pronunciation: String,//よみがな
-  val hpMax: Int,//最大 HP
-  val hp: Int,//現在 HP
-  val skill: Seq[PokemonSkill]//覚えている技
-)
-
-
-class Trainer(
-  val name: String,//トレーナー名
-  val holdsPokemon: Seq[Pokemon]//手持ちポケモン
-)
 
 object AnswerEx3_4:
+  case class PokemonSkill(
+    val name: String,//技名
+    val pronunciation: String,//よみがな
+    val kind: String,//種別
+    val power: Int//威力
+  )
+
+  case class Pokemon(
+    val name: String,//ポケモン名
+    val pronunciation: String,//よみがな
+    val hpMax: Int,//最大 HP
+    val hp: Int,//現在 HP
+    val skill: Seq[PokemonSkill]//覚えている技
+  )
+
+
+  case class Trainer(
+    val name: String,//トレーナー名
+    val holdsPokemon: Seq[Pokemon]//手持ちポケモン
+  )
+
   val MATH_RANDOM = new scala.util.Random(256)
   val trainers: Seq[Trainer] = Seq(
     Trainer("サトシ",Seq(
@@ -61,13 +62,24 @@ object AnswerEx3_4:
   ) ) ) ) )
 
   def main(args: Array[String]): Unit =
-    randomDamage.showHierarchy(trainers)
+    val before = trainers(0) 
+    val after = randomDamage(before)
+
+    println("=== 変更前 ===")
+    showHierarchy(Seq(before)) 
+
+    println("=== 変更後（1体だけHPが減る）===")
+    showHierarchy(Seq(after))
+
+    println("=== 元のトレーナーは変わっていない ===")
+    showHierarchy(Seq(before))
+
 
   def randomDamage(trainer: Trainer): Trainer =
     val index = MATH_RANDOM.nextInt(trainer.holdsPokemon.size)
     //トレーナーが持っているポケモンをランダムに選ぶ
     val target = trainer.holdsPokemon(index)
-    //ポケモンのインデックスを吐き出す
+    //index番目ポケモンを取り出す
     val damage = MATH_RANDOM.nextInt(100)
     //100以下のダメージをランダムで生成
     val damagedPokemon = target.copy(hp = math.max(0, target.hp - damage))

@@ -1,27 +1,29 @@
 package education.section3
 
-class PokemonSkill(
-  val name: String,//技名
-  val pronunciation: String,//よみがな
-  val kind: String,//種別
-  val power: Int//威力
-)
-
-class Pokemon(
-  val name: String,//ポケモン名
-  val pronunciation: String,//よみがな
-  val hpMax: Int,//最大 HP
-  val hp: Int,//現在 HP
-  val skill: Seq[PokemonSkill]//覚えている技
-)
-
-
-class Trainer(
-  val name: String,//トレーナー名
-  val holdsPokemon: Seq[Pokemon]//手持ちポケモン
-)
-
 object AnswerEx3_1:
+
+  case class PokemonSkill(
+    val name: String,//技名
+    val pronunciation: String,//よみがな
+    val kind: String,//種別
+    val power: Int//威力
+  )
+
+  case class Pokemon(
+    val name: String,//ポケモン名
+    val pronunciation: String,//よみがな
+    val hpMax: Int,//最大 HP
+    val hp: Int,//現在 HP
+    val skill: Seq[PokemonSkill]//覚えている技
+  )
+
+
+  case class Trainer(
+    val name: String,//トレーナー名
+    val holdsPokemon: Seq[Pokemon]//手持ちポケモン
+  )
+
+
   val trainers: Seq[Trainer] = Seq(
     Trainer("サトシ",Seq(
       Pokemon("ピカチュウ", "ぴかちゅう", 35, 35, Seq(
