@@ -22,6 +22,7 @@ class Trainer(
 )
 
 object AnswerEx3_4:
+  val MATH_RANDOM = new scala.util.Random(256)
   val trainers: Seq[Trainer] = Seq(
     Trainer("サトシ",Seq(
       Pokemon("ピカチュウ", "ぴかちゅう", 35, 35, Seq(
@@ -60,16 +61,21 @@ object AnswerEx3_4:
   ) ) ) ) )
 
   def main(args: Array[String]): Unit =
-    
-    showHierarchy(trainers)
+    randomDamage.showHierarchy(trainers)
 
   def randomDamage(trainer: Trainer): Trainer =
-    val MATH_RANDOM = new scala.util.Random(256)
-    trainer
-      .flatMap(t => t.holdsPokemon)
-      .map(p => p.Random.hp - MATH_RANDOM.nextInt(100))
-
-
+    val index = MATH_RANDOM.nextInt(trainer.holdsPokemon.size)
+    //トレーナーが持っているポケモンをランダムに選ぶ
+    val target = trainer.holdsPokemon(index)
+    //ポケモンのインデックスを吐き出す
+    val damage = MATH_RANDOM.nextInt(100)
+    //100以下のダメージをランダムで生成
+    val damagedPokemon = target.copy(hp = math.max(0, target.hp - damage))
+    //選ばれたポケモンの情報をコピーし新しいポケモンのhpをdamageの値引く、0以下にはならない
+    val newPokemons = trainer.holdsPokemon.updated(index, damagedPokemon)
+    //選ばれたポケモンの情報をdamagedPokemonの情報に書き換える
+    trainer.copy(holdsPokemon = newPokemons)
+    //新しいトレーナーにnewPokemonの情報を入れる
 
 
   def showHierarchy(trainers: Seq[Trainer]): Unit =
