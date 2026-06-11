@@ -39,7 +39,7 @@ object AnswerEx3_1:
     Trainer("カスミ", Seq(
       Pokemon("ゼニガメ", "ぜにがめ", 44, 44, Seq(
           PokemonSkill("水鉄砲", "みずでっぽう", "攻撃",45),
-          PokemonSkill("甲羅休め", "こうらやすめ", "回復", 50)
+          PokemonSkill("甲羅休め", "こうらやすめ", "回復", 40)
       ) ),
       Pokemon("フシギバナ", "ふしぎばな", 80, 80, Seq(
           PokemonSkill("草結び", "くさむすび", "攻撃",65),
@@ -71,7 +71,7 @@ object AnswerEx3_1:
       //map(s => s.name).//技だけにする
       //distinct.//重複を消す
       //mkString("\n"))
-  showHierarchy(trainers)
+    showHierarchy(trainers)
 
 
   def showHierarchy(trainers: Seq[Trainer]): Unit =
