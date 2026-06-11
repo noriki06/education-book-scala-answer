@@ -88,61 +88,8 @@ object AnswerEx3_1:
             println(s"  ${pokemon.name} (HP${pokemon.hpMax})")
 
             pokemon.skill
-              .sortBy(_.power)
+              .sortBy(-_.power)
               .foreach(v => println(s"    ${v.name} (${v.kind} / 威力${v.power})"))
           }
       }
-    //trainers
-      //.sortBy(t => t.name)
-      //.foreach(t => println(t.name))
-    //trainers
-      //.flatMap(t => t.holdsPokemon)
-      //.sortBy(p => p.pronunciation)
-      //.foreach(p => println(s"  ${p.name} (HP${p.hpMax})"))
-    //trainers
-      //.flatMap(t => t.holdsPokemon)
-      //.flatMap(p => p.skill)
-      //.sortBy(s => -s.power)
-      //.foreach(v => println(s"    ${v.name} (${v.kind} / 威力${v.power})"))
-
-
-   
-    //flatMap(t => t.holdsPokemon).
-    //sortBy(p => p.name).
-    //foreach(p => println(s"  ${p.name} (HP${p.hpMax})")).
-    //flatMap(t => t.holdsPokemon).
-    //flatMap(p => p.skill).
-    //sortBy(s => -s.power).
-    //map(s => s"${s.name} (${s.kind} / 威力${s.power})").
-    //foreach(println)
-
-
-
-
-
-        //flatMap(p => p.skill).
-        //sortBy(s => -s.power).
-        //map(s => s"${s.name} (${s.kind} / 威力${s.power})").
-        //foreach(println)
-
-
-
-   // val trainer =
-     // trainers.
-      //sortBy(t => t.name).
-      //foreach(t => println(t.name))
-
-    //val pokemon =
-      //trainers.
-      //flatMap(t => t.holdsPokemon).
-      //sortBy(p => p.name).
-      //map(p => s"${p.name} (HP${p.hpMax})").
-      //foreach(println)
-
-    //val skill =
-      //trainers.
-      //flatMap(t => t.holdsPokemon).
-      //flatMap(p => p.skill).
-      //sortBy(s => -s.power).
-      //map(s => s"${s.name} (${s.kind} / 威力${s.power})").
-      //foreach(println)
+    
