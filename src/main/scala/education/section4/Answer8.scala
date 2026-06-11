@@ -2,7 +2,7 @@ package education.section4
 
 object Answer8:
   enum Signal:
-      case Red, Yellow, Green
+    case Red, Yellow, Green
 
   def enumQuestion1(signal: Signal): String =
     signal match
