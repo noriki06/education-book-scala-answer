@@ -1,16 +1,16 @@
 package education.section5
 
-object AnswerEx2Shop
+object AnswerEx2Shop:
 
 case class Customer(
   id:   Customer.Id,//顧客ID
   name: String      //顧客名前
 )
 
-object Customer:                          
+object Customer:                       
   opaque type Id = Long                    
   object Id:
-    def apply(value: Long): Id = value   
+    def apply(value: Long): Id = value
 
 case class Order(
   id:         Order.Id,   //注文ID
@@ -19,30 +19,33 @@ case class Order(
   status:     Order.Status//ステータス３種類を定義（enum）
 )
 
-object Order:                          
-  opaque type Id = Long                       
+object Order:
+  opaque type Id = Long 
+  object Id:
+    def apply(value: Long): Id = value
+
   enum Status:                           
     case Pending, Shipped, Cancelled
 
-def main(args: Array[String]): Unit =
+  def main(args: Array[String]): Unit =
   
-  val customers: Seq[Customer] =
-    Seq(
-      (1, Alice), 
-      (2, Bob), 
-      (3, Carol), 
-      (4, Dave)
-    )
+    val customers: Seq[Customer] =
+      Seq(
+        Customer(Customer.Id(1), "Alice"), 
+        Customer(Customer.Id(2), "Bob"), 
+        Customer(Customer.Id(3), "Carol"), 
+        Customer(Customer.Id(4), "Dave")
+      )
 
-  val orders: Seq[Order] =
-    Seq(
-      (101, 1 , 3200, Shipped), 
-      (102, 2, 1500, Pending), 
-      (103, 1, 2800, Cancelled), 
-      (104, 3, 5000, Shipped), 
-      (105, 1, 1200, Pending),
-      (106, 3, 700, Cancelled)
-    )
+    val orders: Seq[Order] =
+      Seq(
+        Order(Order.Id(101), Customer.Id(1) , 3200, Order.Status.Shipped), 
+        Order(Order.Id(102), Customer.Id(2), 1500, Order.Status.Pending), 
+        Order(Order.Id(103), Customer.Id(1), 2800, Order.Status.Cancelled), 
+        Order(Order.Id(104), Customer.Id(3), 5000, Order.Status.Shipped), 
+        Order(Order.Id(105), Customer.Id(1), 1200, Order.Status.Pending),
+        Order(Order.Id(106), Customer.Id(3), 700, Order.Status.Cancelled)
+      )
 
-  println(println(customers))
-  println(println(orders.head))
+    println(println(customers))
+    println(println(orders.head))
