@@ -47,23 +47,44 @@ object AnswerEx2Shop:
         Order(Order.Id(106), Customer.Id(3), 700, Order.Status.Cancelled)
       )
 
+    println(neverOrdered(customers, orders))
+
+
+    def neverOrdered(customers: Seq[Customer], orders: Seq[Order]): Set[String] =
+      val orderyes = orders.map(order => order.cutomerId)
+      val orderall = customers.map(customer => customer.Id)
+      val orderno = orderall.diff(orderyes)
+
+      cutomers.orderno.values
+
+
+
+
+
+
+
+
+
+
+
+
     //val byId = customersById(customers)
     //println(customersById(customers))
     //println(findCustomerName(byId, Customer.Id(3)))
     //println(findCustomerName(byId, Customer.Id(99)))
-    println(totalByCustomer(orders))
+    //println(totalByCustomer(orders))
 
 
-  def totalByCustomer(orders: Seq[Order]): Map[Customer.Id, Int] =
-    val amountTotal =
-      orders
-      .filter(order => order.status != Order.Status.Cancelled)
-      .groupBy(order => order.customerId)
-      .view
-      .mapValues(orderTotal => orderTotal.map(order => order.amount).sum)
-      .toMap
+  //def totalByCustomer(orders: Seq[Order]): Map[Customer.Id, Int] =
+    //val amountTotal =
+      //orders
+      //.filter(order => order.status != Order.Status.Cancelled)
+      //.groupBy(order => order.customerId)
+      //.view
+      //.mapValues(orderTotal => orderTotal.map(order => order.amount).sum)
+      //.toMap
     
-    amountTotal
+    //amountTotal
   //def customersById(customers: Seq[Customer]): Map[Customer.Id, Customer] =
     //val byId = customers.map(customer => customer.id -> customer)
     //byId.toMap
