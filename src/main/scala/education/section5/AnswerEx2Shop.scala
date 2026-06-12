@@ -47,15 +47,30 @@ object AnswerEx2Shop:
         Order(Order.Id(106), Customer.Id(3), 700, Order.Status.Cancelled)
       )
 
-    val byId = customersById(customers)
-    println(customersById(customers))
-    println(findCustomerName(byId, Customer.Id(3)))
-    println(findCustomerName(byId, Customer.Id(99)))
+    //val byId = customersById(customers)
+    //println(customersById(customers))
+    //println(findCustomerName(byId, Customer.Id(3)))
+    //println(findCustomerName(byId, Customer.Id(99)))
+    println(totalByCustomer(orders))
 
-  def customersById(customers: Seq[Customer]): Map[Customer.Id, Customer] =
-    val byId = customers.map(customer => customer.id -> customer)
-    byId.toMap
 
-  def findCustomerName(byId: Map[Customer.Id, Customer], id: Customer.Id): String =
-    byId.get(id).map(customer => customer.name).getOrElse("不明")
+  def totalByCustomer(orders: Seq[Order]): Map[Customer.Id, Int] =
+    val amountTotal =
+      orders
+      .filter(order => order.status != Order.Status.Cancelled)
+      .groupBy(order => order.customerId)
+      .view
+      .mapValues(amount => amount.sum)
+      .toMap
+    
+    orders.map(order => order.customerId -> amountTotal).toMap
+
+
+
+  //def customersById(customers: Seq[Customer]): Map[Customer.Id, Customer] =
+    //val byId = customers.map(customer => customer.id -> customer)
+    //byId.toMap
+
+  //def findCustomerName(byId: Map[Customer.Id, Customer], id: Customer.Id): String =
+    //byId.get(id).map(customer => customer.name).getOrElse("不明")
 
