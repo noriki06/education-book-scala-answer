@@ -60,13 +60,10 @@ object AnswerEx2Shop:
       .filter(order => order.status != Order.Status.Cancelled)
       .groupBy(order => order.customerId)
       .view
-      .mapValues(amount => amount.sum)
+      .mapValues(money => money.amount.sum)
       .toMap
     
-    orders.map(order => order.customerId -> amountTotal).toMap
-
-
-
+    amountTotal
   //def customersById(customers: Seq[Customer]): Map[Customer.Id, Customer] =
     //val byId = customers.map(customer => customer.id -> customer)
     //byId.toMap
