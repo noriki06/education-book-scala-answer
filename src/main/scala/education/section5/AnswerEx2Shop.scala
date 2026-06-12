@@ -47,5 +47,16 @@ object AnswerEx2Shop:
         Order(Order.Id(106), Customer.Id(3), 700, Order.Status.Cancelled)
       )
 
-    println(customers)
-    println(orders.head)
+    val byID = customers.map(customer => customer.id -> customer)
+
+    println(customersById(customers))
+    findCustomerName(byId, Customer.Id(3))
+    findCustomerName(byId, Customer.Id(99))
+
+  def customersById(customers: Seq[Customer]): Map[Customer.Id, Customer] =
+    val byID = customers.map(customer => customer.id -> customer)
+    byID.toMap
+
+  def findCustomerName(byId: Map[Customer.Id, Customer], id: Customer.Id): String =
+    byID.get(id).map(customer => customer.name).getOrElse("不明")
+
