@@ -3,7 +3,7 @@ package education.section5
 object AnswerEx6:
 
   def msEx6(sales: Map[String, Int]): Seq[(String, Int)] =
-    case (name, amount) => -amount
+
     sales.toSeq.sortBy { case (name, amount) => -amount }
 
   def main(args: Array[String]): Unit =
