@@ -2,30 +2,30 @@ package education.section5
 
 object AnswerEx2Shop:
 
-case class Customer(
-  id:   Customer.Id,//顧客ID
-  name: String      //顧客名前
-)
+  case class Customer(
+    id:   Customer.Id,//顧客ID
+    name: String      //顧客名前
+  )
 
-object Customer:                       
-  opaque type Id = Long                    
-  object Id:
-    def apply(value: Long): Id = value
+  object Customer:                       
+    opaque type Id = Long                    
+    object Id:
+      def apply(value: Long): Id = value
 
-case class Order(
-  id:         Order.Id,   //注文ID
-  customerId: Customer.Id,//顧客ID
-  amount:     Int,        //
-  status:     Order.Status//ステータス３種類を定義（enum）
-)
+  case class Order(
+    id:         Order.Id,   //注文ID
+    customerId: Customer.Id,//顧客ID
+    amount:     Int,        //
+    status:     Order.Status//ステータス３種類を定義（enum）
+  )
 
-object Order:
-  opaque type Id = Long 
-  object Id:
-    def apply(value: Long): Id = value
+  object Order:
+    opaque type Id = Long 
+    object Id:
+      def apply(value: Long): Id = value
 
-  enum Status:                           
-    case Pending, Shipped, Cancelled
+    enum Status:                           
+      case Pending, Shipped, Cancelled
 
   def main(args: Array[String]): Unit =
   
@@ -47,5 +47,5 @@ object Order:
         Order(Order.Id(106), Customer.Id(3), 700, Order.Status.Cancelled)
       )
 
-    println(println(customers))
-    println(println(orders.head))
+    println(customers)
+    println(orders.head)
