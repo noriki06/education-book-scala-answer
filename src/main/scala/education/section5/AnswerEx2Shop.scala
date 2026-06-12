@@ -60,7 +60,7 @@ object AnswerEx2Shop:
       .filter(order => order.status != Order.Status.Cancelled)
       .groupBy(order => order.customerId)
       .view
-      .mapValues(money => money.map(o => o.amount).sum)
+      .mapValues(orderTotal => orderTotal.map(order => order.amount).sum)
       .toMap
     
     amountTotal
