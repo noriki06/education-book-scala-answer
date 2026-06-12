@@ -57,10 +57,11 @@ object AnswerEx2Shop:
   def totalByCustomer(orders: Seq[Order]): Map[Customer.Id, Int] =
     val amountTotal =
       orders
-      .filter(order => order.status != Order.Status.Cancelled)
+      .filter(order => order.Status != Order.Status.Cancelled)
       .groupBy(order => order.customerId)
       .view
-      .mapValues(money => money.amount.sum)
+      .mapValues(money => money.order.amount.sum)
+
       .toMap
     
     amountTotal
