@@ -51,11 +51,11 @@ object AnswerEx2Shop:
 
 
     def neverOrdered(customers: Seq[Customer], orders: Seq[Order]): Set[String] =
-      val orderyes = orders.map(order => order.cutomerId)
-      val orderall = customers.map(customer => customer.Id)
-      val orderno = orderall.diff(orderyes)
+      val orderyes = orders.map(order => order.customerId)
+      val orderall = customers.map(customer => customer.id)
+      val orderno = orderall.toSet.diff(orderyes)toSeq
 
-      cutomers.orderno.values
+      customers.orderno.values
 
 
 
