@@ -79,13 +79,17 @@ val MATH_RANDOM = new scala.util.Random(256)
    *「攻撃側が 1 ターン行動した結果の (新しい攻撃側チーム, 新しい防御側チーム)」を返します。
    * 攻撃なら防御側が、回復なら攻撃側が更新されます。
    */
-  def takeTurn(attacker: Seq[Pokemon], defender: Seq[Pokemon]): ((Trainer, Trainer)) =
-    val attackerPokemon = // 手札の
-      attacker
-        .head
+  def takeTurn(attackerTrainer: Trainer, defenderTrainer: Trainer): ((Trainer, Trainer)) =
+    val attackerPokemon = //
+      attackerTrainer     // 攻撃するトレーナー
+        .holdsPokemon     // そのトレーナーのポケモン
+        .filter(pokemon => pokemon.hp > 0)
+        .head             // その先頭のポケモン
 
     val defenderPokemon =
-      defender
+      defenderTrainer
+        .holdsPokemon
+        .filter(pokemon => pokemon.hp > 0)
         .head
 
     val randomIndex = // ランダムなインデックスを取得
@@ -114,18 +118,18 @@ val MATH_RANDOM = new scala.util.Random(256)
       attackerPokemon
         .copy(hp = newAttackerHp)
 
-    val updatedDefenderTeam =
+    val updatedDefenderTrainer =
       defender
         .updated(0, updatedDefenderPokemon)
 
-    val updatedAttackerTeam =
+    val updatedAttackerTrainer =
       attacker
         .updated(0, updatedAttackerPokemon)
 
     if   attackSkill.kind == "攻撃" then
-      (attacker, updatedDefenderTeam)
-    else attackSkill.kind == "回復" then
-      (updatedAttackerTeam, defender)
+      (attacker, updatedDefenderTrainer)
+    else if attackSkill.kind == "回復" then
+      (updatedAttackerTrainer, defender)
 
   /*
    * 決着: どちらかのチームの 全ポケモンの体力が 0（ひんし） になったら、もう一方の勝ち。
