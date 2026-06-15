@@ -1,14 +1,14 @@
 package education.section3
 
-
 object AnswerEx3_5:
+  // ポケモンの技のケースクラス
   case class PokemonSkill(
     val name: String,//技名
     val pronunciation: String,//よみがな
     val kind: String,//種別
     val power: Int//威力
   )
-
+  // ポケモンのケースクラス
   case class Pokemon(
     val name: String,//ポケモン名
     val pronunciation: String,//よみがな
@@ -17,14 +17,15 @@ object AnswerEx3_5:
     val skill: Seq[PokemonSkill]//覚えている技
   )
 
-
+  // トレーナーのケースクラス
   case class Trainer(
     val name: String,//トレーナー名
     val holdsPokemon: Seq[Pokemon]//手持ちポケモン
   )
 
-  val MATH_RANDOM = new scala.util.Random(256)
-  val trainers: Seq[Trainer] = Seq(
+  val MATH_RANDOM = new scala.util.Random(256) // ランダムで数値を出す
+
+  val trainers: Seq[Trainer] = Seq( // トレーナーデータ
     Trainer("サトシ",Seq(
       Pokemon("ピカチュウ", "ぴかちゅう", 35, 35, Seq(
         PokemonSkill("電光石火", "でんこうせっか", "攻撃",40),
@@ -64,74 +65,28 @@ object AnswerEx3_5:
   def main(args: Array[String]): Unit =
     val サトシ = trainers(0)
     val カスミ = trainers(1)
-    //println(swapPokemon(サトシ, カスミ, 0, 0),showHierarchy(Seq(before)))
+    println(swapPokemon(サトシ, カスミ, 0, 0))
 
-
+  /**
+   * ポケモンを交換するメソッド
+   */
   def swapPokemon(a: Trainer, b: Trainer, indexA: Int, indexB: Int): (Trainer, Trainer) =
+    val changePokemonA = //
+      a                                          // aに与えられたトレーナー
+        .holdsPokemon                            // そのトレーナーの持っているポケモン
+        .updated(indexA, b.holdsPokemon(indexB)) // 持っているポケモンのインデックスの値がbに与えられたポケモンにアップデート
 
-    val changePokemonA = a.holdsPokemon.updated(indexA, b.holdsPokemon(indexB))
-    val changePokemonB = b.holdsPokemon.updated(indexB, a.holdsPokemon(indexA))
+    val changePokemonB =
+      b
+        .holdsPokemon
+        .updated(indexB, a.holdsPokemon(indexA))
 
-    val newTrainerA = a.copy(holdsPokemon = changePokemonA)
-    val newTrainerB = b.copy(holdsPokemon = changePokemonB)
-    
+    val newTrainerA =                        // ポケモンを交換した後のトレーナー
+      a                                      // aで与えられたトレーナー
+        .copy(holdsPokemon = changePokemonA) // インスタンスを生成してポケモンを交換したトレーナーへ
+
+    val newTrainerB =
+      b
+        .copy(holdsPokemon = changePokemonB)
+
     (newTrainerA, newTrainerB)
-
-
-  
-  def randomDamage(trainer: Trainer): Trainer =
-    //val index = MATH_RANDOM.nextInt(trainer.holdsPokemon.size)
-    //トレーナーが持っているポケモンをランダムに選ぶ
-    //val target = trainer.holdsPokemon(index)
-   //index番目ポケモンを取り出す
-   //val damage = MATH_RANDOM.nextInt(100)
-   //100以下のダメージをランダムで生成
-   //val damagedPokemon = target.copy(hp = math.max(0, target.hp - damage))
-   ////選ばれたポケモンの情報をコピーし新しいポケモンのhpをdamageの値引く、0以下にはならない
-   //val newPokemons = trainer.holdsPokemon.updated(index, damagedPokemon)
-   //選ばれたポケモンの情報をdamagedPokemonの情報に書き換える
-   //trainer.copy(holdsPokemon = newPokemons)
-   //新しいトレーナーにnewPokemonの情報を入れる
-   //トレーナを受け取り、その手持ちからランダムに１体選ぶ
-   val index = MATH_RANDOM.nextInt(trainer.holdsPokemon.size)
-   //
-   val target = trainer.holdsPokemon(index)
-   //ダメージ
-   val damage = MATH_RANDOM.nextInt(100)
-   //hpが減ったポケモン
-   val damagePokemon = target.copy(hp = math.max(0, target.hp - damage))
-   //選ばれたポケモンの情報をdamagepokemonに変える
-   val newPokemon = trainer.holdsPokemon.updated(index, damagePokemon)
-   //
-   trainer.copy(holdsPokemon = newPokemon)
-
-
-   
-
-
-
-
-
-
-  def showHierarchy(trainers: Seq[Trainer]): Unit =
-    trainers
-      .sortBy(_.name)
-      .foreach { trainer =>
-
-        println(trainer.name)
-
-        trainer.holdsPokemon
-          .sortBy(_.pronunciation)
-          .foreach { pokemon =>
-
-            println(s"  ${pokemon.name} (HP${pokemon.hp})")
-
-            pokemon.skill
-              .sortBy(-_.power)
-              .foreach(v => println(s"    ${v.name} (${v.kind} / 威力${v.power})"))
-          }
-      }
-
-
-
-  //トレーナ２個、インデックス２個渡される、そのトレーナーのポケモン（インデックスでしじ）がお互いのに交換される

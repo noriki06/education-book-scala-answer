@@ -62,11 +62,11 @@ object AnswerEx3_4:
   ) ) ) ) )
 
   def main(args: Array[String]): Unit =
-    val before = trainers(0) 
+    val before = trainers(0)
     val after = randomDamage(before)
 
     println("=== 変更前 ===")
-    showHierarchy(Seq(before)) 
+    showHierarchy(Seq(before))
 
     println("=== 変更後（1体だけHPが減る）===")
     showHierarchy(Seq(after))
@@ -102,7 +102,7 @@ object AnswerEx3_4:
    trainer.copy(holdsPokemon = newPokemon)
 
 
-   
+
 
 
 
@@ -127,6 +127,3 @@ object AnswerEx3_4:
               .foreach(v => println(s"    ${v.name} (${v.kind} / 威力${v.power})"))
           }
       }
-
-
-
