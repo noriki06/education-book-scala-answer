@@ -70,7 +70,29 @@ object AnswerEx3_6:
    * 攻撃なら防御側が、回復なら攻撃側が更新されます。
    */
   def takeTurn(attacker: Seq[Pokemon], defender: Seq[Pokemon]): (Seq[Pokemon], Seq[Pokemon]) =
-    aTurn = true
+    val attackerPokemon =
+      attacker
+        .head
+
+    val defenderPokemon =
+      defender
+        .head
+
+    val attackSkill =
+      attackerPokemon
+        .MATH_RANDOM
+        .nextInt(pokemon.skill.size)
+        .pokemon
+        .skill(randomIndex)
+
+    val attackFlow =
+      if attackSkill.kind == "攻撃" then defenderPokemon.copy.update(hp, max(0, defenderPokemon.hp - defenderPokemon.power))
+      else attackSkill.kind == "回復" then attackerPokemon.copy.update(hp, min(attackerPokemon.maxHp, attackerPokemon.hp + attackerPokemon.power)
+
+
+
+
+
 
   /*
    * 決着: どちらかのチームの 全ポケモンの体力が 0（ひんし） になったら、もう一方の勝ち。
@@ -82,6 +104,5 @@ object AnswerEx3_6:
     else if b.hp <= 0 then s"決着: ${a.Trainer.name}の勝ち！" // a の勝ち
     else if turn > 20 then "引き分け"                         // 決着がつかないまま 20 ターン を超えたら引き分け
     else
-
     val (na, nb) = if aTurn then takeTurn(a, b) else takeTurn(b, a).swap
     battle(na, nb, !aTurn, turn + 1)
