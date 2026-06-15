@@ -63,7 +63,17 @@ val MATH_RANDOM = new scala.util.Random(256)
   ) ) ) ) )
 
   def main(args: Array[String]): Unit =
-    println()
+    // 既存の trainers からサトシとカスミを見つけ出す
+    val satoshi = AnswerEx3_6.trainers.find(_.name == "サトシ").get
+    val kasumi = AnswerEx3_6.trainers.find(_.name == "カスミ").get
+
+    // 変更した battle メソッドに Trainer オブジェクトを渡す
+    val battleResult = battle(satoshi, kasumi, aTurn = true, turn = 1)
+
+    println(s"=== バトル開始: ${satoshi.name} vs ${kasumi.name} ===")
+    println(battleResult)
+    // battleResult は最終的な勝敗メッセージ（String）を返す想定なので、そのまま表示
+    println(s"=== 決着: ${battleResult} ===")
 
   /*
    *「攻撃側が 1 ターン行動した結果の (新しい攻撃側チーム, 新しい防御側チーム)」を返します。
@@ -111,6 +121,7 @@ val MATH_RANDOM = new scala.util.Random(256)
     val updatedAttackerTeam =
       attacker
         .updated(0, updatedAttackerPokemon)
+
     if   attackSkill.kind == "攻撃" then
       (attacker, updatedDefenderTeam)
     else attackSkill.kind == "回復" then
