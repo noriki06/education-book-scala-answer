@@ -1,6 +1,9 @@
 package education.section3
 
 object AnswerEx3_6:
+val MATH_RANDOM = new scala.util.Random(256)
+
+
   // ポケモンの技のケースクラス
   case class PokemonSkill(
     val name: String,//技名
@@ -22,8 +25,6 @@ object AnswerEx3_6:
     val name: String,//トレーナー名
     val holdsPokemon: Seq[Pokemon]//手持ちポケモン
   )
-
-  val MATH_RANDOM = new scala.util.Random(256) // ランダムで数値を出す
 
   val trainers: Seq[Trainer] = Seq( // トレーナーデータ
     Trainer("サトシ",Seq(
@@ -78,17 +79,42 @@ object AnswerEx3_6:
       defender
         .head
 
-    val attackSkill =
+    val randomIndex = // ランダムなインデックスを取得
+      MATH_RANDOM
+        .nextInt(attackerPokemon.skill.size)
+
+    val attackSkill = // ランダムなインデックスで技を決定
       attackerPokemon
-        .MATH_RANDOM
-        .nextInt(pokemon.skill.size)
-        .pokemon
         .skill(randomIndex)
 
-    val attackFlow =
-      if attackSkill.kind == "攻撃" then defenderPokemon.copy.update(hp, max(0, defenderPokemon.hp - defenderPokemon.power))
-      else attackSkill.kind == "回復" then attackerPokemon.copy.update(hp, min(attackerPokemon.maxHp, attackerPokemon.hp + attackerPokemon.power)
+    val newDefenderHp =
+      scala
+        .math
+        .max(0, defenderPokemon.hp - attackSkill.power)
 
+    val updatedDefenderPokemon =
+      defenderPokemon
+        .copy(hp = newDefenderHp)
+
+    val newAttackerHp =
+      scala
+        .math
+        .min(attackerPokemon.hpMax, attackerPokemon.hp + attackSkill.power)
+
+    val updatedAttackerPokemon =
+      attackerPokemon
+        .copy(hp = newAttackerHp)
+
+    val updatedDefenderTeam =
+      defender
+        .updated(0, updatedDefenderPokemon)
+
+    val updatedAttackerTeam =
+      attacker
+        .updated(0, updatedAttackerPokemon)
+
+    (attacker, updatedDefenderTeam)
+    (updatedAttackerTeam, defender)
 
 
 
@@ -100,8 +126,8 @@ object AnswerEx3_6:
    */
 
   def battle(a: Seq[Pokemon], b: Seq[Pokemon], aTurn: Boolean, turn: Int): String =
-    if      a.hp <= 0 then s"決着: ${b.Trainer.name}の勝ち！" // b の勝ち
-    else if b.hp <= 0 then s"決着: ${a.Trainer.name}の勝ち！" // a の勝ち
+    if      a.forall(a => a.hp <= 0) then s"決着: トレーナーBの勝ち！" // b の勝ち
+    else if b.forall(b => b.hp <= 0) then s"決着: トレーナーAの勝ち！" // a の勝ち
     else if turn > 20 then "引き分け"                         // 決着がつかないまま 20 ターン を超えたら引き分け
     else
     val (na, nb) = if aTurn then takeTurn(a, b) else takeTurn(b, a).swap
