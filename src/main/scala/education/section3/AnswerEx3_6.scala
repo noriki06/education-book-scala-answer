@@ -3,7 +3,6 @@ package education.section3
 object AnswerEx3_6:
 val MATH_RANDOM = new scala.util.Random(256)
 
-
   // ポケモンの技のケースクラス
   case class PokemonSkill(
     val name: String,//技名
@@ -70,8 +69,8 @@ val MATH_RANDOM = new scala.util.Random(256)
    *「攻撃側が 1 ターン行動した結果の (新しい攻撃側チーム, 新しい防御側チーム)」を返します。
    * 攻撃なら防御側が、回復なら攻撃側が更新されます。
    */
-  def takeTurn(attacker: Seq[Pokemon], defender: Seq[Pokemon]): (Seq[Pokemon], Seq[Pokemon]) =
-    val attackerPokemon =
+  def takeTurn(attacker: Seq[Pokemon], defender: Seq[Pokemon]): ((Trainer, Trainer)) =
+    val attackerPokemon = // 手札の
       attacker
         .head
 
@@ -112,23 +111,22 @@ val MATH_RANDOM = new scala.util.Random(256)
     val updatedAttackerTeam =
       attacker
         .updated(0, updatedAttackerPokemon)
-
-    (attacker, updatedDefenderTeam)
-    (updatedAttackerTeam, defender)
-
-
-
-
+    if   attackSkill.kind == "攻撃" then
+      (attacker, updatedDefenderTeam)
+    else attackSkill.kind == "回復" then
+      (updatedAttackerTeam, defender)
 
   /*
    * 決着: どちらかのチームの 全ポケモンの体力が 0（ひんし） になったら、もう一方の勝ち。
    * 引き分け: 決着がつかないまま 20 ターン を超えたら引き分け（回復ばかりで終わらない場合の保険）。
    */
 
-  def battle(a: Seq[Pokemon], b: Seq[Pokemon], aTurn: Boolean, turn: Int): String =
-    if      a.forall(a => a.hp <= 0) then s"決着: トレーナーBの勝ち！" // b の勝ち
-    else if b.forall(b => b.hp <= 0) then s"決着: トレーナーAの勝ち！" // a の勝ち
-    else if turn > 20 then "引き分け"                         // 決着がつかないまま 20 ターン を超えたら引き分け
+  def battle(trainerA: Trainer, trainerB: Trainer, aTurn: Boolean, turn: Int): String =
+    if      trainerA.holdsPokemon.forall(a => a.hp <= 0) then s"決着: トレーナーBの勝ち！" // b の勝ち
+    else if trainerB.holdsPokemon.forall(b => b.hp <= 0) then s"決着: トレーナーAの勝ち！" // a の勝ち
+    else if turn > 20 then "引き分け"                                                      // 決着がつかないまま 20 ターン を超えたら引き分け
     else
-    val (na, nb) = if aTurn then takeTurn(a, b) else takeTurn(b, a).swap
+    val (na, nb) =
+      if   aTurn then takeTurn(a, b)
+      else takeTurn(b, a).swap
     battle(na, nb, !aTurn, turn + 1)
