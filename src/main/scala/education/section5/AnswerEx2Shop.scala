@@ -72,9 +72,9 @@ object AnswerEx2Shop:
     // 問４の出力
     println(neverOrdered(customers, orders))        //
 
-  //問２のメソッド
+
   /**
-   * 顧客の Seq を、顧客 ID → 顧客 の Map に変換して返します。
+   * 問２：顧客の Seq を、顧客 ID → 顧客 の Map に変換して返します。
    */
   def customersById(customers: Seq[Customer]): Map[Customer.Id, Customer] =
       customers                                   // 顧客情報
@@ -91,7 +91,7 @@ object AnswerEx2Shop:
       .getOrElse("不明")                  // 顧客名があれば出力なければ不明と出力
 
 /**
- * 「顧客ごとに、いくら買ってくれているか」を集計
+ * 問３：「顧客ごとに、いくら買ってくれているか」を集計
  */
   def totalByCustomer(orders: Seq[Order]): Map[Customer.Id, Int] =
     val orderedCustomerId = // オーダーした顧客id
@@ -105,7 +105,9 @@ object AnswerEx2Shop:
       .sum) // 合計する
       .toMap
 
-  // 問４
+/**
+ *問４：一度も注文していない顧客を探す
+ */
   def neverOrdered(customers: Seq[Customer], orders: Seq[Order]): Set[String] =
     val orderyes = // 注文したことある顧客id
       orders // オーダー履歴
