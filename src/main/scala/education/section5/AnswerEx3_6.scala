@@ -60,16 +60,16 @@ object AnswerEx3_6:
         PokemonSkill("治療", "ちりょう", "回復", 30)
   ) ) ) ) )
 
-  def main(args: Array[String]): Unit =
+  //def main(args: Array[String]): Unit =
 
 
 
 
-  def takeTurn(attacker: Seq[Pokemon], defender: Seq[Pokemon]): (Seq[Pokemon], Seq[Pokemon]) =
+  //def takeTurn(attacker: Seq[Pokemon], defender: Seq[Pokemon]): (Seq[Pokemon], Seq[Pokemon]) =
 
 
 
-  def battle(a: Seq[Pokemon], b: Seq[Pokemon], aTurn: Boolean, turn: Int): String =
+  //def battle(a: Seq[Pokemon], b: Seq[Pokemon], aTurn: Boolean, turn: Int): String =
 
 
 
