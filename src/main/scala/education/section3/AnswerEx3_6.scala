@@ -1,28 +1,28 @@
 package education.section3
 
 object AnswerEx3_6:
-val MATH_RANDOM = new scala.util.Random(256)
+  val MATH_RANDOM = new scala.util.Random(256)
 
   // ポケモンの技のケースクラス
   case class PokemonSkill(
-    val name: String,//技名
-    val pronunciation: String,//よみがな
-    val kind: String,//種別
-    val power: Int//威力
+    val name: String,          // 技名
+    val pronunciation: String, // よみがな
+    val kind: String,          // 種別
+    val power: Int             // 威力
   )
   // ポケモンのケースクラス
   case class Pokemon(
-    val name: String,//ポケモン名
-    val pronunciation: String,//よみがな
-    val hpMax: Int,//最大 HP
-    val hp: Int,//現在 HP
-    val skill: Seq[PokemonSkill]//覚えている技
+    val name: String,            // ポケモン名
+    val pronunciation: String,   // よみがな
+    val hpMax: Int,              // 最大 HP
+    val hp: Int,                 // 現在 HP
+    val skill: Seq[PokemonSkill] // 覚えている技
   )
 
   // トレーナーのケースクラス
   case class Trainer(
-    val name: String,//トレーナー名
-    val holdsPokemon: Seq[Pokemon]//手持ちポケモン
+    val name: String,              // トレーナー名
+    val holdsPokemon: Seq[Pokemon] // 手持ちポケモン
   )
 
   val trainers: Seq[Trainer] = Seq( // トレーナーデータ
@@ -64,8 +64,15 @@ val MATH_RANDOM = new scala.util.Random(256)
 
   def main(args: Array[String]): Unit =
     // 既存の trainers からサトシとカスミを見つけ出す
-    val satoshi = AnswerEx3_6.trainers.find(_.name == "サトシ").get
-    val kasumi = AnswerEx3_6.trainers.find(_.name == "カスミ").get
+    val satoshi =
+      trainers
+        .find(_.name == "サトシ")
+        .get
+
+    val kasumi =
+      trainers
+        .find(_.name == "カスミ")
+        .get
 
     // 変更した battle メソッドに Trainer オブジェクトを渡す
     val battleResult = battle(satoshi, kasumi, aTurn = true, turn = 1)
@@ -119,17 +126,25 @@ val MATH_RANDOM = new scala.util.Random(256)
         .copy(hp = newAttackerHp)
 
     val updatedDefenderTrainer =
-      defender
-        .updated(0, updatedDefenderPokemon)
+      defenderTrainer.copy(
+        holdsPokemon =
+          defenderTrainer.holdsPokemon.updated(
+            0, updatedDefenderPokemon
+          )
+      )
 
     val updatedAttackerTrainer =
-      attacker
-        .updated(0, updatedAttackerPokemon)
+      attackerTrainer.copy(
+        holdsPokemon =
+          attackerPokemon.holdsPokemon.updated(
+            0, updatedAttackerPokemon
+          )
+      )
 
     if   attackSkill.kind == "攻撃" then
-      (attacker, updatedDefenderTrainer)
+      (defenderTrainer, updatedDefenderTrainer)
     else if attackSkill.kind == "回復" then
-      (updatedAttackerTrainer, defender)
+      (updatedAttackerTrainer, defenderTrainer)
 
   /*
    * 決着: どちらかのチームの 全ポケモンの体力が 0（ひんし） になったら、もう一方の勝ち。
@@ -141,7 +156,7 @@ val MATH_RANDOM = new scala.util.Random(256)
     else if trainerB.holdsPokemon.forall(b => b.hp <= 0) then s"決着: トレーナーAの勝ち！" // a の勝ち
     else if turn > 20 then "引き分け"                                                      // 決着がつかないまま 20 ターン を超えたら引き分け
     else
-    val (na, nb) =
-      if   aTurn then takeTurn(a, b)
-      else takeTurn(b, a).swap
-    battle(na, nb, !aTurn, turn + 1)
+      val (na, nb) =
+        if   aTurn then takeTurn(trainerA, trainerB)
+        else takeTurn(trainerB, trainerA).swap
+      battle(na, nb, !aTurn, turn + 1)
