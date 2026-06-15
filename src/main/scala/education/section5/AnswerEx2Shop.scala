@@ -63,14 +63,14 @@ object AnswerEx2Shop:
     println(customers)                               // val customers(顧客情報)の内容が正しいかを出力
     println(orders.head)                             // val orders(注文情報)の内容の確認、先頭の部分のみ出力
     // 問２の出力
-    val byId = customersById(customers)              //
-    println(customersById(customers))                //
-    println(findCustomerName(byId, Customer.Id(3)))  //
-    println(findCustomerName(byId, Customer.Id(99))) //
-
-
+    val byId = customersById(customers)              // 顧客idで顧客情報を取得できるようにした
+    println(customersById(customers))                // 顧客idと顧客情報の関係を出力
+    println(findCustomerName(byId, Customer.Id(3)))  // 顧客id3の時の出力
+    println(findCustomerName(byId, Customer.Id(99))) // 顧客id99の時の出力
+    // 問３の出力
+    println(totalByCustomer(orders))                 // 顧客idごとの購入金額を出力
     // 問４の出力
-    println(neverOrdered(customers, orders))        //
+    println(neverOrdered(customers, orders))        // 一度も注文していない顧客名を出力
 
 
   /**
@@ -94,36 +94,36 @@ object AnswerEx2Shop:
  * 問３：「顧客ごとに、いくら買ってくれているか」を集計
  */
   def totalByCustomer(orders: Seq[Order]): Map[Customer.Id, Int] =
-    val orderedCustomerId = // オーダーした顧客id
-      orders // 全ての注文情報
+    val orderedCustomerId =                                      // オーダーした顧客id
+      orders                                                     // 全ての注文情報
         .filter(order => order.status != Order.Status.Cancelled) // オーダーステイタスがキャンセル以外のもを抽出
-        .groupBy(order => order.customerId) // 顧客idでまとめる
+        .groupBy(order => order.customerId)                      // 顧客idでまとめる
 
-    orderedCustomerId // オーダーした顧客id
+    orderedCustomerId                           // オーダーした顧客id
       .view.mapValues(orderTotal => orderTotal
-      .map(order => order.amount) // 金額を取り出す
-      .sum) // 合計する
-      .toMap
+      .map(order => order.amount)               // 金額を取り出す
+      .sum)                                     // 合計する
+      .toMap                                    // mapに変換
 
 /**
  *問４：一度も注文していない顧客を探す
  */
   def neverOrdered(customers: Seq[Customer], orders: Seq[Order]): Set[String] =
-    val orderyes = // 注文したことある顧客id
-      orders // オーダー履歴
+    val orderyes =                      // 注文したことある顧客id
+      orders                            // オーダー履歴
         .map(order => order.customerId) // オーダー履歴からカスタマーIDを取り出す(Seq(id))
-        .toSet // setに変換し重複をなしに(Set(id))
+        .toSet                          // setに変換し重複をなしに(Set(id))
 
-    val customerAll = // 顧客全員id
-      customers // 顧客情報
+    val customerAll =                 // 顧客全員id
+      customers                       // 顧客情報
         .map(customer => customer.id) // 顧客情報からカスタマーIDを取り出す(Seq(id))
-        .toSet // setに変換し重複をなしに(Set(id))
+        .toSet                        // setに変換し重複をなしに(Set(id))
 
-    val orderno = // 注文したことない顧客id
-      customerAll // 顧客全員id
+    val orderno =       // 注文したことない顧客id
+      customerAll       // 顧客全員id
         .diff(orderyes) // 顧客全員id - 注文したことある顧客id
 
-    customers // 顧客情報
+    customers                                            // 顧客情報
       .filter(customer => orderno.contains(customer.id)) // 顧客情報から注文したことない顧客を取り出す
-      .map(customer => customer.name) // 注文したことない顧客の名前を取り出す(seq(name))
-      .toSet // setに変換
+      .map(customer => customer.name)                    // 注文したことない顧客の名前を取り出す(seq(name))
+      .toSet                                             // setに変換
