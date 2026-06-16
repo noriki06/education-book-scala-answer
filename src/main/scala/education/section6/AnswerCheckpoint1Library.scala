@@ -62,6 +62,8 @@ object AnswerCheckpoint1Library:
     val byId = booksById(books)
     println(findBookTitle(byId, Book.Id(3)).getOrElse("不明"))
     println(findBookTitle(byId, Book.Id(99)).getOrElse("不明"))
+    //問３
+    println(totalBybook(loans))
 
   /**
    *Seqのままだと探すたびに先頭から見るので、ID で引ける Map に変換
@@ -78,3 +80,15 @@ object AnswerCheckpoint1Library:
     byId
       .get(id)
       .map(book => book.title)
+
+  /**
+   *本ごとの貸出回数を集計する
+   */
+  def totalBybook(loans: Seq[Loan]): Map[Book.Id, Int] =
+    val groupedLoansByBookid =
+      loans
+        .groupBy(loan => loan.bookId)
+
+    groupedLoansByBookid
+      .view.mapValues(loanbook => loanbook.size)
+      .toMap
