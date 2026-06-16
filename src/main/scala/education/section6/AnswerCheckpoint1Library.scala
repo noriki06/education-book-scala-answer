@@ -64,6 +64,8 @@ object AnswerCheckpoint1Library:
     println(findBookTitle(byId, Book.Id(99)).getOrElse("不明"))
     //問３
     println(totalBybook(loans))
+    //問４
+    println(neverLoan(books, loans))
 
   /**
    *Seqのままだと探すたびに先頭から見るので、ID で引ける Map に変換
@@ -92,3 +94,26 @@ object AnswerCheckpoint1Library:
     groupedLoansByBookid
       .view.mapValues(loanbook => loanbook.size)
       .toMap
+
+  /**
+   *一度も貸し出されていない本を探す
+   */
+  def neverLoan(books: Seq[Book], loans: Seq[Loan]): Set[String] =
+    val loanedBookIds =
+      loans
+        .map(book => book.bookId)
+        .toSet
+
+    val allBookIds =
+      books
+        .map(book => book.id)
+        .toSet
+
+    val neverLoanbookIds =
+      allBookIds
+        .diff(loanedBookIds)
+
+    books
+      .filter(book => neverLoanbookIds.contains(book.id))
+      .map(book => book.title)
+      .toSet
