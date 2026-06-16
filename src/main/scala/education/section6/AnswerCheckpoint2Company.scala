@@ -48,9 +48,13 @@ object AnswerCheckpoint2Company:
     )
 
   def main(args: Array[String]): Unit =
+    //問１
     println(departments)
     println(employees)
+    //問２
     println(groupByDepartment(employees))
+    //問３
+    println(averageSalaryByDepartment(employees))
 
   /**
    *部署ごとに社員を振り分ける
@@ -65,6 +69,5 @@ object AnswerCheckpoint2Company:
   def averageSalaryByDepartment(employees: Seq[Employee] ): Map[Department.Id, Int] =
     groupByDepartment(employees)
       .view
-      .mapValues(employeesInDepartment => employeesInDepartment
-      .map(employee => ((employee.salary.toInt.sum) / (employee.size))))
+      .mapValues(employeesInDepartment => (employeesInDepartment.map(_.salary).sum) / (employeesInDepartment.size))
       .toMap
