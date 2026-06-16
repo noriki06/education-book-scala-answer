@@ -69,8 +69,11 @@ object AnswerCheckpoint2Company:
    *部署ごとの平均給与を出す
    */
   def averageSalaryByDepartment(employees: Seq[Employee]): Map[Department.Id, Int] =
-    groupByDepartment(employees)
-      .filter(employee => employees.contains(employee.employmentType.FullTime))
+    val employeeFulltime =
+      employees
+        .filter(employee => employee.employmentType == Employee.EmploymentType.FullTime)
+
+    groupByDepartment(employeeFulltime)
       .view
       .mapValues(employeesInDepartment => (employeesInDepartment.map(_.salary).sum) / (employeesInDepartment.size))
       .toMap
