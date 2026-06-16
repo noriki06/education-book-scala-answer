@@ -3,8 +3,8 @@ package education.section6
 object AnswerCheckpoint2Company:
 
   case class Department(
-    id: Department.Id,
-    name: String
+    id:   Department.Id, // 部署ID
+    name: String         // 部署名
   )
 
   object Department:
@@ -13,11 +13,11 @@ object AnswerCheckpoint2Company:
       def apply(value: Long): Id = value
 
   case class Employee(
-    id: Employee.Id,
-    name: String,
-    departmentId: Department.Id,
-    salary: Int,
-    employmentType: Employee.EmploymentType
+    id:             Employee.Id,            // 社員 ID
+    name:           String,                 // 名前
+    departmentId:   Department.Id,          // 部署 ID
+    salary:         Int,                    // 給与（万円）
+    employmentType: Employee.EmploymentType // 雇用形態
   )
 
   object Employee:
@@ -26,9 +26,9 @@ object AnswerCheckpoint2Company:
       def apply(value: Long): Id = value
 
     enum EmploymentType:
-      case FullTime,
-           Contract,
-           PartTime
+      case FullTime, // 正社員
+           Contract, // 契約
+           PartTime  // パート
 
   val departments: Seq[Department] =
     Seq(
@@ -70,6 +70,7 @@ object AnswerCheckpoint2Company:
    */
   def averageSalaryByDepartment(employees: Seq[Employee]): Map[Department.Id, Int] =
     groupByDepartment(employees)
+      .filter(employee => employees.contains(employee.employmentType.FullTime))
       .view
       .mapValues(employeesInDepartment => (employeesInDepartment.map(_.salary).sum) / (employeesInDepartment.size))
       .toMap
