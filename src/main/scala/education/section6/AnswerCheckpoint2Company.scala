@@ -52,6 +52,18 @@ object AnswerCheckpoint2Company:
     println(employees)
     println(groupByDepartment(employees))
 
+  /**
+   *部署ごとに社員を振り分ける
+   */
   def groupByDepartment(employees: Seq[Employee]): Map[Department.Id, Seq[Employee]] =
     employees
       .groupBy(employee => employee.departmentId)
+
+  /**
+   *部署ごとの平均給与を出す
+   */
+  def averageSalaryByDepartment(employees: Seq[Employee] ): Map[Department.Id, Int] =
+    groupByDepartment(employees)
+      .view
+      .mapValues(employee = ((employee.salary).sum) / (employee.size))
+      .toMap
