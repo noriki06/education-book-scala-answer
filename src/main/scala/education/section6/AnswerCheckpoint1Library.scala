@@ -32,13 +32,9 @@ object AnswerCheckpoint1Library:
       def apply(value: Long): Id = value
 
     enum Status:
-      case OnLoan,
-           Returned,
-           Overdue
-
-  def main(args: Array[String]): Unit =
-    println(books)
-    println(loans)
+      case OnLoan,   //貸出中
+           Returned, //返却済み
+           Overdue   // 延滞中
 
   val books: Seq[Book] =
     Seq(
@@ -56,4 +52,29 @@ object AnswerCheckpoint1Library:
       Loan(Loan.Id(103), Book.Id(1), "Carol", Loan.Status.OnLoan),
       Loan(Loan.Id(104), Book.Id(3), "Alice", Loan.Status.Overdue),
       Loan(Loan.Id(105), Book.Id(2), "Alice", Loan.Status.Returned),
-         )
+    )
+
+  def main(args: Array[String]): Unit =
+    //問１
+    println(books)
+    println(loans)
+    //問２
+    val byId = booksById(books)
+    println(findBookTitle(byId, Book.Id(3)).getOrElse("不明"))
+    println(findBookTitle(byId, Book.Id(99)).getOrElse("不明"))
+
+  /**
+   *Seqのままだと探すたびに先頭から見るので、ID で引ける Map に変換
+   */
+  def booksById(books: Seq[Book]): Map[Book.Id, Book] =
+    books
+      .map(book => book.id -> book)
+      .toMap
+
+  /**
+   *booksByIdで作ったMapとBook.Idを受け取り、タイトルを返す
+   */
+  def findBookTitle(byId: Map[Book.Id, Book], id: Book.Id): Option[String] =
+    byId
+      .get(id)
+      .map(book => book.title)
