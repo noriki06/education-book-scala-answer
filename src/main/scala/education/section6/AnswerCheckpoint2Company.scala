@@ -93,6 +93,6 @@ object AnswerCheckpoint2Company:
         .diff(affiliationDepartmentId)
 
     departments
-      .filter(department => department.id == noPersonDepartmentId)
+      .filter(department => noPersonDepartmentId.contains(department.id))
       .map(department => department.name)
       .toSet
