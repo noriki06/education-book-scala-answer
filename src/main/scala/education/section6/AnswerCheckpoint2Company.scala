@@ -55,5 +55,3 @@ object AnswerCheckpoint2Company:
   def groupByDepartment(employees: Seq[Employee]): Map[Department.Id, Seq[Employee]] =
     employees
       .groupBy(employee => employee.departmentId)
-      .map(employee => employee.Department.Id -> employee)
-      .toMap
