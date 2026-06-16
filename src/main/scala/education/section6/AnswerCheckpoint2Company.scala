@@ -55,6 +55,8 @@ object AnswerCheckpoint2Company:
     println(groupByDepartment(employees))
     //問３
     println(averageSalaryByDepartment(employees))
+    //問４
+    println(findNoPersonDepartment(departments, employees))
 
   /**
    *部署ごとに社員を振り分ける
@@ -66,8 +68,31 @@ object AnswerCheckpoint2Company:
   /**
    *部署ごとの平均給与を出す
    */
-  def averageSalaryByDepartment(employees: Seq[Employee] ): Map[Department.Id, Int] =
+  def averageSalaryByDepartment(employees: Seq[Employee]): Map[Department.Id, Int] =
     groupByDepartment(employees)
       .view
       .mapValues(employeesInDepartment => (employeesInDepartment.map(_.salary).sum) / (employeesInDepartment.size))
       .toMap
+
+  /**
+   *社員のいない部署を探す
+   */
+  def findNoPersonDepartment(departments: Seq[Department], employees: Seq[Employee]): Set[String] =
+    val allDepartmentId =
+      departments
+        .map(department => department.id)
+        .toSet
+
+    val affiliationDepartmentId =
+     employees
+       .map(employee => employee.departmentId)
+       .toSet
+
+    val noPersonDepartmentId =
+      allDepartmentId
+        .diff(affiliationDepartmentId)
+
+    departments
+      .filter(department => department.id == noPersonDepartmentId)
+      .map(department => department.name)
+      .toSet
