@@ -94,7 +94,7 @@ object AnswerEx3_6:
         .head             // その先頭のポケモン
 
     val defenderPokemon =
-      defenderTrainer
+      defenderTrainer //
         .holdsPokemon
         .filter(pokemon => pokemon.hp > 0)
         .head
@@ -136,21 +136,20 @@ object AnswerEx3_6:
     val updatedAttackerTrainer =
       attackerTrainer.copy(
         holdsPokemon =
-          attackerPokemon.holdsPokemon.updated(
+          attackerTrainer.holdsPokemon.updated(
             0, updatedAttackerPokemon
           )
       )
 
     if   attackSkill.kind == "攻撃" then
-      (defenderTrainer, updatedDefenderTrainer)
-    else if attackSkill.kind == "回復" then
+      (attackerTrainer, updatedDefenderTrainer)
+    else
       (updatedAttackerTrainer, defenderTrainer)
 
   /*
    * 決着: どちらかのチームの 全ポケモンの体力が 0（ひんし） になったら、もう一方の勝ち。
    * 引き分け: 決着がつかないまま 20 ターン を超えたら引き分け（回復ばかりで終わらない場合の保険）。
    */
-
   def battle(trainerA: Trainer, trainerB: Trainer, aTurn: Boolean, turn: Int): String =
     if      trainerA.holdsPokemon.forall(a => a.hp <= 0) then s"決着: トレーナーBの勝ち！" // b の勝ち
     else if trainerB.holdsPokemon.forall(b => b.hp <= 0) then s"決着: トレーナーAの勝ち！" // a の勝ち
