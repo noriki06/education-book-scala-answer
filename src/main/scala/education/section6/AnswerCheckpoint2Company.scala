@@ -30,10 +30,6 @@ object AnswerCheckpoint2Company:
            Contract,
            PartTime
 
-  def main(args: Array[String]): Unit =
-    println(departments)                               // val customers(顧客情報)の内容が正しいかを出力
-    println(employees)
-
   val departments: Seq[Department] =
     Seq(
       Department(Department.Id(1), "営業部"),
@@ -50,3 +46,14 @@ object AnswerCheckpoint2Company:
       Employee(Employee.Id(1004), "Dave",  Department.Id(1), 45, Employee.EmploymentType.FullTime),
       Employee(Employee.Id(1005), "Eve",   Department.Id(2), 55, Employee.EmploymentType.PartTime)
     )
+
+  def main(args: Array[String]): Unit =
+    println(departments)
+    println(employees)
+    println(groupByDepartment(employees))
+
+  def groupByDepartment(employees: Seq[Employee]): Map[Department.Id, Seq[Employee]] =
+    employees
+      .groupBy(employee => employee.departmentId)
+      .map(employee => employee.Department.Id -> employee)
+      .toMap
