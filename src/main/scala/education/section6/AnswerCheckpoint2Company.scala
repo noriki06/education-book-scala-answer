@@ -65,5 +65,6 @@ object AnswerCheckpoint2Company:
   def averageSalaryByDepartment(employees: Seq[Employee] ): Map[Department.Id, Int] =
     groupByDepartment(employees)
       .view
-      .mapValues(employee = ((employee.salary).sum) / (employee.size))
+      .mapValues(employeesInDepartment => employeesInDepartment
+      .map(employee => ((employee.salary.toInt.sum) / (employee.size))))
       .toMap
