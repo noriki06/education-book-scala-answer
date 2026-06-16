@@ -84,11 +84,15 @@ object AnswerCheckpoint1Library:
       .map(book => book.title)
 
   /**
-   *本ごとの貸出回数を集計する
+   *本ごとの貸出回数を集計する(延滞中のみ)
    */
   def totalBybook(loans: Seq[Loan]): Map[Book.Id, Int] =
-    val groupedLoansByBookid =
+    val overdueLoans =
       loans
+        .filter(loan => loan.status == Loan.Status.Overdue)
+
+    val groupedLoansByBookid =
+      overdueLoans
         .groupBy(loan => loan.bookId)
 
     groupedLoansByBookid
