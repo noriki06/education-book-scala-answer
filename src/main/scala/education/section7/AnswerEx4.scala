@@ -13,8 +13,8 @@ object AnswerEx4:
 
 
   def forEx4(users: Seq[User], id1: Int, id2: Int): Option[String] =
+
     for {
-      n <- users
-      a <- n.find(id1)
-      b <- n.find(id2)
-    } yield s"${a.name}さんと${b.name}さん"
+      a <- users.find(q => q.id == id1)
+      b <- users.find(q => q.id == id2)
+    } yield (s"${a.name}さんと${b.name}さん")
