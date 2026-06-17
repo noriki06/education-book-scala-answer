@@ -1,0 +1,14 @@
+package education.section7
+
+object AnswerEx2:
+
+  def main(args: Array[String]): Unit =
+    println(forEx2(20))
+
+  def forEx2(max: Int): Seq[(Int, Int, Int)] =
+    for {
+      a <- 1 to max
+      b <- 1 to max
+      c <- 1 to max
+      if a <= b <= c && a*a + b*b == c*c
+    } yield (a, b, c)
