@@ -15,5 +15,6 @@ object AnswerEx4:
   def forEx4(users: Seq[User], id1: Int, id2: Int): Option[String] =
     for {
       n <- users
-      if n.find(id1) && n.find(id2)
-    } yield s"${n.find(id1)}さんと${nn.find(id2)}さん"
+      a <- n.find(id1)
+      b <- n.find(id2)
+    } yield s"${a.name}さんと${b.name}さん"
