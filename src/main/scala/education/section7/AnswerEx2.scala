@@ -10,5 +10,5 @@ object AnswerEx2:
       a <- 1 to max
       b <- 1 to max
       c <- 1 to max
-      if a <= b <= c && a*a + b*b == c*c
+      if a <= b && b <= c && a*a + b*b == c*c
     } yield (a, b, c)
