@@ -7,7 +7,6 @@ object AnswerEx1:
 
   def forEx1(xs: Seq[Int]): Seq[String] =
     for {
-      n <- xs
-      x <- xs
-      b <- (n, x)
-    } yield s"$n x $x = $b"
+      a <- xs
+      b <- xs
+    } yield s"$a x $b = ${a * b}"

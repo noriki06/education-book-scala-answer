@@ -82,17 +82,17 @@ object AnswerCheckpoint2Company:
    *社員のいない部署を探す
    */
   def findNoPersonDepartment(departments: Seq[Department], employees: Seq[Employee]): Set[String] =
-    val allDepartmentIds =
+    val allDepartmentId =
       departments
         .map(department => department.id)
         .toSet
 
-    val affiliationDepartmentIds =
+    val affiliationDepartmentId =
      employees
        .map(employee => employee.departmentId)
        .toSet
 
-    val noPersonDepartmentIds =
+    val noPersonDepartmentId =
       allDepartmentId
         .diff(affiliationDepartmentId)
 
