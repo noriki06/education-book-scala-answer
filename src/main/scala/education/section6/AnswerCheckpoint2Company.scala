@@ -26,9 +26,9 @@ object AnswerCheckpoint2Company:
       def apply(value: Long): Id = value
 
     enum EmploymentType:
-      case FullTime,
-      Contract,
-      PartTime
+      case FullTime
+      case Contract //
+      case PartTime
 
   val departments: Seq[Department] =
     Seq(
@@ -82,17 +82,17 @@ object AnswerCheckpoint2Company:
    *社員のいない部署を探す
    */
   def findNoPersonDepartment(departments: Seq[Department], employees: Seq[Employee]): Set[String] =
-    val allDepartmentId =
+    val allDepartmentIds =
       departments
         .map(department => department.id)
         .toSet
 
-    val affiliationDepartmentId =
+    val affiliationDepartmentIds =
      employees
        .map(employee => employee.departmentId)
        .toSet
 
-    val noPersonDepartmentId =
+    val noPersonDepartmentIds =
       allDepartmentId
         .diff(affiliationDepartmentId)
 
