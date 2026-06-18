@@ -9,10 +9,13 @@ object ThrowDanger2:
     import scala.util.{Try, Success, Failure}
 
     val result: Try[Int] = parseInt()
-    result match
+    result
+    println(parseInt("42") match
+      case Success(n) => n.toInt
+      case Failure(e) => "(変換できません)"
+    )    // 数値 → 42
+    println(parseInt("abc") match
       case Success(n) => n
       case Failure(e) => "(変換できません)"
-
-    println(parseInt("42"))    // 数値 → 42
-    println(parseInt("abc"))   // 数値でない → ここで例外が発生
+    )   // 数値でない → ここで例外が発生
     println("最後まで到達した")   // この行は表示される？
