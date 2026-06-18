@@ -10,16 +10,25 @@ object AnswerEx1:
     age:  Int
   )
 
-  def validateName(name: String): Either[String, User] =
+  /**
+   *名前の検証
+   */
+  def validateName(name: String): Either[String, String] =
     name match
       case name if name == "" => Left("名前が空です")
       case                    => Right(name)
 
-  def validateAge(age: String): Either[String, User] =
+  /**
+   *年齢の検証
+   */
+  def validateAge(age: Int): Either[String, Int] =
     age match
       case age if age < 0 => Left("年齢が不正です")
       case                  => Right(age)
-
+　
+  /**
+   *ユーザー情報の検証
+   */
   def validateUser(name: String, age: Int): Either[String, User]=
     for{
       a <- validateName(name)
