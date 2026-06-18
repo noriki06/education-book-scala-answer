@@ -9,8 +9,8 @@ object Answer6:
 
   def tryQuestion6(a: String, b: String): Try[Int] =
     for {
-      x <- a.tryQuestion5
-      y <- b.tryQuestion5
+      x <- tryQuestion5(a)
+      y <- tryQuestion5(b)
     } yield x * y
 
 
