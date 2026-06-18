@@ -21,13 +21,13 @@ object AnswerEx2:
     (name, age) match
       case (name, age) if name == "" => Left(ValidationError.EmptyName)
       case (name, age) if age < 0    => Left(ValidationError.InvalidAge)
-      case (name, age)               => Right(name, age)
+      case                           => Right(User(name, age))
 
   def describe(result: Either[ValidationError, User]): String =
-    result(name, age) match
-      case Right(user)                            => s"登録成功: ${user.name} (${user.age})"
-      case Left(ValidationError.EmptyName)        => "名前を入力してください"
-      case Left(ValidationError.InvalidAge(v))    => s"年齢が不正です: $v"
+    result match
+      case Right(user)                      => s"登録成功: ${user.name} (${user.age})"
+      case Left(ValidationError.EmptyName)  => "名前を入力してください"
+      case Left(ValidationError.InvalidAge) =>"年齢が不正です"
 
   def main(args: Array[String]): Unit =
     println(describe(validateUser("Alice", 20)))
