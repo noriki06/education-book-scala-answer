@@ -1,7 +1,7 @@
 package education.section8
 
 object ThrowDanger2:
-import scala.util.{Try, Success, Failure}
+  import scala.util.{Try, Success, Failure}
   // 文字列を数値にする。失敗すると例外を投げる（s.toInt がそうなっている）
   def parseInt(s: String): Try[Int] =
     Try(s.toInt)
