@@ -1,7 +1,9 @@
 package education.section7
 
 object AnswerEx4:
-
+  /**
+   *ユーザーのケースクラス
+   */
   case class User(
     id: Int,
     name: String
@@ -11,9 +13,10 @@ object AnswerEx4:
     println(forEx4(users = Seq(User(1, "Alice"), User(2, "Bob")), id1 = 1, id2 = 2))
     println(forEx4(users = Seq(User(1, "Alice"), User(2, "Bob")), id1 = 1, id2 = 99))
 
-
+  /**
+   *問題 4: Option の for 式 — 2 つの検索を連結する
+   */
   def forEx4(users: Seq[User], id1: Int, id2: Int): Option[String] =
-
     for {
       a <- users.find(q => q.id == id1)
       b <- users.find(q => q.id == id2)

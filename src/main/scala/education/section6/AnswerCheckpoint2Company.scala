@@ -1,34 +1,42 @@
 package education.section6
 
 object AnswerCheckpoint2Company:
-
+  /**
+   *部署のケースクラス
+   */
   case class Department(
-    id:   Department.Id,
-    name: String
+    id:   Department.Id, // 部署 ID
+    name: String         // 部署名
   )
-
+  /**
+   *部署のコンパニオンオブジェクト
+   */
   object Department:
     opaque type Id = Long
     object Id:
       def apply(value: Long): Id = value
-
+  /**
+   *社員のケースクラス
+   */
   case class Employee(
-    id:             Employee.Id,
-    name:           String,
-    departmentId:   Department.Id,
-    salary:         Int,
-    employmentType: Employee.EmploymentType
+    id:             Employee.Id,            // 社員 ID
+    name:           String,                 // 名前
+    departmentId:   Department.Id,          // 部署 ID
+    salary:         Int,                    // 給与（万円）
+    employmentType: Employee.EmploymentType // 雇用形態
   )
-
+  /**
+   *社員のコンパニオンオブジェクト
+   */
   object Employee:
     opaque type Id = Long
     object Id:
       def apply(value: Long): Id = value
 
     enum EmploymentType:
-      case FullTime
-      case Contract //
-      case PartTime
+      case FullTime // 正社員
+      case Contract // 契約
+      case PartTime // パート
 
   val departments: Seq[Department] =
     Seq(
@@ -82,21 +90,21 @@ object AnswerCheckpoint2Company:
    *社員のいない部署を探す
    */
   def findNoPersonDepartment(departments: Seq[Department], employees: Seq[Employee]): Set[String] =
-    val allDepartmentId =
+    val allDepartmentIds =
       departments
         .map(department => department.id)
         .toSet
 
-    val affiliationDepartmentId =
+    val affiliationDepartmentIds =
      employees
        .map(employee => employee.departmentId)
        .toSet
 
-    val noPersonDepartmentId =
-      allDepartmentId
-        .diff(affiliationDepartmentId)
+    val noPersonDepartmentIds =
+      allDepartmentIds
+        .diff(affiliationDepartmentIds)
 
     departments
-      .filter(department => noPersonDepartmentId.contains(department.id))
+      .filter(department => noPersonDepartmentIds.contains(department.id))
       .map(department => department.name)
       .toSet

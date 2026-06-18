@@ -1,7 +1,9 @@
 package education.section7
 
 object AnswerEx3:
-
+  /**
+   *製品のケースクラス
+   */
   case class Product(
     name: String,
     stock: Int
@@ -13,6 +15,9 @@ object AnswerEx3:
       Product("ノート", 0),
       Product("消しゴム", 3)
     ) ) )
+  /**
+   *問題 3: case class × for — 在庫のある商品名
+   */
   def forEx3(products: Seq[Product]): Seq[String] =
     for {
       n <- products

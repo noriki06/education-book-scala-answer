@@ -4,7 +4,9 @@ object Answer3:
 
   def main(args: Array[String]): Unit =
     println(forQuestion3(Seq(1, 2, 3, 4)))
-
+/**
+ *問題 3: ガード ＋ yield
+ */
   def forQuestion3(numSeq: Seq[Int]): Seq[Int] =
     for {
       n <- numSeq

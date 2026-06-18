@@ -1,31 +1,39 @@
 package education.section6
 
 object AnswerCheckpoint1Library:
-
+  /**
+   *蔵書表のケースクラス
+   */
   case class Book(
-    id: Book.Id,
-    title: String,
-    category: Book.Category
+    id: Book.Id,            // 本 ID
+    title: String,          // タイトル
+    category: Book.Category // カテゴリ
   )
-
+  /**
+   *蔵書表のコンパニオンオブジェクト
+   */
   object Book:
     opaque type Id = Long
     object Id:
       def apply(value: Long): Id = value
 
     enum Category:
-      case Novel,
-           Comic,
-           Technical,
-           Magazine
-
+      case Novel,     // 小説
+           Comic,     // 漫画
+           Technical, // 技術書
+           Magazine   // 雑誌
+  /**
+   *貸出記録表のケースクラス
+   */
   case class Loan(
-    id: Loan.Id,
-    bookId: Book.Id,
-    borrower: String,
-    status: Loan.Status
+    id: Loan.Id,        // 貸出 ID
+    bookId: Book.Id,    // 本 ID
+    borrower: String,   // 借りた人
+    status: Loan.Status // ステータス
   )
-
+  /**
+   *貸出記録表のコンパニオンオブジェクト
+   */
   object Loan:
     opaque type Id = Long
     object Id:

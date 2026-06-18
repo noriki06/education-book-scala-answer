@@ -4,7 +4,9 @@ object AnswerEx2:
 
   def main(args: Array[String]): Unit =
     println(forEx2(20))
-
+  /**
+   *問題 2: 多重ジェネレータ ＋ ガード — ピタゴラス数
+   */
   def forEx2(max: Int): Seq[(Int, Int, Int)] =
     for {
       a <- 1 to max
