@@ -21,7 +21,7 @@ object AnswerEx2:
     (name, age) match
       case (name, age) if name == "" => Left(ValidationError.EmptyName)
       case (name, age) if age < 0    => Left(ValidationError.InvalidAge)
-      case                           => Right(result)
+      case (name, age)               => Right(name, age)
 
   def describe(result: Either[ValidationError, User]): String =
     result(name, age) match
