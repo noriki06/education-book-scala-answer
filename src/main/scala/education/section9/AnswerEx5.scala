@@ -13,9 +13,9 @@ object AnswerEx5:
 
   val users: Seq[User] =
     Seq(
-      User(1, ohira),
-      User(2, ueno),
-      User(3, tenkumo)
+      User(1, "ohira"),
+      User(2, "ueno"),
+      User(3, "tenkumo")
     )
 
   val userMap = users.map(user => user.id -> user).toMap
@@ -25,15 +25,16 @@ object AnswerEx5:
       Thread.sleep(1000)
       userMap
         .get(id)
-        .toRight("ユーザーが見つかりません: id=$id")
+        .toRight(s"ユーザーが見つかりません: id=$id")
+    }
 
   def main(args: Array[String]): Unit =
     val start1 = System.currentTimeMillis()
-    val result1: Int = Await.result1(findUser(1), Duration.Inf)
+    val result1: Either[String, User] = Await.result(findUser(1), Duration.Inf)
     val end1 = System.currentTimeMillis()
     println(s"結果: $result1, かかった時間: ${end1 - start1} ms")
 
     val start2 = System.currentTimeMillis()
-    val result2: Int = Await.result2(findUser(5), Duration.Inf)
+    val result2: Either[String, User] = Await.result(findUser(5), Duration.Inf)
     val end2 = System.currentTimeMillis()
     println(s"結果: $result2, かかった時間: ${end2 - start2} ms")
