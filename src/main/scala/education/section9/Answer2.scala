@@ -15,10 +15,11 @@ object Answer2:
 
 
   def main(args: Array[String]): Unit =
-    val result1: Future[Int] =
+    val futureResult1: Future[Int] =
       futureQuestion2("123")
         .onComplete {
           case Success(n) => println(n)
           case Failure(e) => println(s"失敗: $e")
         }
+    val result1: Int = Await.result(futureResult1, Duration.Inf)
     println(result1)
