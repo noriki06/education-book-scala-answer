@@ -8,6 +8,7 @@ object AnswerEx3:
 
   def fetch(id: Int): Future[String] =
     Future {
+      Thread.sleep(1000)
       s"item$id"
     }
 
@@ -16,5 +17,5 @@ object AnswerEx3:
 
 
   def main(args: Array[String]): Unit =
-    val result: Seq[String] = Await.result(fetchAll, Duration.Inf)
+    val result: Seq[String] = Await.result(fetchAll(Seq(1, 2, 3)), Duration.Inf)
     println(result)
