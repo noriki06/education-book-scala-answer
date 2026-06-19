@@ -2,12 +2,12 @@ package education.section8
 
 object AnswerEx3:
 
-  import scala.util.{Try, Success, Failure}
+  import scala.util.{Try}
 
   def parse(s: String): Either[String, Int] =
     Try(s.toInt)
       .toEither
-      .left.map(e => s"数値に変換できません: + $e")
+      .left.map(e => s"数値に変換できません: " + s)
 
   def sumThree(a: String, b: String, c: String): Either[String, Int] =
     for{
