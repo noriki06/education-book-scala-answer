@@ -42,7 +42,7 @@ object AnswerCheckpointShop:
   /**
    *問 3: 商品を探す
    */
-  def findProductById(productMap: Map[Int, Product], id: Int): Either[TypeOrderFailure, Map[Int, Product]] =
+  def findProductById(productMap: Map[Int, Product], id: Int): Either[TypeOrderFailure, Product] =
     productMap
       .get(id)
       .toRight(TypeOrderFailure.NotFoundProduct)
@@ -55,3 +55,4 @@ object AnswerCheckpointShop:
     println(inputValueToQuantity("0"))
     //問3
     println(findProductById(productMap, 1))
+    println(findProductById(productMap, 99))
