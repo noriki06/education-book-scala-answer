@@ -28,7 +28,7 @@ object AnswerCheckpointShop:
   /**
    *商品ID で引ける Map
    */
-  def productsById(products: Seq[Product]): Map[id, Product] =
+  def productsById(products: Seq[Product]): Map[Int, Product] =
     products
       .map(product => product.id -> product)
       .toMap
