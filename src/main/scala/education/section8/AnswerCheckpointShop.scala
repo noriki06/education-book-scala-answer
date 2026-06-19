@@ -32,19 +32,3 @@ object AnswerCheckpointShop:
     products
       .map(product => product.id -> product)
       .toMap
-
-  /**
-   *問 2: 数量を数値に変換する
-   */
-  def inputValueToQuantity(inputValue: String): Int =
-    for {
-      x <- inputValue.toIntOption.toRight(TypeOrderFailure.IncorrectQuantity)
-      if x <= 0
-    } yield x
-
-
-
-  def main(args: Array[String]): Unit =
-    println(inputValueToQuantity("3"))
-    println(inputValueToQuantity("abc"))
-    println(inputValueToQuantity("0"))
