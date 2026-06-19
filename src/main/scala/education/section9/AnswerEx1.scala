@@ -15,13 +15,10 @@ object AnswerEx1:
     }
 
   def main(args: Array[String]): Unit =
-    val f1 = slow("一つ目の処理", 10)
-    val f2 = slow("二つ目の処理", 20)
-
     val combinedFuture: Future[Int] =
       for {
-        result1 <- f1
-        result2 <- f2
+        result1 <- slow("一つ目の処理", 10)
+        result2 <- slow("二つ目の処理", 20)
       } yield result1 + result2
 
     val finalResult: Int = Await.result(combinedFuture, Duration.Inf)
