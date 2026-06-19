@@ -2,7 +2,7 @@ package education.section8
 
 object AnswerCheckpointShop:
 
-  /**会議のリンク
+  /**
    *商品のケースクラス
    */
   case class Product(
@@ -15,7 +15,7 @@ object AnswerCheckpointShop:
   enum TypeOrderFailure:
     case IncorrectQuantity(s: String) // 数量が正しくない
     case NotFoundProduct   // 商品が見つからない
-    case NotEnoughStock(s: String)    //在庫が足りない
+    case NotEnoughStock(orderQuantity: Int, stock: Int)    //在庫が足りない
 
   val products: Seq[Product] = // 商品マスタ
     Seq(
@@ -52,8 +52,8 @@ object AnswerCheckpointShop:
    *問 4: 在庫を確認し、注文全体を for で合成する
    */
   def checkStock(product: Product, orderQuantity: Int): Either[TypeOrderFailure, Unit]
-    products.stock match
-    case s if s < orderQuantity => Left(TypeOrderFailure.NotEnoughStock(s))
+    product.stock match
+    case s if s < orderQuantity => Left(TypeOrderFailure.NotEnoughStock(orderQuantity, product.stock))
     case _                      => Right()
 
   def totalPriceForOrder(productId: Int, inputValue: String): Either[TypeOrderFailure, Int]
@@ -61,7 +61,7 @@ object AnswerCheckpointShop:
       x <- inputValueToQuantity(inputValue)
       y <- findProductById(productMap, productId)
       z <- checkStock(y, x)
-    }yield x.price * x
+    }yield y.price * x
 
   def main(args: Array[String]): Unit =
     // 問2
