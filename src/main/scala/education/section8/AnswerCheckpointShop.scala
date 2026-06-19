@@ -36,10 +36,10 @@ object AnswerCheckpointShop:
   /**
    *問 2: 数量を数値に変換する
    */
-  def inputValueToQuantity(inputValue: String): Int =
+  def inputValueToQuantity(inputValue: String): Either[TypeOrderFailure, Int] =
     inputValue
       .toIntOption
-      .filter(i = i > 0)
+      .filter(i => i > 0)
       .toRight(TypeOrderFailure.IncorrectQuantity)
 
 
