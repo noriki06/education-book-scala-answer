@@ -9,20 +9,23 @@ object AnswerEx4:
   def findUserId(name: String): Future[Int] =
     Future {
       Thread.sleep(1000)
-      name.toInt
+      if (name == "scala") {
+        123 // 仮のユーザーID
+      } else {
+        456
+      }
     }
 
   def findProfile(userId: Int): Future[String] =
     Future {
       Thread.sleep(1000)
-      userId.toString
+      s"ユーザー$userId のプロフィール情報"
     }
 
   def findNotice(): Future[String] =
     Future {
       Thread.sleep(1000)
-
-
+      "システムからのお知らせです！"
     }
 
 
@@ -42,7 +45,7 @@ object AnswerEx4:
 
   def main(args: Array[String]): Unit =
     val start = System.currentTimeMillis()
-    val result: Seq[String] = Await.result(loadPage("scala"), Duration.Inf)
+    val result: (String, String) = Await.result(loadPage("scala"), Duration.Inf)
     val end = System.currentTimeMillis()
     println(result)
     println(s"結果: $result, かかった時間: ${end - start} ms")
