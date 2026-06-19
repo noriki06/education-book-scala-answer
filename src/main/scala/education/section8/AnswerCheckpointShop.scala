@@ -15,7 +15,7 @@ object AnswerCheckpointShop:
   enum TypeOrderFailure:
     case IncorrectQuantity // 数量が正しくない
     case NotFoundProduct   // 商品が見つからない
-    case NotEnoughStock    //在庫が足りない
+    case NotEnoughStock(s: String)    //在庫が足りない
 
   val products: Seq[Product] = // 商品マスタ
     Seq(
@@ -44,6 +44,8 @@ object AnswerCheckpointShop:
 
 
   def main(args: Array[String]): Unit =
+    // 問１
     println(inputValueToQuantity("3"))
     println(inputValueToQuantity("abc"))
     println(inputValueToQuantity("0"))
+    //問２
