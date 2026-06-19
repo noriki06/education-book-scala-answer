@@ -51,12 +51,12 @@ object AnswerCheckpointShop:
   /**
    *問 4: 在庫を確認し、注文全体を for で合成する
    */
-  def checkStock(product: Product, orderQuantity: Int): Either[TypeOrderFailure, Unit]
+  def checkStock(product: Product, orderQuantity: Int): Either[TypeOrderFailure, Unit] =
     product.stock match
     case s if s < orderQuantity => Left(TypeOrderFailure.NotEnoughStock(orderQuantity, product.stock))
-    case _                      => Right()
+    case _                      => Right(())
 
-  def totalPriceForOrder(productId: Int, inputValue: String): Either[TypeOrderFailure, Int]
+  def totalPriceForOrder(productId: Int, inputValue: String): Either[TypeOrderFailure, Int] =
     for{
       x <- inputValueToQuantity(inputValue)
       y <- findProductById(productMap, productId)
@@ -73,3 +73,6 @@ object AnswerCheckpointShop:
     println(findProductById(productMap, 99))
     // 問４
     println(totalPriceForOrder(1, "3"))
+    println(totalPriceForOrder(1, "abc"))
+    println(totalPriceForOrder(99, "1"))
+    println(totalPriceForOrder(2, "1"))
