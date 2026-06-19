@@ -15,4 +15,4 @@ object Answer1:
   def main(args: Array[String]): Unit =
     val resultFuture: Future[Int] = futureQuestion1(21)
     val result: Int = Await.result(resultFuture, Duration.Inf)
-    println(futureQuestion1(21))
+    println(futureQuestion1(result))
