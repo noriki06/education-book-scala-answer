@@ -13,7 +13,7 @@ object AnswerCheckpointShop:
   )
 
   enum TypeOrderFailure:
-    case IncorrectQuantity // 数量が正しくない
+    case IncorrectQuantity(s: String) // 数量が正しくない
     case NotFoundProduct   // 商品が見つからない
     case NotEnoughStock(s: String)    //在庫が足りない
 
@@ -28,10 +28,7 @@ object AnswerCheckpointShop:
   /**
    *商品ID で引ける Map
    */
-  def productsById(products: Seq[Product]): Map[Int, Product] =
-    products
-      .map(product => product.id -> product)
-      .toMap
+  val productMap = products.map(product => product.id -> product).toMap
 
   /**
    *問 2: 数量を数値に変換する
@@ -40,12 +37,21 @@ object AnswerCheckpointShop:
     inputValue
       .toIntOption
       .filter(i => i > 0)
-      .toRight(TypeOrderFailure.IncorrectQuantity)
+      .toRight(TypeOrderFailure.IncorrectQuantity(inputValue))
+
+  /**
+   *問 3: 商品を探す
+   */
+  def findProductById(productMap: Map[Int, Product], id: Int): Either[TypeOrderFailure, Map[Int, Product]] =
+    productMap
+      .get(id)
+      .toRight(TypeOrderFailure.NotFoundProduct)
 
 
   def main(args: Array[String]): Unit =
-    // 問１
+    // 問2
     println(inputValueToQuantity("3"))
     println(inputValueToQuantity("abc"))
     println(inputValueToQuantity("0"))
-    //問２
+    //問3
+    println(findProductById(productMap, 1))
