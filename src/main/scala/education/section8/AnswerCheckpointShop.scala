@@ -12,7 +12,7 @@ object AnswerCheckpointShop:
     stock: Int     //在庫数
   )
 
-   enum TypeOrderFailure:
+  enum TypeOrderFailure:
     case IncorrectQuantity // 数量が正しくない
     case NotFoundProduct   // 商品が見つからない
     case NotEnoughStock    //在庫が足りない
@@ -32,3 +32,18 @@ object AnswerCheckpointShop:
     products
       .map(product => product.id -> product)
       .toMap
+
+  /**
+   *問 2: 数量を数値に変換する
+   */
+  def inputValueToQuantity(inputValue: String): Int =
+    inputValue
+      .toIntOption
+      .filter(i = i > 0)
+      .toRight(TypeOrderFailure.IncorrectQuantity)
+
+
+  def main(args: Array[String]): Unit =
+    println(inputValueToQuantity("3"))
+    println(inputValueToQuantity("abc"))
+    println(inputValueToQuantity("0"))
