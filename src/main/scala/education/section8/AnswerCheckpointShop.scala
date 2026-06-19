@@ -48,11 +48,28 @@ object AnswerCheckpointShop:
       .toRight(TypeOrderFailure.NotFoundProduct)
 
 
+  /**
+   *問 4: 在庫を確認し、注文全体を for で合成する
+   */
+  def checkStock(products: Product, orderQuantity: Int): Either[TypeOrderFailure, Unit]
+    products.stock match
+    case s if s > orderQuantity => Right()
+    case _                      => Left(TypeOrderFailure.NotEnoughStock)
+
+  def totalPriceForOeder(productId: Int, inputValue: String): Either[TypeOrderFailure, Int]
+    for{
+      x <- inputValueToQuantity(inputValue)
+      y <- findProductById(productid)
+      z <- checkStock(y)
+    }yield x * z
+
   def main(args: Array[String]): Unit =
     // 問2
     println(inputValueToQuantity("3"))
     println(inputValueToQuantity("abc"))
     println(inputValueToQuantity("0"))
-    //問3
+    // 問3
     println(findProductById(productMap, 1))
     println(findProductById(productMap, 99))
+    // 問４
+    println(totalPriceForOeder(1, "3"))
