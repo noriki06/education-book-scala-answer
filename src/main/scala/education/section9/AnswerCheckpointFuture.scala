@@ -81,8 +81,8 @@ object AnswerCheckpointFuture:
           )
       )
 
-  def tryAll(requests: Seq[Int, Int]): Future[Seq[Either[TypeOfPaymentFailed, Int]]] =
-    Future.sequence(transaction(requests))
+  def tryAll(requests: Seq[(Int, Int)]): Future[Seq[Either[TypeOfPaymentFailed, Int]]] =
+    Future.sequence(requests.map((id, usePoints) => transaction(id, usePoints)))
 
   def main(args: Array[String]): Unit =
     // 問2
@@ -96,11 +96,13 @@ object AnswerCheckpointFuture:
     //val result2: Either[TypeOfPaymentFailed, Member] = Await.result(findMemberById(memberMap, 99), Duration.Inf)
     //println(result2)
     // 問4
-    val result3: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(1, 300),  Duration.Inf)
-    println(result3)
-    val result4: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(2, 100),  Duration.Inf)
-    println(result4)
-    val result5: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(1, 0),    Duration.Inf)
-    println(result5)
-    val result6: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(99, 100), Duration.Inf)
-    println(result6)
+    //val result3: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(1, 300),  Duration.Inf)
+    //println(result3)
+    //val result4: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(2, 100),  Duration.Inf)
+    //println(result4)
+    //val result5: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(1, 0),    Duration.Inf)
+    //println(result5)
+    //val result6: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(99, 100), Duration.Inf)
+    //println(result6)
+    // 問５
+    println(describe(tryAll(Seq((1, 300), (2, 100), (1, 0), (99, 100)))))
