@@ -72,10 +72,11 @@ object AnswerCheckpointFuture:
    * 問 4: 2 つをつないで引き落としを行う
    */
   def transaction(id: Int, usePoints: Int): Future[Either[TypeOfPaymentFailed, Int]] =
-    for {
-      a <- findMemberById(memberMap, id)
-      b <- describe(balanceAfterUse(a, usePoints)
-    } yield b
+
+    findMemberById(memberMap, id)
+      .right.map(member =>
+        describe(balanceAfterUse(member, usePoints))
+      )
 
   def main(args: Array[String]): Unit =
     // 問2
