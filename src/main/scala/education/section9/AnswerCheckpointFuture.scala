@@ -68,8 +68,17 @@ object AnswerCheckpointFuture:
         .toRight(TypeOfPaymentFailed.MemberNotFound(id))
     }
 
+  /**
+   * 問 4: 2 つをつないで引き落としを行う
+   */
+  def transaction(id: Int, usePoints: Int): Future[Either[TypeOfPaymentFailed, Int]] =
+    for {
+      a <- findMemberById(memberMap, id)
+      b <- describe(balanceAfterUse(a, usePoints)
+    } yield b
+
   def main(args: Array[String]): Unit =
-    // 問２
+    // 問2
     println(describe(balanceAfterUse(Member(1, "田中", 500), 300)))
     println(describe(balanceAfterUse(Member(1, "田中", 500), 0  )))
     println(describe(balanceAfterUse(Member(2, "佐藤", 0),   300)))
@@ -78,3 +87,6 @@ object AnswerCheckpointFuture:
     println(result1)
     val result2: Either[TypeOfPaymentFailed, Member] = Await.result(findMemberById(memberMap, 99), Duration.Inf)
     println(result2)
+    // 問4
+    val result3: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(1, 300), Duration.Inf)
+    println(result3)
