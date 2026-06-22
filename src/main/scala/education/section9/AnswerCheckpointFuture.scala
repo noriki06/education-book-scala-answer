@@ -30,6 +30,22 @@ object AnswerCheckpointFuture:
       Member(3, "鈴木", 1200)
     )
 
-  val findById = members.map(member => member.id -> member).toMap
+  val memberMap = members.map(member => member.id -> member).toMap
+
+  def BalanceAfterUse(memberMap: Map[Int, Member], usePoints: Int): Either[TypeOfPaymentFailed, Int] =
+    (memberMap, usePoints) match
+      case (memberMap, usePoints) if usePoints <= 0
+        => Left(TypeOfPaymentFailed.PointsIncorrect(usePoints))
+      case (memberMap, usePoints) if memberMap.point > usePoints
+        => Left(TypeOfPaymentFailed.NotEnoughPoints(memberMap.point))
+      case _
+        => Right(memberMap.point - usePoints)
+
+  def describe(result: Either[TypeOfPaymentFailed, Int]): String =
+    result match
+      case Right(points)                             => s"$points"
+      case Left(TypeOfPaymentFailed.PointsIncorrect) => "利用ポイント不正の失敗"
+      case Left(TypeOfPaymentFailed.NotEnoughPoints) => "ポイント不足の失敗"
 
   def main(args: Array[String]): Unit =
+    println(describe(BalanceAfterUse(Map(3, memberMap), 300)))
