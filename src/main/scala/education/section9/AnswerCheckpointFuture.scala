@@ -39,7 +39,7 @@ object AnswerCheckpointFuture:
       case (member, usePoints) if usePoints <= 0
         => Left(TypeOfPaymentFailed.PointsIncorrect(usePoints))
       case (member, usePoints) if member.point < usePoints
-        => Left(TypeOfPaymentFailed.MemberNotFound(_))
+        => Left(TypeOfPaymentFailed.NotEnoughPoints(member.point, usePoints))
       case _
         => Right(member.point - usePoints)
 
@@ -49,11 +49,13 @@ object AnswerCheckpointFuture:
   def describe(result: Either[TypeOfPaymentFailed, Int]): String =
     result match
       case Right(points)
-        => s"$points"
-      case Left(TypeOfPaymentFailed.PointsIncorrect(_))
-        => "利用ポイント不正の失敗"
-      case Left(TypeOfPaymentFailed.NotEnoughPoints(member.point, usePoints))
-        => "ポイントが足りません（保有 0／利用 100）"
+        => s"残高 $points ポイント"
+      case Left(TypeOfPaymentFailed.PointsIncorrect(usePoints))
+        => s"${usePoints}は不正な利用ポイントです"
+      case Left(TypeOfPaymentFailed.NotEnoughPoints(heldPoints, usePoints))
+        => s"ポイントが足りません（保有 $heldPoints／利用 $usePoints）"
+      case Left(TypeOfPaymentFailed.MemberNotFound(id))
+        => "そのIDの会員はいません"
 
   /**
    * 問 3: 会員を探す
@@ -65,6 +67,7 @@ object AnswerCheckpointFuture:
         .get(id)
         .toRight(TypeOfPaymentFailed.MemberNotFound(id))
     }
+
 
   /**
    * 問 4: 2 つをつないで引き落としを行う
@@ -78,22 +81,28 @@ object AnswerCheckpointFuture:
           )
       )
 
+  def
+
+  def tryAll(id: Int, usePoints: Int): Future[Seq[Either[TypeOfPaymentFailed, Int]]] =
+    Future.sequence(transaction(id, usePoints))
+
   def main(args: Array[String]): Unit =
     // 問2
-    println(describe(balanceAfterUse(Member(1, "田中", 500), 300)))
-    println(describe(balanceAfterUse(Member(1, "田中", 500), 0  )))
-    println(describe(balanceAfterUse(Member(2, "佐藤", 0),   300)))
+    // println(describe(balanceAfterUse(Member(1, "田中", 500), 300)))
+    //println(describe(balanceAfterUse(Member(1, "田中", 500), 0  )))
+    //println(describe(balanceAfterUse(Member(2, "佐藤", 0),   300)))
+    //println(describe(balanceAfterUse(Member(6, "山田", 0),   300)))
     // 問3
-    val result1: Either[TypeOfPaymentFailed, Member] = Await.result(findMemberById(memberMap, 1), Duration.Inf)
-    println(result1)
-    val result2: Either[TypeOfPaymentFailed, Member] = Await.result(findMemberById(memberMap, 99), Duration.Inf)
-    println(result2)
+    //val result1: Either[TypeOfPaymentFailed, Member] = Await.result(findMemberById(memberMap, 1), Duration.Inf)
+    //println(result1)
+    //val result2: Either[TypeOfPaymentFailed, Member] = Await.result(findMemberById(memberMap, 99), Duration.Inf)
+    //println(result2)
     // 問4
-    val result3: Either[String, String] = Await.result(describe(transaction(1, 300)),  Duration.Inf)
+    val result3: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(1, 300),  Duration.Inf)
     println(result3)
-    val result4: Either[String, String] = Await.result(describe(transaction(2, 100)),  Duration.Inf)
+    val result4: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(2, 100),  Duration.Inf)
     println(result4)
-    val result5: Either[String, String] = Await.result(describe(transaction(1, 0)),    Duration.Inf)
+    val result5: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(1, 0),    Duration.Inf)
     println(result5)
-    val result6: Either[String, String] = Await.result(describe(transaction(99, 100)), Duration.Inf)
+    val result6: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(99, 100), Duration.Inf)
     println(result6)
