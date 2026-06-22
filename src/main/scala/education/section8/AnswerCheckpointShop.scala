@@ -63,7 +63,7 @@ object AnswerCheckpointShop:
       z <- checkStock(y, x)
     }yield y.price * x
 
-  def allInformation(result: [TypeOrderFailure, Int]): String =
+  def allInformation(result: Either[TypeOrderFailure, Int]): String =
     result match
       case Right(money)
         => s"合計 $money 円"
@@ -75,7 +75,7 @@ object AnswerCheckpointShop:
         => s"在庫が足りません（在庫 $stock／利用 $orderQuantity）"
 
   def doAll(requests: Seq[(Int, String)]): Either[TypeOrderFailure, Int] =
-    requests.partitionMap(totalPriceForOrder(id, inputValue))
+    requests.partitionMap(totalPriceForOrder(id, inputValue).map(money => money.sum))
 
   def main(args: Array[String]): Unit =
     // 問2
