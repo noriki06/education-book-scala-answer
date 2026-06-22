@@ -43,9 +43,14 @@ object AnswerCheckpointFuture:
 
   def describe(result: Either[TypeOfPaymentFailed, Int]): String =
     result match
-      case Right(points)                             => s"$points"
-      case Left(TypeOfPaymentFailed.PointsIncorrect(_)) => "利用ポイント不正の失敗"
-      case Left(TypeOfPaymentFailed.NotEnoughPoints(_)) => "ポイント不足の失敗"
+      case Right(points)
+        => s"$points"
+      case Left(TypeOfPaymentFailed.PointsIncorrect(_))
+        => "利用ポイント不正の失敗"
+      case Left(TypeOfPaymentFailed.NotEnoughPoints(_))
+        => "ポイント不足の失敗"
+      case Left(TypeOfPaymentFailed.MemberNotFound(_))
+        => "会員なしの失敗"
 
   def main(args: Array[String]): Unit =
     println(describe(balanceAfterUse(Member(1, "田中", 500), 300)))
