@@ -60,7 +60,7 @@ object AnswerCheckpointFuture:
   /**
    * 問 3: 会員を探す
    */
-  def findMemberByid(memberMap: Map[Int, Member], id: Int): Future[Either[TypeOfPaymentFailed, Member]] =
+  def findMemberById(memberMap: Map[Int, Member], id: Int): Future[Either[TypeOfPaymentFailed, Member]] =
     Future {
       Thread.sleep(1000)
       memberMap
