@@ -55,7 +55,7 @@ object AnswerCheckpointFuture:
       case Left(TypeOfPaymentFailed.NotEnoughPoints(heldPoints, usePoints))
         => s"ポイントが足りません（保有 $heldPoints／利用 $usePoints）"
       case Left(TypeOfPaymentFailed.MemberNotFound(id))
-        => "そのIDの会員はいません"
+        => s"ID:${id}の会員はいません"
 
   /**
    * 問 3: 会員を探す
