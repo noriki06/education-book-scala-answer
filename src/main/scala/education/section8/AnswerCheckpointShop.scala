@@ -95,4 +95,10 @@ object AnswerCheckpointShop:
     println(totalPriceForOrder(99, "1"))
     println(totalPriceForOrder(2, "1"))
     // 問５
+    //
+    println(toMessage(totalPriceForOrder(1, "3")))
+    println(toMessage(totalPriceForOrder(1, "abc")))
+    println(toMessage(totalPriceForOrder(99, "1")))
+    println(toMessage(totalPriceForOrder(2, "1")))
+
     println(summarizeOrders(Seq((1, "3"), (1, "abc"), (99, "1"), (2, "1"))))
