@@ -81,10 +81,8 @@ object AnswerCheckpointFuture:
           )
       )
 
-  def
-
-  def tryAll(id: Int, usePoints: Int): Future[Seq[Either[TypeOfPaymentFailed, Int]]] =
-    Future.sequence(transaction(id, usePoints))
+  def tryAll(requests: Seq[Int, Int]): Future[Seq[Either[TypeOfPaymentFailed, Int]]] =
+    Future.sequence(transaction(requests))
 
   def main(args: Array[String]): Unit =
     // 問2
