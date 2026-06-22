@@ -74,7 +74,7 @@ object AnswerCheckpointFuture:
     println(describe(balanceAfterUse(Member(1, "田中", 500), 0  )))
     println(describe(balanceAfterUse(Member(2, "佐藤", 0),   300)))
     // 問3
-    val result1: Either[TypeOfPaymentFailed, Member] = Await.result(findMemberByid(memberMap, 1), Duration.Inf)
+    val result1: Either[TypeOfPaymentFailed, Member] = Await.result(findMemberById(memberMap, 1), Duration.Inf)
     println(result1)
-    val result2: Either[TypeOfPaymentFailed, Member] = Await.result(findMemberByid(memberMap, 99), Duration.Inf)
+    val result2: Either[TypeOfPaymentFailed, Member] = Await.result(findMemberById(memberMap, 99), Duration.Inf)
     println(result2)
