@@ -75,7 +75,11 @@ object AnswerCheckpointShop:
         => s"在庫が足りません（在庫 $stock／利用 $orderQuantity）"
 
   def doAll(requests: Seq[(Int, String)]): Either[TypeOrderFailure, Int] =
-    requests.partitionMap(totalPriceForOrder(id, inputValue).map(money => money.sum))
+    val (failures, successes) =
+      requests
+        .partitionMap { case (id, inputValue) => totalPriceForOrder(id, inputValue) }
+
+        (failures, successes)
 
   def main(args: Array[String]): Unit =
     // 問2
