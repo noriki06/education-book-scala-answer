@@ -105,5 +105,5 @@ object AnswerCheckpointFuture:
     //val result6: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(99, 100), Duration.Inf)
     //println(result6)
     // 問５
-    val result6: [Either[TypeOfPaymentFailed, Int]] = Await.result(tryAll(Seq((1, 300), (2, 100), (1, 0), (99, 100))), Duration.Inf)
+    val result6: Seq[Either[TypeOfPaymentFailed, Int]] = Await.result(tryAll(Seq((1, 300), (2, 100), (1, 0), (99, 100))), Duration.Inf)
     result6.foreach(result => println(describe(result)))
