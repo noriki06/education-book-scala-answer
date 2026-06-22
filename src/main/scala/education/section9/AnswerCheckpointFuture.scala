@@ -19,7 +19,7 @@ object AnswerCheckpointFuture:
   enum TypeOfPaymentFailed:
     case MemberNotFound(memberId: Int)         // 会員が見つからない（その会員IDが無い）
     case PointsIncorrect(requestedPoints: Int) // 利用ポイントが正しくない（0 以下だった）
-    case NotEnoughPoints(heldPoints: Int)      // ポイントが足りない
+    case NotEnoughPoints(heldPoints: Int, usePoints: Int)      // ポイントが足りない
 
   // 会員マスタ一覧
   val members: Seq[Member] =
@@ -39,7 +39,7 @@ object AnswerCheckpointFuture:
       case (member, usePoints) if usePoints <= 0
         => Left(TypeOfPaymentFailed.PointsIncorrect(usePoints))
       case (member, usePoints) if member.point < usePoints
-        => Left(TypeOfPaymentFailed.NotEnoughPoints(member.point))
+        => Left(TypeOfPaymentFailed.MemberNotFound(_))
       case _
         => Right(member.point - usePoints)
 
@@ -52,10 +52,8 @@ object AnswerCheckpointFuture:
         => s"$points"
       case Left(TypeOfPaymentFailed.PointsIncorrect(_))
         => "利用ポイント不正の失敗"
-      case Left(TypeOfPaymentFailed.NotEnoughPoints(_))
-        => "ポイント不足の失敗"
-      case Left(TypeOfPaymentFailed.MemberNotFound(_))
-        => "会員なしの失敗"
+      case Left(TypeOfPaymentFailed.NotEnoughPoints(member.point, usePoints))
+        => "ポイントが足りません（保有 0／利用 100）"
 
   /**
    * 問 3: 会員を探す
@@ -91,11 +89,11 @@ object AnswerCheckpointFuture:
     val result2: Either[TypeOfPaymentFailed, Member] = Await.result(findMemberById(memberMap, 99), Duration.Inf)
     println(result2)
     // 問4
-    val result3: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(1, 300),  Duration.Inf)
+    val result3: Either[String, String] = Await.result(describe(transaction(1, 300)),  Duration.Inf)
     println(result3)
-    val result4: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(2, 100),  Duration.Inf)
+    val result4: Either[String, String] = Await.result(describe(transaction(2, 100)),  Duration.Inf)
     println(result4)
-    val result5: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(1, 0),    Duration.Inf)
+    val result5: Either[String, String] = Await.result(describe(transaction(1, 0)),    Duration.Inf)
     println(result5)
-    val result6: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(99, 100), Duration.Inf)
+    val result6: Either[String, String] = Await.result(describe(transaction(99, 100)), Duration.Inf)
     println(result6)
