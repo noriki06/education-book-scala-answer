@@ -2,9 +2,9 @@ package education.section9
 
 object AnswerCheckpointFuture:
 
-  // import scala.concurrent.{Future, Await}
-  // import scala.concurrent.ExecutionContext.Implicits.global
-  // import scala.concurrent.duration.*
+  import scala.concurrent.{Future, Await}
+  import scala.concurrent.ExecutionContext.Implicits.global
+  import scala.concurrent.duration.*
 
   /**
    * 会員のケースクラス
@@ -29,8 +29,11 @@ object AnswerCheckpointFuture:
       Member(3, "鈴木", 1200)
     )
 
-  val memberMap = members.map(member => member.id -> member).toMap
+  val memberMap = members.map(member => member.id -> member).toMap // 会員IDで引ける会員マスター一覧
 
+  /**
+   * 問2:ポイントが足りるか確認する
+   */
   def balanceAfterUse(member: Member, usePoints: Int): Either[TypeOfPaymentFailed, Int] =
     (member, usePoints) match
       case (member, usePoints) if usePoints <= 0
@@ -40,6 +43,9 @@ object AnswerCheckpointFuture:
       case _
         => Right(member.point - usePoints)
 
+  /**
+   * balanceAfterUseの値から利用後の残高 or エラー表示
+   */
   def describe(result: Either[TypeOfPaymentFailed, Int]): String =
     result match
       case Right(points)
@@ -51,7 +57,24 @@ object AnswerCheckpointFuture:
       case Left(TypeOfPaymentFailed.MemberNotFound(_))
         => "会員なしの失敗"
 
+  /**
+   * 問 3: 会員を探す
+   */
+  def findMemberByid(memberMap: Map[Int, Member], id: Int): Future[Either[TypeOfPaymentFailed, Member]] =
+    Future {
+      Thread.sleep(1000)
+      memberMap
+        .get(id)
+        .toRight(TypeOfPaymentFailed.MemberNotFound(id))
+    }
+
   def main(args: Array[String]): Unit =
+    // 問２
     println(describe(balanceAfterUse(Member(1, "田中", 500), 300)))
     println(describe(balanceAfterUse(Member(1, "田中", 500), 0  )))
     println(describe(balanceAfterUse(Member(2, "佐藤", 0),   300)))
+    // 問3
+    val result1: Either[TypeOfPaymentFailed, Member] = Await.result(findMemberByid(memberMap, 1), Duration.Inf)
+    println(result1)
+    val result2: Either[TypeOfPaymentFailed, Member] = Await.result(findMemberByid(memberMap, 99), Duration.Inf)
+    println(result2)
