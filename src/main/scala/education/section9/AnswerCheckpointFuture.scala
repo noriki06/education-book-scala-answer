@@ -16,8 +16,8 @@ object AnswerCheckpointFuture:
     point: Int     // 保有ポイント
   )
 
-　// 引き落としの失敗の種類
-　enum TypeOfPaymentFailed:
+  // 引き落としの失敗の種類
+  enum TypeOfPaymentFailed:
     case MemberNotFound(memberId: Int)  // 会員が見つからない（その会員IDが無い）
     case PointsIncorrect(requestedPoints: Int) // 利用ポイントが正しくない（0 以下だった）
     case NotEnoughPoints(heldPoints: Int) // ポイントが足りない
