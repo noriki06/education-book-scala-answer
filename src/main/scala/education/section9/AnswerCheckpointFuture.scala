@@ -9,7 +9,6 @@ object AnswerCheckpointFuture:
   /**
    * 会員のケースクラス
    */
-
   case class Member(
     id:    Int,    // 会員ID
     name:  String, // 氏名
@@ -18,9 +17,9 @@ object AnswerCheckpointFuture:
 
   // 引き落としの失敗の種類
   enum TypeOfPaymentFailed:
-    case MemberNotFound(memberId: Int)  // 会員が見つからない（その会員IDが無い）
+    case MemberNotFound(memberId: Int)         // 会員が見つからない（その会員IDが無い）
     case PointsIncorrect(requestedPoints: Int) // 利用ポイントが正しくない（0 以下だった）
-    case NotEnoughPoints(heldPoints: Int) // ポイントが足りない
+    case NotEnoughPoints(heldPoints: Int)      // ポイントが足りない
 
   // 会員マスタ一覧
   val members: Seq[Member] =
@@ -54,3 +53,5 @@ object AnswerCheckpointFuture:
 
   def main(args: Array[String]): Unit =
     println(describe(balanceAfterUse(Member(1, "田中", 500), 300)))
+    println(describe(balanceAfterUse(Member(1, "田中", 500), 0  )))
+    println(describe(balanceAfterUse(Member(2, "佐藤", 0),   300)))
