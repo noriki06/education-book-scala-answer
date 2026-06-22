@@ -74,8 +74,10 @@ object AnswerCheckpointFuture:
   def transaction(id: Int, usePoints: Int): Future[Either[TypeOfPaymentFailed, Int]] =
 
     findMemberById(memberMap, id)
-      .right.map(member =>
-        describe(balanceAfterUse(member, usePoints))
+      .map(member =>
+          member.right.map(member =>
+            balanceAfterUse(member, usePoints)
+          )
       )
 
   def main(args: Array[String]): Unit =
