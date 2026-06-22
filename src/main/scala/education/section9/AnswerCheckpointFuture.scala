@@ -17,9 +17,9 @@ object AnswerCheckpointFuture:
 
   // 引き落としの失敗の種類
   enum TypeOfPaymentFailed:
-    case MemberNotFound(memberId: Int)         // 会員が見つからない（その会員IDが無い）
-    case PointsIncorrect(requestedPoints: Int) // 利用ポイントが正しくない（0 以下だった）
-    case NotEnoughPoints(heldPoints: Int, usePoints: Int)      // ポイントが足りない
+    case MemberNotFound(memberId: Int)                    // 会員が見つからない（その会員IDが無い）
+    case PointsIncorrect(requestedPoints: Int)            // 利用ポイントが正しくない（0 以下だった）
+    case NotEnoughPoints(heldPoints: Int, usePoints: Int) // ポイントが足りない
 
   // 会員マスタ一覧
   val members: Seq[Member] =
@@ -29,7 +29,8 @@ object AnswerCheckpointFuture:
       Member(3, "鈴木", 1200)
     )
 
-  val memberMap = members.map(member => member.id -> member).toMap // 会員IDで引ける会員マスター一覧
+  // 会員IDで引ける会員マスター一覧
+  val memberMap = members.map(member => member.id -> member).toMap
 
   /**
    * 問2:ポイントが足りるか確認する
@@ -81,29 +82,32 @@ object AnswerCheckpointFuture:
           )
       )
 
+  /**
+   * 問５ 結果をメッセージにする／複数要求を並行処理する
+   */
   def tryAll(requests: Seq[(Int, Int)]): Future[Seq[Either[TypeOfPaymentFailed, Int]]] =
     Future.sequence(requests.map((id, usePoints) => transaction(id, usePoints)))
 
   def main(args: Array[String]): Unit =
     // 問2
-    // println(describe(balanceAfterUse(Member(1, "田中", 500), 300)))
-    //println(describe(balanceAfterUse(Member(1, "田中", 500), 0  )))
-    //println(describe(balanceAfterUse(Member(2, "佐藤", 0),   300)))
-    //println(describe(balanceAfterUse(Member(6, "山田", 0),   300)))
+    println(describe(balanceAfterUse(Member(1, "田中", 500), 300)))
+    println(describe(balanceAfterUse(Member(1, "田中", 500), 0  )))
+    println(describe(balanceAfterUse(Member(2, "佐藤", 0),   300)))
+    println(describe(balanceAfterUse(Member(6, "山田", 0),   300)))
     // 問3
-    //val result1: Either[TypeOfPaymentFailed, Member] = Await.result(findMemberById(memberMap, 1), Duration.Inf)
-    //println(result1)
-    //val result2: Either[TypeOfPaymentFailed, Member] = Await.result(findMemberById(memberMap, 99), Duration.Inf)
-    //println(result2)
+    val result1: Either[TypeOfPaymentFailed, Member] = Await.result(findMemberById(memberMap, 1), Duration.Inf)
+    println(result1)
+    val result2: Either[TypeOfPaymentFailed, Member] = Await.result(findMemberById(memberMap, 99), Duration.Inf)
+    println(result2)
     // 問4
-    //val result3: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(1, 300),  Duration.Inf)
-    //println(result3)
-    //val result4: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(2, 100),  Duration.Inf)
-    //println(result4)
-    //val result5: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(1, 0),    Duration.Inf)
-    //println(result5)
-    //val result6: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(99, 100), Duration.Inf)
-    //println(result6)
+    val result3: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(1, 300),  Duration.Inf)
+    println(result3)
+    val result4: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(2, 100),  Duration.Inf)
+    println(result4)
+    val result5: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(1, 0),    Duration.Inf)
+    println(result5)
+    val result6: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(99, 100), Duration.Inf)
+    println(result6)
     // 問５
-    val result6: Seq[Either[TypeOfPaymentFailed, Int]] = Await.result(tryAll(Seq((1, 300), (2, 100), (1, 0), (99, 100))), Duration.Inf)
-    result6.foreach(result => println(describe(result)))
+    val result7: Seq[Either[TypeOfPaymentFailed, Int]] = Await.result(tryAll(Seq((1, 300), (2, 100), (1, 0), (99, 100))), Duration.Inf)
+    result7.foreach(result => println(describe(result)))

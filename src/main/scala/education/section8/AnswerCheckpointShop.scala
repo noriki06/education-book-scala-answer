@@ -14,7 +14,7 @@ object AnswerCheckpointShop:
 
   enum TypeOrderFailure:
     case IncorrectQuantity(s: String) // 数量が正しくない
-    case NotFoundProduct   // 商品が見つからない
+    case NotFoundProduct(id: Int)   // 商品が見つからない
     case NotEnoughStock(orderQuantity: Int, stock: Int)    //在庫が足りない
 
   val products: Seq[Product] = // 商品マスタ
@@ -63,6 +63,20 @@ object AnswerCheckpointShop:
       z <- checkStock(y, x)
     }yield y.price * x
 
+  def allInformation((result: [TypeOrderFailure, Int]): Either[TypeOrderFailure, String]) =
+    result match
+      case Right(money)
+        => s"合計 $money 円"
+      case Left(TypeOrderFailure.IncorrectQuantity(inputValue))
+        => s"${inputValue}は不正な入力値です"
+      case Left(TypeOrderFailure.NotFoundProduct(id))
+        => s"ID:${ID}の商品がありません"
+      case Left(TypeOrderFailure.NotEnoughStock(orderQuantity, stock))
+        => s"在庫が足りません（在庫 $stock／利用 $orderQuantity）"
+
+  def doAll(requests: Seq[(Int, String)]): Either[TypeOrderFailure, Int] =
+    requests.flatMap((id, inputValue) => totalPriceForOrder(id, inputValue))
+
   def main(args: Array[String]): Unit =
     // 問2
     println(inputValueToQuantity("3"))
@@ -76,3 +90,5 @@ object AnswerCheckpointShop:
     println(totalPriceForOrder(1, "abc"))
     println(totalPriceForOrder(99, "1"))
     println(totalPriceForOrder(2, "1"))
+    // 問５
+    println(allInformation(doAll(Seq((1, "3"), (1, "abc"), (99, "1"), (2, "1")))))
