@@ -58,12 +58,12 @@ object AnswerCheckpointShop:
 
   def totalPriceForOrder(productId: Int, inputValue: String): Either[TypeOrderFailure, Int] =
     for{
-      x <- inputValueToQuantity(inputValue)
-      y <- findProductById(productMap, productId)
-      z <- checkStock(y, x)
-    }yield y.price * x
+      quantity <- inputValueToQuantity(inputValue)
+      product  <- findProductById(productMap, productId)
+      _        <- checkStock(product, quantity)
+    }yield product.price * quantity
 
-  def allInformation(result: Either[TypeOrderFailure, Int]): String =
+  def toMessage(result: Either[TypeOrderFailure, Int]): String =
     result match
       case Right(money)
         => s"合計 $money 円"
@@ -74,12 +74,12 @@ object AnswerCheckpointShop:
       case Left(TypeOrderFailure.NotEnoughStock(orderQuantity, stock))
         => s"在庫が足りません（在庫 $stock／利用 $orderQuantity）"
 
-  def doAll(requests: Seq[(Int, String)]): (TypeOrderFailure, Int) =
+  def summarizeOrders(requests: Seq[(Int, String)]): (Seq[TypeOrderFailure], Int) =
     val (failures, successes) =
       requests
         .partitionMap { case (id, inputValue) => totalPriceForOrder(id, inputValue) }
 
-        (failures, successes.sum)
+    (failures, successes.sum)
 
   def main(args: Array[String]): Unit =
     // 問2
@@ -95,4 +95,4 @@ object AnswerCheckpointShop:
     println(totalPriceForOrder(99, "1"))
     println(totalPriceForOrder(2, "1"))
     // 問５
-    println(doAll(Seq((1, "3"), (1, "abc"), (99, "1"), (2, "1"))))
+    println(summarizeOrders(Seq((1, "3"), (1, "abc"), (99, "1"), (2, "1"))))
