@@ -74,12 +74,12 @@ object AnswerCheckpointShop:
       case Left(TypeOrderFailure.NotEnoughStock(orderQuantity, stock))
         => s"在庫が足りません（在庫 $stock／利用 $orderQuantity）"
 
-  def doAll(requests: Seq[(Int, String)]): Either[TypeOrderFailure, Int] =
+  def doAll(requests: Seq[(Int, String)]): (TypeOrderFailure, Int) =
     val (failures, successes) =
       requests
         .partitionMap { case (id, inputValue) => totalPriceForOrder(id, inputValue) }
 
-        (failures, successes)
+        (failures, successes.sum)
 
   def main(args: Array[String]): Unit =
     // 問2
@@ -95,4 +95,4 @@ object AnswerCheckpointShop:
     println(totalPriceForOrder(99, "1"))
     println(totalPriceForOrder(2, "1"))
     // 問５
-    println(allInformation(doAll(Seq((1, "3"), (1, "abc"), (99, "1"), (2, "1")))))
+    println(doAll(Seq((1, "3"), (1, "abc"), (99, "1"), (2, "1"))))
