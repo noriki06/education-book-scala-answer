@@ -75,8 +75,8 @@ object AnswerCheckpointFuture:
 
     findMemberById(memberMap, id)
       .map(member =>
-          member.right.map(member =>
-            balanceAfterUse(member, usePoints)
+          member.flatMap(memberInfo =>
+            balanceAfterUse(memberInfo, usePoints)
           )
       )
 
@@ -91,5 +91,11 @@ object AnswerCheckpointFuture:
     val result2: Either[TypeOfPaymentFailed, Member] = Await.result(findMemberById(memberMap, 99), Duration.Inf)
     println(result2)
     // 問4
-    val result3: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(1, 300), Duration.Inf)
+    val result3: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(1, 300),  Duration.Inf)
     println(result3)
+    val result4: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(2, 100),  Duration.Inf)
+    println(result4)
+    val result5: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(1, 0),    Duration.Inf)
+    println(result5)
+    val result6: Either[TypeOfPaymentFailed, Int] = Await.result(transaction(99, 100), Duration.Inf)
+    println(result6)
