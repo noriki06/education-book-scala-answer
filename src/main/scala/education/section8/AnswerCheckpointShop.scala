@@ -45,7 +45,7 @@ object AnswerCheckpointShop:
   def findProductById(productMap: Map[Int, Product], id: Int): Either[TypeOrderFailure, Product] =
     productMap
       .get(id)
-      .toRight(TypeOrderFailure.NotFoundProduct)
+      .toRight(TypeOrderFailure.NotFoundProduct(id))
 
 
   /**
@@ -63,19 +63,19 @@ object AnswerCheckpointShop:
       z <- checkStock(y, x)
     }yield y.price * x
 
-  def allInformation((result: [TypeOrderFailure, Int]): Either[TypeOrderFailure, String]) =
+  def allInformation(result: [TypeOrderFailure, Int]): String =
     result match
       case Right(money)
         => s"合計 $money 円"
       case Left(TypeOrderFailure.IncorrectQuantity(inputValue))
         => s"${inputValue}は不正な入力値です"
       case Left(TypeOrderFailure.NotFoundProduct(id))
-        => s"ID:${ID}の商品がありません"
+        => s"ID:${id}の商品がありません"
       case Left(TypeOrderFailure.NotEnoughStock(orderQuantity, stock))
         => s"在庫が足りません（在庫 $stock／利用 $orderQuantity）"
 
   def doAll(requests: Seq[(Int, String)]): Either[TypeOrderFailure, Int] =
-    requests.flatMap((id, inputValue) => totalPriceForOrder(id, inputValue))
+    requests.partitionMap(totalPriceForOrder(id, inputValue))
 
   def main(args: Array[String]): Unit =
     // 問2
