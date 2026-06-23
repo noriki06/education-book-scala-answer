@@ -63,9 +63,9 @@ object AnswerCheckpointTransfer:
     searchAccountById(accountMap, senderId).flatMap {
       case Right(senderAccount) =>
         returnBalance(senderAccount, transferAmount) match {
-          case Right(newbalance) =>
+          case Right(newBalance) =>
             searchAccountById(accountMap, receiverId).map {
-              case Right(receiverAccount) => Right((newbalance, receiverAccount.balance + transferAmount))
+              case Right(receiverAccount) => Right((newBalance, receiverAccount.balance + transferAmount))
               case Left(e)                => Left(e)
             }
           case Left(e) => Future.successful(Left(e))   // 短絡
