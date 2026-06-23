@@ -58,13 +58,13 @@ object AnswerCheckpointTransfer:
   /**
    * 問 4: 3 つをつないで振込を行う
    */
-  def controlTransfer(senderId: Int, receiverId: Int, transferAmount: Int, memberMap: Map[Int, Account]):
+  def executeTransfer(senderId: Int, receiverId: Int, transferAmount: Int, accountMap: Map[Int, Account]):
     Future[Either[TypesOfTransferFailures, (Int, Int)]] =
-    searchAccountById(memberMap, senderId).flatMap {
+    searchAccountById(accountMap, senderId).flatMap {
       case Right(senderAccount) =>
         returnBalance(senderAccount, transferAmount) match {
           case Right(newbalance) =>
-            searchAccountById(memberMap, receiverId).map {
+            searchAccountById(accountMap, receiverId).map {
               case Right(receiverAccount) => Right((newbalance, receiverAccount.balance + transferAmount))
               case Left(e)                => Left(e)
             }
@@ -81,3 +81,14 @@ object AnswerCheckpointTransfer:
     //問3
     val result1: Either[TypesOfTransferFailures, Account] = Await.result(searchAccountById(accountMap, 1), Duration.Inf)
     println(result1)
+    // 問４
+    val result2: Either[TypesOfTransferFailures, (Int, Int)] = Await.result(executeTransfer(1, 3, 3000, accountMap), Duration.Inf)
+    println(result2)
+    val result3: Either[TypesOfTransferFailures, (Int, Int)] = Await.result(executeTransfer(2, 1, 0, accountMap), Duration.Inf)
+    println(result3)
+    val result4: Either[TypesOfTransferFailures, (Int, Int)] = Await.result(executeTransfer(1, 3, 0, accountMap), Duration.Inf)
+    println(result4)
+    val result5: Either[TypesOfTransferFailures, (Int, Int)] = Await.result(executeTransfer(99, 1, 100, accountMap), Duration.Inf)
+    println(result5)
+    val result6: Either[TypesOfTransferFailures, (Int, Int)] = Await.result(executeTransfer(1, 99, 100, accountMap), Duration.Inf)
+    println(result6)
