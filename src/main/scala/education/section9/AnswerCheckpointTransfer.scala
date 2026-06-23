@@ -33,16 +33,17 @@ object AnswerCheckpointTransfer:
    * 残高が足りるか確認する
    */
   def returnBalance(account: Account, transferAmount: Int): Either[TypesOfTransferFailures, Int] =
-    (account, transferAmount) match
-      case (account, amount) if amount <= 0
-        => Left(TypesOfTransferFailures.AmountIncorrect(amount))
-      case (account, amount) if amount > account.balance
-        => Left(TypesOfTransferFailures.NotEnoughBalance(amount, account.balance))
-      case _
-        => Right(account.balance - transferAmount)
+    if transferAmount <= 0
+    // 振込金額が 0 以下
+      then Left(TypesOfTransferFailures.AmountIncorrect(transferAmount))
+    else if transferAmount > account.balance
+    // 残高より振込金額が多い
+      then Left(TypesOfTransferFailures.NotEnoughBalance(transferAmount, account.balance))
+    else
+      Right(account.balance - transferAmount)
 
   def main(args: Array[String]): Unit =
-  　// 問１
+    // 問１
     println(returnBalance(Account(1, "田中", 5000), 3000))
     println(returnBalance(Account(1, "田中", 5000), 0))
     println(returnBalance(Account(1, "田中", 5000), 8000))
