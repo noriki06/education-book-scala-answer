@@ -54,10 +54,11 @@ object AnswerCheckpointSignup:
    * すでに登録済みでないか照会する
    */
   def checkAlreadyRegistered(application: Application): Future[Either[ErrorType, Application]] =
-    val checkEmail = application.heavyProcess { db.values.find(_.email == 応募.email) }
-      checkEmail.map(_.application) match
-        case Some() => Left(ErrorType.AlreadyRegistered(_))
-        case None   => Right(application)
+    val checkEmail = heavyProcess { db.values.find(_.email == application.email) }
+      checkEmail.map {
+        case Some(targetApplication) => Left(ErrorType.AlreadyRegistered(targetApplication.email))
+        case None                    => Right(application)
+      }
 
   def main(args: Array[String]): Unit =
     // 問2
@@ -67,5 +68,9 @@ object AnswerCheckpointSignup:
     println(checkPhoneNumber(ok))
     println(checkPhoneNumber(badPhone))
     // 問4
-    println(checkAlreadyRegistered(dupEmail))
-    println(checkAlreadyRegistered(ok))
+    val result1: Either[ErrorType, Application] =
+      Await.result(checkAlreadyRegistered(dupEmail), Duration.Inf)
+    println(result1)
+    val result2: Either[ErrorType, Application] =
+      Await.result(checkAlreadyRegistered(ok), Duration.Inf)
+    println(result2)
