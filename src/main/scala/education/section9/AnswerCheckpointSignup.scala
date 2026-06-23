@@ -2,14 +2,14 @@ package education.section9
 
 object AnswerCheckpointSignup:
 
-  // import scala.concurrent.{Future, Await}
-  // import scala.concurrent.ExecutionContext.Implicits.global
-  // import scala.concurrent.duration.*
+  import scala.concurrent.{Future, Await}
+  import scala.concurrent.ExecutionContext.Implicits.global
+  import scala.concurrent.duration.*
 
   // 「中の処理は時間がかかる」を表すラッパー（DB アクセスのつもり）。
   // block は呼ばれた時点ではまだ実行されず、1 秒待ってから実行される（名前渡し: => A）。
-  // def heavyProcess[A](block: => A): Future[A] =
-    // Future { Thread.sleep(1000); block }
+  def heavyProcess[A](block: => A): Future[A] =
+    Future { Thread.sleep(1000); block }
 
   // 応募情報（DB に合わせて型は固定）
   case class Application(name: String, email: String, phone: String)
@@ -40,6 +40,9 @@ object AnswerCheckpointSignup:
     else
       Left(ErrorType.EmailIncorrect)
 
+  /**
+   * 問 3: 電話番号の形式を確認する
+   */
   def checkPhoneNumber(application: Application): Either[ErrorType, Application] =
     val checkNumber = application.phone.replace("-", "")
     if checkNumber.forall(_.isDigit) && checkNumber.nonEmpty
@@ -47,7 +50,14 @@ object AnswerCheckpointSignup:
     else
       Left(ErrorType.PhoneNumberIncorrect)
 
-
+  /**
+   * すでに登録済みでないか照会する
+   */
+  def checkAlreadyRegistered(application: Application): Future[Either[ErrorType, Application]] =
+    val checkEmail = application.heavyProcess { db.values.find(_.email == 応募.email) }
+      checkEmail.map(_.application) match
+        case Some() => Left(ErrorType.AlreadyRegistered(_))
+        case None   => Right(application)
 
   def main(args: Array[String]): Unit =
     // 問2
@@ -56,3 +66,6 @@ object AnswerCheckpointSignup:
     // 問3
     println(checkPhoneNumber(ok))
     println(checkPhoneNumber(badPhone))
+    // 問4
+    println(checkAlreadyRegistered(dupEmail))
+    println(checkAlreadyRegistered(ok))
