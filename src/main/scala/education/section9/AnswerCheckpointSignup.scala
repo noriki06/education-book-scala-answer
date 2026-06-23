@@ -42,7 +42,7 @@ object AnswerCheckpointSignup:
 
   def checkPhoneNumber(application: Application): Either[ErrorType, Application] =
     val checkNumber = application.phone.replace("-", "")
-    if checkNumber == forall(_.isDigit) && checkNumber == nonEmpty
+    if checkNumber.forall(_.isDigit) && checkNumber.nonEmpty
       then Right(application)
     else
       Left(ErrorType.PhoneNumberIncorrect)
