@@ -99,7 +99,7 @@ val MATH_RANDOM = new scala.util.Random(256)
     val newAttackerHp =
       scala
         .math
-        .min(attackerPokemon.hpMax, attackerPokemon.hp + attackSkill.power)
+       .min(attackerPokemon.hpMax, attackerPokemon.hp + attackSkill.power)
 
     val updatedAttackerPokemon =
       attackerPokemon
@@ -113,12 +113,9 @@ val MATH_RANDOM = new scala.util.Random(256)
       attacker
         .updated(0, updatedAttackerPokemon)
 
-    (attacker, updatedDefenderTeam)
-    (updatedAttackerTeam, defender)
-
-
-
-
+    attackerSkill.kind match
+      case kind if kind == "攻撃" => (attacker, updatedDefenderTeam)
+      case kind if kind == "回復" => (updatedAttackerTeam, defender)
 
   /*
    * 決着: どちらかのチームの 全ポケモンの体力が 0（ひんし） になったら、もう一方の勝ち。
