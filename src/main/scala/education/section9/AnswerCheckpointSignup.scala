@@ -2,14 +2,14 @@ package education.section9
 
 object AnswerCheckpointSignup:
 
-  import scala.concurrent.{Future, Await}
-  import scala.concurrent.ExecutionContext.Implicits.global
-  import scala.concurrent.duration.*
+  // import scala.concurrent.{Future, Await}
+  // import scala.concurrent.ExecutionContext.Implicits.global
+  // import scala.concurrent.duration.*
 
   // 「中の処理は時間がかかる」を表すラッパー（DB アクセスのつもり）。
   // block は呼ばれた時点ではまだ実行されず、1 秒待ってから実行される（名前渡し: => A）。
-  def heavyProcess[A](block: => A): Future[A] =
-    Future { Thread.sleep(1000); block }
+  // def heavyProcess[A](block: => A): Future[A] =
+    // Future { Thread.sleep(1000); block }
 
   // 応募情報（DB に合わせて型は固定）
   case class Application(name: String, email: String, phone: String)
@@ -33,6 +33,11 @@ object AnswerCheckpointSignup:
 
   def checkEmailFormat(application: Application): Either[ErrorType, Application] =
     if application.email.contains("@")
-      then Right(application.email)
+      then Right(application)
     else
-      then Left(ErrorType.EmailIncorrect)
+      Left(ErrorType.EmailIncorrect)
+
+  def main(args: Array[String]): Unit =
+    // 問2
+    println(checkEmailFormat(badEmail))
+    println(checkEmailFormat(ok))
