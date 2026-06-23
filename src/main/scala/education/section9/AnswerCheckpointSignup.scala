@@ -29,4 +29,10 @@ object AnswerCheckpointSignup:
   enum ErrorType:
     case EmailIncorrect                    // メールアドレスの形式が正しくない
     case PhoneNumberIncorrect              //電話番号の形式が正しくない
-    case AlreadyRegistered(adress: String) // すでに登録済み（同じメールアドレスの登録がある）
+    case AlreadyRegistered(address: String) // すでに登録済み（同じメールアドレスの登録がある）
+
+  def checkEmailFormat(application: Application): Either[ErrorType, Application] =
+    if application.email.contains("@")
+      then Right(application.email)
+    else
+      then Left(ErrorType.EmailIncorrect)
