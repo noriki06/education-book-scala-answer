@@ -1,7 +1,7 @@
 package education.section3
 
 object AnswerEx3_6:
-val MATH_RANDOM = new scala.util.Random(256)
+  val MATH_RANDOM = new scala.util.Random(256)
 
 
   // ポケモンの技のケースクラス
@@ -63,8 +63,10 @@ val MATH_RANDOM = new scala.util.Random(256)
         PokemonSkill("治療", "ちりょう", "回復", 30)
   ) ) ) ) )
 
+  val satoshi = trainers.flatMap(trainer => trainer.holdsPokemon)
+
   def main(args: Array[String]): Unit =
-    println()
+    println(takeTurn(satoshi, satoshi))
 
   /*
    *「攻撃側が 1 ターン行動した結果の (新しい攻撃側チーム, 新しい防御側チーム)」を返します。
@@ -113,19 +115,18 @@ val MATH_RANDOM = new scala.util.Random(256)
       attacker
         .updated(0, updatedAttackerPokemon)
 
-    attackerSkill.kind match
-      case kind if kind == "攻撃" => (attacker, updatedDefenderTeam)
-      case kind if kind == "回復" => (updatedAttackerTeam, defender)
+    attackSkill.kind match
+      case "攻撃" => (attacker, updatedDefenderTeam)
+      case "回復" => (updatedAttackerTeam, defender)
 
   /*
    * 決着: どちらかのチームの 全ポケモンの体力が 0（ひんし） になったら、もう一方の勝ち。
    * 引き分け: 決着がつかないまま 20 ターン を超えたら引き分け（回復ばかりで終わらない場合の保険）。
    */
-
   def battle(a: Seq[Pokemon], b: Seq[Pokemon], aTurn: Boolean, turn: Int): String =
     if      a.forall(a => a.hp <= 0) then s"決着: トレーナーBの勝ち！" // b の勝ち
     else if b.forall(b => b.hp <= 0) then s"決着: トレーナーAの勝ち！" // a の勝ち
     else if turn > 20 then "引き分け"                         // 決着がつかないまま 20 ターン を超えたら引き分け
-    else
+    else takeTurn(a, b)
     val (na, nb) = if aTurn then takeTurn(a, b) else takeTurn(b, a).swap
     battle(na, nb, !aTurn, turn + 1)
