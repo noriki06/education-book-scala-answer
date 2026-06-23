@@ -2,9 +2,9 @@ package education.section9
 
 object AnswerCheckpointTransfer:
 
-  // import scala.concurrent.{Future, Await}
-  // import scala.concurrent.ExecutionContext.Implicits.global
-  // import scala.concurrent.duration.*
+  import scala.concurrent.{Future, Await}
+  import scala.concurrent.ExecutionContext.Implicits.global
+  import scala.concurrent.duration.*
 
   /**
    * 口座のケースクラス
@@ -16,8 +16,8 @@ object AnswerCheckpointTransfer:
   )
 
   enum TypesOfTransferFailures:
-    case AccountNotFound(remitterId: Int, receiverId: Int)   // 口座が見つからない
-    case AmountIncorrect(transferAmount: Int)        // 振込金額が正しくない（0 以下）
+    case AccountNotFound(remitterId: Int)   // 口座が見つからない
+    case AmountIncorrect(transferAmount: Int)                // 振込金額が正しくない（0 以下）
     case NotEnoughBalance(transferAmount: Int, balance: Int) // 残高が足りない
 
   val accounts =
@@ -30,7 +30,7 @@ object AnswerCheckpointTransfer:
   val accountMap = accounts.map(account => account.id -> account).toMap
 
   /**
-   * 残高が足りるか確認する
+   * 問2:残高が足りるか確認する
    */
   def returnBalance(account: Account, transferAmount: Int): Either[TypesOfTransferFailures, Int] =
     if transferAmount <= 0
@@ -40,10 +40,27 @@ object AnswerCheckpointTransfer:
     // 残高より振込金額が多い
       then Left(TypesOfTransferFailures.NotEnoughBalance(transferAmount, account.balance))
     else
+    // 振込後の送金元残高（残高 − 振込金額）を返す
       Right(account.balance - transferAmount)
 
+  /**
+   * 問3:口座を探す
+   */
+  def serchAccountById(memberMap: Map[Int, Account], accountId: Int):
+    Future[Either[TypesOfTransferFailures, Account]] =
+    Future {
+      Thread.sleep(1000)
+      memberMap
+        .get(accountId)
+        .toRight(TypesOfTransferFailures.AccountNotFound(accountId))
+
+    }
+
   def main(args: Array[String]): Unit =
-    // 問１
+    // 問2
     println(returnBalance(Account(1, "田中", 5000), 3000))
     println(returnBalance(Account(1, "田中", 5000), 0))
     println(returnBalance(Account(1, "田中", 5000), 8000))
+    //問3
+    val result1: Either[TypesOfTransferFailures, Account] = Await.result(serchAccountById(accountMap, 1), Duration.Inf)
+    println(result1)
