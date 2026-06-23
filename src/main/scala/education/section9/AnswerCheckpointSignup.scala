@@ -34,7 +34,8 @@ object AnswerCheckpointSignup:
   /**
    * 問 2: メールアドレスの形式を確認する
    */
-  def checkEmailFormat(application: Application): Either[ErrorType, Application] =
+  def checkEmailFormat(application: Application):
+    Either[ErrorType, Application] =
     if application.email.contains("@")
       then Right(application)
     else
@@ -43,7 +44,8 @@ object AnswerCheckpointSignup:
   /**
    * 問 3: 電話番号の形式を確認する
    */
-  def checkPhoneNumber(application: Application): Either[ErrorType, Application] =
+  def checkPhoneNumber(application: Application):
+    Either[ErrorType, Application] =
     val checkNumber = application.phone.replace("-", "")
     if checkNumber.forall(_.isDigit) && checkNumber.nonEmpty
       then Right(application)
@@ -53,11 +55,14 @@ object AnswerCheckpointSignup:
   /**
    * すでに登録済みでないか照会する
    */
-  def checkAlreadyRegistered(application: Application): Future[Either[ErrorType, Application]] =
+  def checkAlreadyRegistered(application: Application):
+    Future[Either[ErrorType, Application]] =
     val checkEmail = heavyProcess { db.values.find(_.email == application.email) }
       checkEmail.map {
-        case Some(targetApplication) => Left(ErrorType.AlreadyRegistered(targetApplication.email))
-        case None                    => Right(application)
+        case Some(targetApplication)
+          => Left(ErrorType.AlreadyRegistered(targetApplication.email))
+        case None
+          => Right(application)
       }
 
   def main(args: Array[String]): Unit =
