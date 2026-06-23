@@ -31,13 +31,28 @@ object AnswerCheckpointSignup:
     case PhoneNumberIncorrect              //電話番号の形式が正しくない
     case AlreadyRegistered(address: String) // すでに登録済み（同じメールアドレスの登録がある）
 
+  /**
+   * 問 2: メールアドレスの形式を確認する
+   */
   def checkEmailFormat(application: Application): Either[ErrorType, Application] =
     if application.email.contains("@")
       then Right(application)
     else
       Left(ErrorType.EmailIncorrect)
 
+  def checkPhoneNumber(application: Application): Either[ErrorType, Application] =
+    val checkNumber = application.phone.replace("-", "").nonEmpty
+    if checkNumber.forall(_.isDigit)
+      then Right(application)
+    else
+      Left(ErrorType.PhoneNumberIncorrect)
+
+
+
   def main(args: Array[String]): Unit =
     // 問2
     println(checkEmailFormat(badEmail))
     println(checkEmailFormat(ok))
+    // 問3
+    println(checkPhoneNumber(ok))
+    println(checkPhoneNumber(badPhone))
