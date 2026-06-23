@@ -17,7 +17,7 @@ object AnswerCheckpointFuture:
 
   // 引き落としの失敗の種類
   enum TypeOfPaymentFailed:
-    case MemberNotFound(memberId: Int)                    // 会員が見つからない（その会員IDが無い）
+    case MemberNotFound (memberId: Int)                   // 会員が見つからない（その会員IDが無い）
     case PointsIncorrect(requestedPoints: Int)            // 利用ポイントが正しくない（0 以下だった）
     case NotEnoughPoints(heldPoints: Int, usePoints: Int) // ポイントが足りない
 
@@ -69,12 +69,10 @@ object AnswerCheckpointFuture:
         .toRight(TypeOfPaymentFailed.MemberNotFound(id))
     }
 
-
   /**
    * 問 4: 2 つをつないで引き落としを行う
    */
   def transaction(id: Int, usePoints: Int): Future[Either[TypeOfPaymentFailed, Int]] =
-
     findMemberById(memberMap, id)
       .map(member =>
           member.flatMap(memberInfo =>
@@ -83,7 +81,7 @@ object AnswerCheckpointFuture:
       )
 
   /**
-   * 問５ 結果をメッセージにする／複数要求を並行処理する
+   * 問５ 複数要求を並行処理する
    */
   def tryAll(requests: Seq[(Int, Int)]): Future[Seq[Either[TypeOfPaymentFailed, Int]]] =
     Future.sequence(requests.map((id, usePoints) => transaction(id, usePoints)))

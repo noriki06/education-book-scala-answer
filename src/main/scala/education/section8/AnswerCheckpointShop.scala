@@ -3,7 +3,7 @@ package education.section8
 object AnswerCheckpointShop:
 
   /**
-   *商品のケースクラス
+   * 商品のケースクラス
    */
   case class Product(
     id:    Int,    //商品ID
@@ -13,9 +13,9 @@ object AnswerCheckpointShop:
   )
 
   enum TypeOrderFailure:
-    case IncorrectQuantity(s: String) // 数量が正しくない
-    case NotFoundProduct(id: Int)   // 商品が見つからない
-    case NotEnoughStock(orderQuantity: Int, stock: Int)    //在庫が足りない
+    case IncorrectQuantity(s: String)                      // 数量が正しくない
+    case NotFoundProduct  (id: Int)                        // 商品が見つからない
+    case NotEnoughStock   (orderQuantity: Int, stock: Int) // 在庫が足りない
 
   val products: Seq[Product] = // 商品マスタ
     Seq(
@@ -26,12 +26,12 @@ object AnswerCheckpointShop:
     )
 
   /**
-   *商品ID で引ける Map
+   * 商品ID で引ける Map
    */
   val productMap = products.map(product => product.id -> product).toMap
 
   /**
-   *問 2: 数量を数値に変換する
+   * 問 2: 数量を数値に変換する
    */
   def inputValueToQuantity(inputValue: String): Either[TypeOrderFailure, Int] =
     inputValue
@@ -40,7 +40,7 @@ object AnswerCheckpointShop:
       .toRight(TypeOrderFailure.IncorrectQuantity(inputValue))
 
   /**
-   *問 3: 商品を探す
+   * 問 3: 商品を探す
    */
   def findProductById(productMap: Map[Int, Product], id: Int): Either[TypeOrderFailure, Product] =
     productMap
@@ -49,13 +49,16 @@ object AnswerCheckpointShop:
 
 
   /**
-   *問 4: 在庫を確認し、注文全体を for で合成する
+   * 問 4: 在庫を確認し、注文全体を for で合成する
    */
   def checkStock(product: Product, orderQuantity: Int): Either[TypeOrderFailure, Unit] =
     product.stock match
     case s if s < orderQuantity => Left(TypeOrderFailure.NotEnoughStock(orderQuantity, product.stock))
     case _                      => Right(())
 
+  /**
+   * 注文の合計金額を出す
+   */
   def totalPriceForOrder(productId: Int, inputValue: String): Either[TypeOrderFailure, Int] =
     for{
       quantity <- inputValueToQuantity(inputValue)
@@ -63,6 +66,9 @@ object AnswerCheckpointShop:
       _        <- checkStock(product, quantity)
     }yield product.price * quantity
 
+  /**
+   * 結果を読みやすいメッセージにする
+   */
   def toMessage(result: Either[TypeOrderFailure, Int]): String =
     result match
       case Right(money)
@@ -74,6 +80,9 @@ object AnswerCheckpointShop:
       case Left(TypeOrderFailure.NotEnoughStock(orderQuantity, stock))
         => s"在庫が足りません（在庫 $stock／利用 $orderQuantity）"
 
+  /**
+   * 複数注文をまとめて処理する
+   */
   def summarizeOrders(requests: Seq[(Int, String)]): (Seq[TypeOrderFailure], Int) =
     val (failures, successes) =
       requests
