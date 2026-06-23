@@ -16,7 +16,7 @@ object AnswerCheckpointTransfer:
   )
 
   enum TypesOfTransferFailures:
-    case AccountNotFound(remitterId: Int)   // 口座が見つからない
+    case AccountNotFound(id: Int)   // 口座が見つからない
     case AmountIncorrect(transferAmount: Int)                // 振込金額が正しくない（0 以下）
     case NotEnoughBalance(transferAmount: Int, balance: Int) // 残高が足りない
 
@@ -30,8 +30,8 @@ object AnswerCheckpointTransfer:
   val accountMap = accounts.map(account => account.id -> account).toMap
 
   /**
-   * 問2:残高が足りるか確認する
-   */
+   * 問2:振込後の送金元残高を返す
+   **/
   def returnBalance(account: Account, transferAmount: Int): Either[TypesOfTransferFailures, Int] =
     if transferAmount <= 0
     // 振込金額が 0 以下
@@ -46,15 +46,46 @@ object AnswerCheckpointTransfer:
   /**
    * 問3:口座を探す
    */
-  def serchAccountById(memberMap: Map[Int, Account], accountId: Int):
+  def searchAccountById(accountMap: Map[Int, Account], accountId: Int):
     Future[Either[TypesOfTransferFailures, Account]] =
     Future {
       Thread.sleep(1000)
-      memberMap
+      accountMap
         .get(accountId)
         .toRight(TypesOfTransferFailures.AccountNotFound(accountId))
-
     }
+
+  /**
+   * 問 4: 3 つをつないで振込を行う
+   */
+  def controlTransfer(senderId, Int, receiverId: Int, transferAmount: Int):
+    Future[Either[TypesOfTransferFailures, (Int, Int)]] =
+    searchAccountById(memberMap, senderId) match
+    // 送金元の口座を探す
+      case Right(account) =>
+        account.map(_.flatMap(returnBalance(_, transferAmount))) match
+        // 振込後の送金元残高を返す
+          case Right(amount) =>
+            searchAccountById(memberMap, receiverId)
+            // 送金先の口座を探す
+            　　case Right(account) =>
+                  account.map(_.flatMap(returnBalance(_, -transferAmount)))
+                  // 振込を受けた額を返す
+                  //
+
+
+
+    val receiver =
+      searchAccountById(memberMap, receiverId)
+        .map(_.flatMap(returnBalance(_, -transferAmount)))
+
+    for{
+
+
+
+    }yield
+
+
 
   def main(args: Array[String]): Unit =
     // 問2
@@ -62,5 +93,5 @@ object AnswerCheckpointTransfer:
     println(returnBalance(Account(1, "田中", 5000), 0))
     println(returnBalance(Account(1, "田中", 5000), 8000))
     //問3
-    val result1: Either[TypesOfTransferFailures, Account] = Await.result(serchAccountById(accountMap, 1), Duration.Inf)
+    val result1: Either[TypesOfTransferFailures, Account] = Await.result(searchAccountById(accountMap, 1), Duration.Inf)
     println(result1)
