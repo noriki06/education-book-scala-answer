@@ -58,34 +58,20 @@ object AnswerCheckpointTransfer:
   /**
    * 問 4: 3 つをつないで振込を行う
    */
-  def controlTransfer(senderId, Int, receiverId: Int, transferAmount: Int):
+  def controlTransfer(senderId: Int, receiverId: Int, transferAmount: Int, memberMap: Map[Int, Account]):
     Future[Either[TypesOfTransferFailures, (Int, Int)]] =
-    searchAccountById(memberMap, senderId) match
-    // 送金元の口座を探す
-      case Right(account) =>
-        account.map(_.flatMap(returnBalance(_, transferAmount))) match
-        // 振込後の送金元残高を返す
-          case Right(amount) =>
-            searchAccountById(memberMap, receiverId)
-            // 送金先の口座を探す
-            　　case Right(account) =>
-                  account.map(_.flatMap(returnBalance(_, -transferAmount)))
-                  // 振込を受けた額を返す
-                  //
-
-
-
-    val receiver =
-      searchAccountById(memberMap, receiverId)
-        .map(_.flatMap(returnBalance(_, -transferAmount)))
-
-    for{
-
-
-
-    }yield
-
-
+    searchAccountById(memberMap, senderId).flatMap {
+      case Right(senderAccount) =>
+        returnBalance(senderAccount, transferAmount) match {
+          case Right(newbalance) =>
+            searchAccountById(memberMap, receiverId).map {
+              case Right(receiverAccount) => Right((newbalance, receiverAccount.balance + transferAmount))
+              case Left(e)                => Left(e)
+            }
+          case Left(e) => Future.successful(Left(e))   // 短絡
+        }
+      case Left(e) => Future.successful(Left(e))        // 短絡
+    }
 
   def main(args: Array[String]): Unit =
     // 問2
