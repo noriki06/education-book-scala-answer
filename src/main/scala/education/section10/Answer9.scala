@@ -2,10 +2,16 @@ package education.section10
 
 object Answer9:
 
-  case class Box[A](value: A)
+  sealed trait PaymentMethod
+  case class Card(number: String) extends PaymentMethod
+  case class Cash(amount: Int)    extends PaymentMethod
 
-  def genericQuestion1(): Seq[String] =
-    Seq(Box(42).toString, Box("hello").toString)
+  def sealedQuestion1(p: PaymentMethod): String =
+    p match
+      case Card(n) => s"カード支払い: $n"
+      case Cash(a) => s"現金支払い: $a 円"
+
 
   def main(args: Array[String]): Unit =
-    println(genericQuestion1())
+    println(sealedQuestion1(Card("1234")))
+    println(sealedQuestion1(Cash(500)))
