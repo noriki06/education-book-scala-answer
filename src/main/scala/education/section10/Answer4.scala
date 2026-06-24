@@ -1,0 +1,20 @@
+package education.section10
+
+object Answer4:
+
+  trait Named:
+    def name: String
+
+  trait Aged:
+    def age: Int
+    def isAdult: Boolean = age >= 18   // 具体実装
+
+  case class Person(name: String, age: Int) extends Named, Aged:
+
+  def traitQuestion4(person: Person): String =
+    if person.isAdult then s"${person.name}さんは成人です"
+    else                   s"${person.name}さんは未成年です"
+
+  def main(args: Array[String]): Unit =
+    println(traitQuestion4(Person("Alice", 20)))
+    println(traitQuestion4(Person("Bob",   15)))
