@@ -16,7 +16,7 @@ object Answer3:
     override def greet = s"$name は気まぐれに $sound と鳴く"
 
   def traitQuestion3(cat: Cat): String =
-    Cat.greet
+    cat.greet
 
   def main(args: Array[String]): Unit =
     println(traitQuestion3(Cat("タマ")))
