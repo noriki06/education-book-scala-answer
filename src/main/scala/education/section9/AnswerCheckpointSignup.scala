@@ -69,10 +69,8 @@ object AnswerCheckpointSignup:
    * 問 5: 登録して登録IDを採番する
    */
   def registerAssignId(application: Application): Future[Either[ErrorType, Int]] =
-    heavyProcess { db.keys.maxOption.getOrElse(0) + 1 }.map {
-      case Right(newId) => Right((newId))
-      case Left(id)     => Left(ErrorType.AlreadyRegistered(id))
-    }
+    heavyProcess { db.keys.maxOption.getOrElse(0) + 1 }
+      .map(Right(_))
 
   def main(args: Array[String]): Unit =
     // 問2
