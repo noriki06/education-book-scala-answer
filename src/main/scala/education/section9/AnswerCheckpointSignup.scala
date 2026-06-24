@@ -72,6 +72,25 @@ object AnswerCheckpointSignup:
     heavyProcess { db.keys.maxOption.getOrElse(0) + 1 }
       .map(Right(_))
 
+  /**
+   * すべてをつないで登録処理を行う
+   */
+  def registration(application: Application): Future[Either[ErrorType, Int]] =
+    val verificationResults = // Either[失敗, Application]（同期）
+      for {
+        _  <- checkEmailFormat(application)
+        ok <- checkPhoneNumber(application)
+      } yield ok
+
+    verificationResults match {
+      case Right(verified) =>
+        checkAlreadyRegistered(verified).flatMap {     // 非同期 → 次も非同期なので flatMap
+          case Right(verifiedApplication) => registerAssignId(verifiedApplication)   // これ自体が Future[Either] なのでそのまま返す
+          case Left(e)          => Future.successful(Left(e))   // 短絡
+        }
+      case Left(e) => Future.successful(Left(e))   // 検証で弾かれた → 短絡
+    }
+
   def main(args: Array[String]): Unit =
     // 問2
     println(checkEmailFormat(badEmail))
@@ -90,3 +109,16 @@ object AnswerCheckpointSignup:
     val result3: Either[ErrorType, Int] =
       Await.result(registerAssignId(ok), Duration.Inf)
     println(result3)
+    // 問6
+    val result4: Either[ErrorType, Int] =
+      Await.result(registration(ok), Duration.Inf)
+    println(result4)
+    val result5: Either[ErrorType, Int] =
+      Await.result(registration(badEmail), Duration.Inf)
+    println(result5)
+    val result6: Either[ErrorType, Int] =
+      Await.result(registration(badPhone), Duration.Inf)
+    println(result6)
+    val result7: Either[ErrorType, Int] =
+      Await.result(registration(dupEmail), Duration.Inf)
+    println(result7)
