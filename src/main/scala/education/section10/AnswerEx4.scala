@@ -22,8 +22,7 @@ object AnswerEx4:
       case MyNone()  => default
 
   def myOptionQuestion4(s: String): Int =
-    myOptionQuestion2(myOptionQuestion3(parseInt(s)))
-
+   myOptionQuestion2((myOptionQuestion3(parseInt(s), (x: Int) => x * 2)), 0)
 
   def main(args: Array[String]): Unit =
     println(myOptionQuestion4("21"))
