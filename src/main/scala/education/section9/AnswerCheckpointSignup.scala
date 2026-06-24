@@ -27,8 +27,8 @@ object AnswerCheckpointSignup:
   val badPhone = Application("無効", "ok@example.com",     "090-abcd")       // 数字でない
 
   enum ErrorType:
-    case EmailIncorrect                    // メールアドレスの形式が正しくない
-    case PhoneNumberIncorrect              //電話番号の形式が正しくない
+    case EmailIncorrect                     // メールアドレスの形式が正しくない
+    case PhoneNumberIncorrect               //電話番号の形式が正しくない
     case AlreadyRegistered(address: String) // すでに登録済み（同じメールアドレスの登録がある）
 
   /**
@@ -53,7 +53,7 @@ object AnswerCheckpointSignup:
       Left(ErrorType.PhoneNumberIncorrect)
 
   /**
-   * すでに登録済みでないか照会する
+   * 問 4:すでに登録済みでないか照会する
    */
   def checkAlreadyRegistered(application: Application):
     Future[Either[ErrorType, Application]] =
@@ -64,6 +64,15 @@ object AnswerCheckpointSignup:
         case None
           => Right(application)
       }
+
+  /**
+   * 問 5: 登録して登録IDを採番する
+   */
+  def registerAssignId(application: Application): Future[Either[ErrorType, Int]] =
+    heavyProcess { db.keys.maxOption.getOrElse(0) + 1 }.map {
+      case Right(newId) => Right((newId))
+      case Left(id)     => Left(ErrorType.AlreadyRegistered(id))
+    }
 
   def main(args: Array[String]): Unit =
     // 問2
@@ -79,3 +88,7 @@ object AnswerCheckpointSignup:
     val result2: Either[ErrorType, Application] =
       Await.result(checkAlreadyRegistered(ok), Duration.Inf)
     println(result2)
+    // 問5
+    val result3: Either[ErrorType, Int] =
+      Await.result(registerAssignId(ok), Duration.Inf)
+    println(result3)
