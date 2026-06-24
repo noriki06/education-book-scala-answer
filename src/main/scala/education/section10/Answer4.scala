@@ -9,7 +9,7 @@ object Answer4:
     def age: Int
     def isAdult: Boolean = age >= 18   // 具体実装
 
-  case class Person(name: String, age: Int) extends Named, Aged:
+  case class Person(name: String, age: Int) extends Named, Aged
 
   def traitQuestion4(person: Person): String =
     if person.isAdult then s"${person.name}さんは成人です"
