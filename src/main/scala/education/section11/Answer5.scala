@@ -2,12 +2,19 @@ package education.section11
 
 object Answer5:
 
-  case class TaxRate(value: Double)
+  trait Show[A]:
+    def show(value: A): String
 
-  given TaxRate = TaxRate(0.10)
+  given Show[Int] with
+    def show(value: Int) = s"整数($value)"
 
-  def givenQuestion1(price: Int)(using rate: TaxRate): Int =
-    (price * (1 + rate.value)).toInt
+  given Show[String] with
+    def show(value: String) = s"文字列(\"$value\")"
+
+
+  def typeclassQuestion2[A](value: A)(using s: Show[A]): String =
+    s.show(value)
 
   def main(args: Array[String]): Unit =
-    println(givenQuestion1(1000))
+    println(typeclassQuestion2(42))
+    println(typeclassQuestion2("hi"))
