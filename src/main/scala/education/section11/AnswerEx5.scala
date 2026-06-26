@@ -2,6 +2,13 @@ package education.section11
 
 object AnswerEx5:
 
+  trait Combine[A]:
+    def empty: A                    // 「何もない」状態（合計の 0、連結の "" にあたる）
+    def combine(x: A, y: A): A
+
+  trait Show[A]:
+    def show(value: A): String
+
   given Show[Int] with
     def show(value: Int): String = value.toString
 
