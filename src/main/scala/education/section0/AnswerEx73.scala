@@ -54,9 +54,16 @@ object Answer73:
     println(orders.head)
     println(customersById(customers))
     println(name)
+    println(println(totalByCustomer(orders)))
 
   def customersById(customers: Seq[Customer]): Map[Customer.Id, Customer] =
     customers.map(customer => customer.id -> customer).toMap
 
   def findCustomerName(byId: Map[Customer.Id, Customer], id: Customer.Id): Option[String] =
     byId.get(id).map(customer => customer.name)
+
+  def totalByCustomer(orders: Seq[Order]): Map[Customer.Id, Int] =
+    orders
+      .filter(order => order.status != Order.Status.Cancelled)
+      .groupMap(_.customerId)(_.amount.sum)
+      .toMap
