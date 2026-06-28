@@ -54,7 +54,9 @@ object Answer73:
     println(orders.head)
     println(customersById(customers))
     println(name)
-    println(println(totalByCustomer(orders)))
+    println(totalByCustomer(orders))
+    println(neverOrdered(customers, orders))
+
 
   def customersById(customers: Seq[Customer]): Map[Customer.Id, Customer] =
     customers.map(customer => customer.id -> customer).toMap
@@ -69,3 +71,6 @@ object Answer73:
       .view
       .mapValues(_.sum)
       .toMap
+
+  def neverOrdered(customers: Seq[Customer], orders: Seq[Order]): Set[String] =
+    val neverOrder = customers.diff(orders)
