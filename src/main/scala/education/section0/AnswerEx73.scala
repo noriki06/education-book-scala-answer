@@ -65,5 +65,7 @@ object Answer73:
   def totalByCustomer(orders: Seq[Order]): Map[Customer.Id, Int] =
     orders
       .filter(order => order.status != Order.Status.Cancelled)
-      .groupMap(_.customerId)(_.amount.sum)
+      .groupMap(_.customerId)(_.amount)
+      .view
+      .mapValues(_.sum)
       .toMap
