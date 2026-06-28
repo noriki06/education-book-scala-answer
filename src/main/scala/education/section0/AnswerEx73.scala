@@ -73,6 +73,9 @@ object Answer73:
       .toMap
 
   def neverOrdered(customers: Seq[Customer], orders: Seq[Order]): Set[String] =
-    val doOrder = orders.map(order => order.customerId)
-    val neverOrder = customers.diff(findCustomerName(customers,doOrder))
-    customersById(neverOrder)mapValues(customer => customer.name).toSet
+    val doOrderId = orders.map(order => order.customerId).toSet
+
+    customers
+      .filter(customer => !doOrderId.contains(customer.id))
+      .map(_.name)
+      .toSet
