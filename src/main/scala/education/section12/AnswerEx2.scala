@@ -8,7 +8,10 @@ object AnswerEx2:
   import cats.data.EitherT
   import cats.syntax.all.*
   import cats.data.Validated
-  import cats.data.ValidatedNel  /**
+  import cats.data.ValidatedNel
+  import cats.data.NonEmptyList
+
+  /**
    *注文のケースクラス
    */
   case class Order(
@@ -121,19 +124,19 @@ object AnswerEx2:
     customers: Map[Int, Customer],
     products: Map[Int, Product]
     ): Future[Either[NonEmptyList[ErrorType], Details]] =
-    validate(orderId, quantity)
-
-    (for {
-      order    <- EitherT(orderToMap(orders, orderId))
-      customer <- EitherT(customerToMap(customers, order.customerId))
-      product  <- EitherT(productToMap(products, order.productId))
-    } yield Details(
-      customer.name,
-      product.name,
-      s"数量${order.quantity}",
-      s"合計${product.price * order.quantity}円"
-      )
-    ).value
+    validate(orderId, quantity).toEither match
+      case Left(errors) -> Future.successful(Left(errors))
+      => Right(_)     -> (for {
+        order    <- (EitherT(orderToMap(orders, orderId))).leftMap(e => NonEmptyList.of(e))
+        customer <- (EitherT(customerToMap(customers, order.customerId))).leftMap(e => NonEmptyList.of(e))
+        product  <- (EitherT(productToMap(products, order.productId))).leftMap(e => NonEmptyList.of(e))
+      } yield Details(
+        customer.name,
+        product.name,
+        s"数量${order.quantity}",
+        s"合計${product.price * order.quantity}円"
+        )
+      ).value
 
   def validateOrderId(orderId: Int): ValidatedNel[ErrorType, Int] =
     if orderId > 0 then orderId.validNel
