@@ -122,7 +122,7 @@ object AnswerEx2:
     products: Map[Int, Product]
     ): Future[Either[ErrorType, Details]] =
     (for {
-      a        <- EitherT.fromEither[Future](validate(orderId, quantity).toEither)
+      a        <- EitherT.fromEither[Future](validate(orderId, quantity).toEither.leftMap(error => error.head))
       order    <- EitherT(orderToMap(orders, orderId))
       customer <- EitherT(customerToMap(customers, order.customerId))
       product  <- EitherT(productToMap(products, order.productId))
