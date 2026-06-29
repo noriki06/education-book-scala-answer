@@ -74,11 +74,11 @@ object AnswerEx2:
       Map(
         (10, Product(10, "ノート", 300))
       )
-    val result2: Either[ErrorType, Details] = Await.result(detailsByOrderId(100, 3, orders, customers, products), Duration.Inf)
+    val result2: Either[NonEmptyList[ErrorType], Details] = Await.result(detailsByOrderId(-1, -1, orders, customers, products), Duration.Inf)
     println(result2)
-    val result3: Either[ErrorType, Details] = Await.result(detailsByOrderId(101, 2, orders, customers, products), Duration.Inf)
+    val result3: Either[NonEmptyList[ErrorType], Details] = Await.result(detailsByOrderId(101, 2, orders, customers, products), Duration.Inf)
     println(result3)
-    val result4: Either[ErrorType, Details] = Await.result(detailsByOrderId(999, 1, orders, customers, products), Duration.Inf)
+    val result4: Either[NonEmptyList[ErrorType], Details] = Await.result(detailsByOrderId(999, 1, orders, customers, products), Duration.Inf)
     println(result4)
 
   /**
@@ -125,8 +125,8 @@ object AnswerEx2:
     products: Map[Int, Product]
     ): Future[Either[NonEmptyList[ErrorType], Details]] =
     validate(orderId, quantity).toEither match
-      case Left(errors) -> Future.successful(Left(errors))
-      => Right(_)     -> (for {
+    case Left(errors) => Future.successful(Left(errors))
+    case Right(_)     => (for {
         order    <- (EitherT(orderToMap(orders, orderId))).leftMap(e => NonEmptyList.of(e))
         customer <- (EitherT(customerToMap(customers, order.customerId))).leftMap(e => NonEmptyList.of(e))
         product  <- (EitherT(productToMap(products, order.productId))).leftMap(e => NonEmptyList.of(e))
