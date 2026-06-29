@@ -120,9 +120,10 @@ object AnswerEx2:
     orders: Map[Int, Order],
     customers: Map[Int, Customer],
     products: Map[Int, Product]
-    ): Future[Either[ErrorType, Details]] =
+    ): Future[Either[NonEmptyList[ErrorType], Details]] =
+    validate(orderId, quantity)
+
     (for {
-      a        <- EitherT.fromEither[Future](validate(orderId, quantity).toEither.leftMap(error => error.head))
       order    <- EitherT(orderToMap(orders, orderId))
       customer <- EitherT(customerToMap(customers, order.customerId))
       product  <- EitherT(productToMap(products, order.productId))
