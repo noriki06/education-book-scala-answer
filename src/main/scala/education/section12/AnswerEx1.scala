@@ -72,7 +72,7 @@ object AnswerEx1:
     // 問４
     val result2: Either[TypesOfTransferFailures, (Int, Int)] = Await.result(executeTransfer(1, 3, 3000, accountMap), Duration.Inf)
     println(result2)
-    val result3: Either[TypesOfTransferFailures, (Int, Int)] = Await.result(executeTransfer(2, 1, 0, accountMap), Duration.Inf)
+    val result3: Either[TypesOfTransferFailures, (Int, Int)] = Await.result(executeTransfer(2, 1, 100, accountMap), Duration.Inf)
     println(result3)
     val result4: Either[TypesOfTransferFailures, (Int, Int)] = Await.result(executeTransfer(1, 3, 0, accountMap), Duration.Inf)
     println(result4)
