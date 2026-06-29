@@ -71,11 +71,11 @@ object AnswerEx2:
       Map(
         (10, Product(10, "ノート", 300))
       )
-    val result2: Either[ErrorType, Details] = Await.result(detailsByOrderId(1, 100, orders, customers, products), Duration.Inf)
+    val result2: Either[ErrorType, Details] = Await.result(detailsByOrderId(100, 3, orders, customers, products), Duration.Inf)
     println(result2)
-    val result3: Either[ErrorType, Details] = Await.result(detailsByOrderId(2, 101, orders, customers, products), Duration.Inf)
+    val result3: Either[ErrorType, Details] = Await.result(detailsByOrderId(101, 2, orders, customers, products), Duration.Inf)
     println(result3)
-    val result4: Either[ErrorType, Details] = Await.result(detailsByOrderId(1, 999, orders, customers, products), Duration.Inf)
+    val result4: Either[ErrorType, Details] = Await.result(detailsByOrderId(999, 1, orders, customers, products), Duration.Inf)
     println(result4)
 
   /**
@@ -115,8 +115,8 @@ object AnswerEx2:
    * 顧客・商品・数量から 注文詳細を組み立てるメソッド
    */
   def detailsByOrderId(
-    quantity: Int,
     orderId: Int,
+    quantity: Int,
     orders: Map[Int, Order],
     customers: Map[Int, Customer],
     products: Map[Int, Product]
