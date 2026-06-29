@@ -37,3 +37,4 @@ val defaultTheme = PromptTheme(List(
 ))
 promptTheme := defaultTheme
 shellPrompt := (implicit state => promptTheme.value.render(state))
+libraryDependencies += "org.typelevel" %% "cats-core" % "2.13.0"
