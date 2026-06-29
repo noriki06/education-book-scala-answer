@@ -122,7 +122,7 @@ object AnswerEx2:
     products: Map[Int, Product]
     ): Future[Either[ErrorType, Details]] =
     (for {
-      a        <- validate(orderId, quantity).toEither
+      a        <- EitherT.fromEither[Future](validate(orderId, quantity).toEither)
       order    <- EitherT(orderToMap(orders, orderId))
       customer <- EitherT(customerToMap(customers, order.customerId))
       product  <- EitherT(productToMap(products, order.productId))
@@ -144,4 +144,4 @@ object AnswerEx2:
 
   def validate(orderId: Int, quantity: Int): ValidatedNel[ErrorType, (Int, Int)] =
     (validateOrderId(orderId), validateQuantity(quantity))
-      .mapN((Int, Int).apply)
+      .mapN((id, qty) => (id, qty))
