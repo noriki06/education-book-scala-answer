@@ -60,13 +60,13 @@ object AnswerEx1:
   /**
    * 問 4: 3 つをつないで振込を行う
    */
-  def executeTransfer(senderId: Int, receiverId: Int, transferamount: Int, accountMap: Map[Int, Account]):
+  def executeTransfer(senderId: Int, receiverId: Int, transferAmount: Int, accountMap: Map[Int, Account]):
     Future[Either[TypesOfTransferFailures, (Int, Int)]] =
-    for {
+    (for {
       senderAccount   <- EitherT(searchAccountById(accountMap, senderId))
       senderAmount    <- EitherT.fromEither[Future](returnBalance(senderAccount, transferAmount))
       receiverAccount <- EitherT(searchAccountById(accountMap, receiverId))
-    } yield (senderAmount, receiverAccount.senderAmount + transferamount)
+    } yield (senderAmount, receiverAccount.balance + transferAmount)).value
 
   def main(args: Array[String]): Unit =
     // 問４
