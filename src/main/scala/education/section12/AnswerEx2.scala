@@ -7,51 +7,51 @@ object AnswerEx2:
   import scala.concurrent.duration.*
   import cats.data.EitherT
   import cats.syntax.all.*
-
-  /**
+  import cats.data.Validated
+  import cats.data.ValidatedNel  /**
    *注文のケースクラス
    */
   case class Order(
-    id: Int,
-    customerId: Int,
-    productId: Int,
-    quantity: Int
+    id:         Int, // 注文id
+    customerId: Int, // 顧客id　
+    productId:  Int, // 商品id
+    quantity:   Int  // 数量
   )
 
   /**
    * 顧客のケースクラス
    */
   case class Customer(
-    id: Int,
-    name: String
+    id:   Int,   // 顧客id
+    name: String // 顧客名
   )
 
   /**
    *商品のケースクラス
    */
   case class Product(
-    id: Int,
-    name: String,
-    price: Int
+    id:    Int,    // 商品id
+    name:  String, // 商品名
+    price: Int     // 単価
   )
 
   /**
    * 注文詳細のケースクラス
    */
   case class Details(
-    customerName: String,
-    productName: String,
-    amount: String,
-    totalAmount: String
+    customerName: String, // 顧客の氏名
+    productName:  String, // 商品名
+    amount:       String, // 数量
+    totalAmount:  String  // 合計金額
   )
 
   /**
    * エラーのタイプ
    */
   enum ErrorType:
-    case NoneOrder(id: Int)
-    case NoneCustomer(id: Int)
-    case NoneProduct(id: Int)
+    case NoneOrder(id: Int)    // 注文が見つからない
+    case NoneCustomer(id: Int) // 顧客が見つからない
+    case NoneProduct(id: Int)  // 商品が見つからない
 
 
   def main(args: Array[String]): Unit =
@@ -71,11 +71,11 @@ object AnswerEx2:
       Map(
         (10, Product(10, "ノート", 300))
       )
-    val result2: Either[ErrorType, Details] = Await.result(detailsByOrderId(100, orders, customers, products), Duration.Inf)
+    val result2: Either[ErrorType, Details] = Await.result(detailsByOrderId(1, 100, orders, customers, products), Duration.Inf)
     println(result2)
-    val result3: Either[ErrorType, Details] = Await.result(detailsByOrderId(101, orders, customers, products), Duration.Inf)
+    val result3: Either[ErrorType, Details] = Await.result(detailsByOrderId(2, 101, orders, customers, products), Duration.Inf)
     println(result3)
-    val result4: Either[ErrorType, Details] = Await.result(detailsByOrderId(999, orders, customers, products), Duration.Inf)
+    val result4: Either[ErrorType, Details] = Await.result(detailsByOrderId(1, 999, orders, customers, products), Duration.Inf)
     println(result4)
 
   /**
@@ -115,13 +115,33 @@ object AnswerEx2:
    * 顧客・商品・数量から 注文詳細を組み立てるメソッド
    */
   def detailsByOrderId(
+    quantity: Int,
     orderId: Int,
     orders: Map[Int, Order],
     customers: Map[Int, Customer],
     products: Map[Int, Product]
     ): Future[Either[ErrorType, Details]] =
     (for {
-      order <- EitherT(orderToMap(orders, orderId))
+      a        <- validate(orderId, quantity).toEither
+      order    <- EitherT(orderToMap(orders, orderId))
       customer <- EitherT(customerToMap(customers, order.customerId))
-      product <- EitherT(productToMap(products, order.productId))
-    } yield Details(customer.name, product.name, s"数量${order.quantity}", s"合計${product.price * order.quantity}円")).value
+      product  <- EitherT(productToMap(products, order.productId))
+    } yield Details(
+      customer.name,
+      product.name,
+      s"数量${order.quantity}",
+      s"合計${product.price * order.quantity}円"
+      )
+    ).value
+
+  def validateOrderId(orderId: Int): ValidatedNel[ErrorType, Int] =
+    if orderId > 0 then orderId.validNel
+    else ErrorType.NoneOrder(orderId).invalidNel
+
+  def validateQuantity(quantity: Int): ValidatedNel[ErrorType, Int] =
+    if quantity > 0 then quantity.validNel
+    else ErrorType.NoneProduct(quantity).invalidNel
+
+  def validate(orderId: Int, quantity: Int): ValidatedNel[ErrorType, (Int, Int)] =
+    (validateOrderId(orderId), validateQuantity(quantity))
+      .mapN((Int, Int).apply)
