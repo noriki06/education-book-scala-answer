@@ -63,10 +63,13 @@ object AnswerEx3_6:
         PokemonSkill("治療", "ちりょう", "回復", 30)
   ) ) ) ) )
 
-  val satoshi = trainers.flatMap(trainer => trainer.holdsPokemon)
+  val satoshi = trainers(0).holdsPokemon
+  val kasumi = trainers(1).holdsPokemon
+  val takeshi = trainers(2).holdsPokemon
+
 
   def main(args: Array[String]): Unit =
-    println(takeTurn(satoshi, satoshi))
+    println(battle(satoshi, kasumi, true, 1))
 
   /*
    *「攻撃側が 1 ターン行動した結果の (新しい攻撃側チーム, 新しい防御側チーム)」を返します。
