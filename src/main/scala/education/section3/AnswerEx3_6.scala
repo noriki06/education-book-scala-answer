@@ -75,11 +75,18 @@ object AnswerEx3_6:
   def takeTurn(attacker: Seq[Pokemon], defender: Seq[Pokemon]): (Seq[Pokemon], Seq[Pokemon]) =
     val attackerPokemon =
       attacker
+        .filter(pokemon => pokemon.hp > 0)
         .head
+
+    val recoverePokemon =
+      attacker
+        .filter(pokemon => pokemon.hp > 0)
+        .seq(MATH_RANDOM.nextInt(seq.size))
 
     val defenderPokemon =
       defender
-        .head
+        .filter(pokemon => pokemon.hp > 0)
+        .seq(MATH_RANDOM.nextInt(seq.size))
 
     val randomIndex = // ランダムなインデックスを取得
       MATH_RANDOM
@@ -101,7 +108,7 @@ object AnswerEx3_6:
     val newAttackerHp =
       scala
         .math
-       .min(attackerPokemon.hpMax, attackerPokemon.hp + attackSkill.power)
+        .min(recoverePokemon.hpMax, recoverePokemon.hp + attackSkill.power)
 
     val updatedAttackerPokemon =
       attackerPokemon
@@ -109,7 +116,7 @@ object AnswerEx3_6:
 
     val updatedDefenderTeam =
       defender
-        .updated(0, updatedDefenderPokemon)
+        .updated(, updatedDefenderPokemon)
 
     val updatedAttackerTeam =
       attacker
