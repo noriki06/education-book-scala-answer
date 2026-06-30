@@ -78,25 +78,27 @@ object AnswerEx3_6:
         .filter(pokemon => pokemon.hp > 0)
         .head
 
-    val aliveAttacker =
-      attacker.filter(_.hp > 0)
+    def randomAliveIndex(team: Seq[Pokemon]): Int =
+      val index = MATH_RANDOM.nextInt(team.size)
+
+      if team(index).hp > 0 then
+        index
+      else
+        randomAliveIndex(team)
 
     val randomRecoverIndex =
-      MATH_RANDOM.nextInt(aliveAttacker.size)
+      randomAliveIndex(attacker)
 
     val recoverePokemon =
-      aliveAttacker(randomRecoverIndex)
-
-    val aliveDefender =
-      defender.filter(_.hp > 0)
+      attacker(randomRecoverIndex)
 
     val randomDefenderIndex =
-      MATH_RANDOM.nextInt(aliveDefender.size)
+      randomAliveIndex(defender)
 
     val defenderPokemon =
-      aliveDefender(randomDefenderIndex)
+      defender(randomDefenderIndex)
 
-    val randomIndex = // ランダムなインデックスを取得（攻撃側の技選定用）
+    val randomSkillIndex = // ランダムなインデックスを取得（攻撃側の技選定用）
       MATH_RANDOM
         .nextInt(attackerPokemon.skill.size)
 
