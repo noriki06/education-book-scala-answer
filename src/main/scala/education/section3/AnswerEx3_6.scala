@@ -93,7 +93,7 @@ object AnswerEx3_6:
     val randomRecoverIndex =
       randomAliveIndex(attacker)
 
-    val recoverePokemon =
+    val recoverPokemon =
       attacker(randomRecoverIndex)
 
     val randomDefenderIndex =
@@ -119,7 +119,7 @@ object AnswerEx3_6:
       defenderPokemon
         .copy(hp = newDefenderHp)
 
-    val newAttackerHp = // 回復された攻撃側のポケモンのhpを変更（maxHpが最大値）
+    val newRecoverHp = // 回復された攻撃側のポケモンのhpを変更（maxHpが最大値）
       scala
         .math
         .min(recoverePokemon.hpMax, recoverePokemon.hp + attackSkill.power)
@@ -137,14 +137,11 @@ object AnswerEx3_6:
         .updated(randomRecoverIndex, updatedAttackerPokemon)
 
     attackSkill.kind match // 技の種類で表示を場合分け
-      case "攻撃" => (attacker, updatedDefenderTeam),
-                     println(s"${attacker}：${attackerPokemon}の「${attackSkill}」→
-                       ${defender}：${defenderPokemon}に${attackSkill.power} ダメージ（体力 ${defenderPokemon.hp}-> ${newDefenderHp}")
-      // 攻撃時（攻撃したポケモンseq, 攻撃されたポケモン）
+      case "攻撃" => println(s"${attackerPokemon.name}の「${attackSkill.name}」→ ${defenderPokemon.name}に${attackSkill.power} ダメージ（体力 ${defenderPokemon.hp}-> ${newDefenderHp}")
+                     (attacker, updatedDefenderTeam)
 
-      case "回復" => (updatedAttackerTeam, defender)
-                    println(s"${attacker}：${attackerPokemon}の「${attackSkill}」→
-                       ${attacker}：${recoverPokemon}に${attackSkill.power} 回復（体力 ${recoverPokemon.hp}-> ${newRecoverHp}")
+      case "回復" => println(s"${attackerPokemon.name}の「${attackSkill.name}」→ ${recoverPokemon.name}に${attackSkill.power} 回復（体力 ${recoverPokemon.hp}-> ${newRecoverHp}")
+                     (updatedAttackerTeam, defender)
 
   /*
    * 決着: どちらかのチームの 全ポケモンの体力が 0（ひんし） になったら、もう一方の勝ち。
