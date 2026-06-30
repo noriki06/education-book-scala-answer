@@ -69,6 +69,7 @@ object AnswerEx3_6:
 
 
   def main(args: Array[String]): Unit =
+    println("=== バトル開始: サトシ vs カスミ ===")
     println(battle(satoshi, kasumi, true, 1))
 
   /*
@@ -136,9 +137,14 @@ object AnswerEx3_6:
         .updated(randomRecoverIndex, updatedAttackerPokemon)
 
     attackSkill.kind match // 技の種類で表示を場合分け
-      case "攻撃" => (attacker, updatedDefenderTeam)
+      case "攻撃" => (attacker, updatedDefenderTeam),
+                     println(s"${attacker}：${attackerPokemon}の「${attackSkill}」→
+                       ${defender}：${defenderPokemon}に${attackSkill.power} ダメージ（体力 ${defenderPokemon.hp}-> ${newDefenderHp}")
       // 攻撃時（攻撃したポケモンseq, 攻撃されたポケモン）
-      case "回復" => (updatedAttackerTeam, defender) //
+
+      case "回復" => (updatedAttackerTeam, defender)
+                    println(s"${attacker}：${attackerPokemon}の「${attackSkill}」→
+                       ${attacker}：${recoverPokemon}に${attackSkill.power} 回復（体力 ${recoverPokemon.hp}-> ${newRecoverHp}")
 
   /*
    * 決着: どちらかのチームの 全ポケモンの体力が 0（ひんし） になったら、もう一方の勝ち。
