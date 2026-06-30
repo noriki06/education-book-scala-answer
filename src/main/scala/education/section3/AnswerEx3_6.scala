@@ -104,7 +104,7 @@ object AnswerEx3_6:
 
     val attackSkill = // ランダムなインデックスで技を決定
       attackerPokemon
-        .skill(randomIndex)
+        .skill(randomSkillIndex)
 
     val newDefenderHp = // 攻撃された防御側のポケモンのhpを変更（０が最小値）
       scala
@@ -145,6 +145,6 @@ object AnswerEx3_6:
     if      a.forall(a => a.hp <= 0) then s"決着: トレーナーBの勝ち！" // b の勝ち
     else if b.forall(b => b.hp <= 0) then s"決着: トレーナーAの勝ち！" // a の勝ち
     else if turn > 20 then "引き分け"                         // 決着がつかないまま 20 ターン を超えたら引き分け
-    else takeTurn(a, b)
-    val (na, nb) = if aTurn then takeTurn(a, b) else takeTurn(b, a).swap
-    battle(na, nb, !aTurn, turn + 1)
+    else
+      val (na, nb) = if aTurn then takeTurn(a, b) else takeTurn(b, a).swap
+      battle(na, nb, !aTurn, turn + 1)
