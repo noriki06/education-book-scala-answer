@@ -73,22 +73,30 @@ object AnswerEx3_6:
    * 攻撃なら防御側が、回復なら攻撃側が更新されます。
    */
   def takeTurn(attacker: Seq[Pokemon], defender: Seq[Pokemon]): (Seq[Pokemon], Seq[Pokemon]) =
-    val attackerPokemon =
+    val attackerPokemon = // 攻撃するポケモンの選定（生きてる中の、先頭）
       attacker
         .filter(pokemon => pokemon.hp > 0)
         .head
 
+    val aliveAttacker =
+      attacker.filter(_.hp > 0)
+
+    val randomRecoverIndex =
+      MATH_RANDOM.nextInt(aliveAttacker.size)
+
     val recoverePokemon =
-      attacker
-        .filter(pokemon => pokemon.hp > 0)
-        .seq(MATH_RANDOM.nextInt(seq.size))
+      aliveAttacker(randomRecoverIndex)
+
+    val aliveDefender =
+      defender.filter(_.hp > 0)
+
+    val randomDefenderIndex =
+      MATH_RANDOM.nextInt(aliveDefender.size)
 
     val defenderPokemon =
-      defender
-        .filter(pokemon => pokemon.hp > 0)
-        .seq(MATH_RANDOM.nextInt(seq.size))
+      aliveDefender(randomDefenderIndex)
 
-    val randomIndex = // ランダムなインデックスを取得
+    val randomIndex = // ランダムなインデックスを取得（攻撃側の技選定用）
       MATH_RANDOM
         .nextInt(attackerPokemon.skill.size)
 
@@ -96,35 +104,36 @@ object AnswerEx3_6:
       attackerPokemon
         .skill(randomIndex)
 
-    val newDefenderHp =
+    val newDefenderHp = // 攻撃された防御側のポケモンのhpを変更（０が最小値）
       scala
         .math
         .max(0, defenderPokemon.hp - attackSkill.power)
 
-    val updatedDefenderPokemon =
+    val updatedDefenderPokemon = // 攻撃されたhpで新しくポケモンインスタンスの生成
       defenderPokemon
         .copy(hp = newDefenderHp)
 
-    val newAttackerHp =
+    val newAttackerHp = // 回復された攻撃側のポケモンのhpを変更（maxHpが最大値）
       scala
         .math
         .min(recoverePokemon.hpMax, recoverePokemon.hp + attackSkill.power)
 
-    val updatedAttackerPokemon =
+    val updatedAttackerPokemon = // 回復されたhpで新しくポケモンインスタンスの生成
       attackerPokemon
         .copy(hp = newAttackerHp)
 
-    val updatedDefenderTeam =
+    val updatedDefenderTeam = // ポケモンseqを更新、攻撃されたポケモンの要素をアップデート
       defender
-        .updated(, updatedDefenderPokemon)
+        .updated(randomDefenderIndex, updatedDefenderPokemon)
 
-    val updatedAttackerTeam =
+    val updatedAttackerTeam = // ポケモンseqを更新、回復されたポケモンの要素をアップデート
       attacker
-        .updated(0, updatedAttackerPokemon)
+        .updated(randomRecoverIndex, updatedAttackerPokemon)
 
-    attackSkill.kind match
+    attackSkill.kind match // 技の種類で表示を場合分け
       case "攻撃" => (attacker, updatedDefenderTeam)
-      case "回復" => (updatedAttackerTeam, defender)
+      // 攻撃時（攻撃したポケモンseq, 攻撃されたポケモン）
+      case "回復" => (updatedAttackerTeam, defender) //
 
   /*
    * 決着: どちらかのチームの 全ポケモンの体力が 0（ひんし） になったら、もう一方の勝ち。
