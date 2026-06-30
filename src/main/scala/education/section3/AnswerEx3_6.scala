@@ -124,7 +124,7 @@ object AnswerEx3_6:
         .min(recoverePokemon.hpMax, recoverePokemon.hp + attackSkill.power)
 
     val updatedAttackerPokemon = // 回復されたhpで新しくポケモンインスタンスの生成
-      attackerPokemon
+      recoverePokemon
         .copy(hp = newAttackerHp)
 
     val updatedDefenderTeam = // ポケモンseqを更新、攻撃されたポケモンの要素をアップデート
