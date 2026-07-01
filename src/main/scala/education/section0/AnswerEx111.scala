@@ -51,10 +51,13 @@ object AnswerEx111:
       .map(id => Right(id))
 
   def total(apply: Apply): Future[Either[Error, Int]] =
-    for {
-      a <- checkmail(apply)
-      b <- checkphone(a)
-    } yield b match
+    val check: Either[Error, Apply] =
+      for {
+        a <- checkmail(apply)
+        b <- checkphone(a)
+      } yield b
+
+    check match
       case Left(e) => Future.successful(Left(e))
       case Right(apply) =>
         checkresi(apply).flatMap {
@@ -62,10 +65,28 @@ object AnswerEx111:
           case Right(apply) => addresi(apply)
         }
 
+  def message(result: Either[Error, Int]): String =
+    result match
+      case Left(Error.Nonmail) => "メールアドレスの形式が正しくない"
+      case Left(Error.Nonphone) => "電話番号の形式が正しくない"
+      case Left(Error.Nonresi) => "すでに登録されています"
+      case Right(id) => s"登録完了（登録ID: ${id}）"
+
+  def totalapply(applys: Seq[(Apply)]): Future[Seq[Either[Error, Int]]] =
+    Future.sequence(applys
+      .map((name, email, phone) => message(Apply(name, email, phone))))
+
 
 
 
 
 
   def main(args: Array[String]): Unit =
-    println(Await.result(total(Apply("鈴木", "suzuki@example.com", "070-5555-6666")), Duration.Inf))
+    val result7: Seq[Either[Error, Int]] = Await.result(totalapply(
+      Seq(
+        Apply("鈴木", "suzuki@example.com", "070-5555-6666"),
+        Apply("重複", "tanaka@example.com", "09000000000"),
+        Apply("無効", "bad-email-no-at",    "09000000000"),
+        Apply("無効", "ok@example.com",     "090-abcd"))),
+        Duration.Inf)
+    result7.foreach(result => println(message(result)))
