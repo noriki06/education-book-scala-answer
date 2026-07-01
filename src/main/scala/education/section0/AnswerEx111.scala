@@ -59,7 +59,7 @@ object AnswerEx111:
       case Right(apply) =>
         checkresi(apply).flatMap {
           case Left(e) => Future.successful(Left(e))
-          case Right(apply) => apply.id
+          case Right(apply) => addresi(apply)
         }
 
 
