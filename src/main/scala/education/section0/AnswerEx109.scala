@@ -17,9 +17,8 @@ object AnswerEx109:
     case NonPoint(point: Int)
 
   def main(args: Array[String]): Unit =
-    val result3: String = Await.result(message(balance(2, 300)),  Duration.Inf)
-    println(result3)
-
+    val result7: Seq[Either[Error, Int]] = Await.result(totalDo(Seq((1, 300), (2, 100), (1, 0), (99, 100))), Duration.Inf)
+    result7.foreach(result => println(message(result)))
   val members: Seq[Member] =
     Seq(
       Member(1, "田中", 500),
@@ -46,7 +45,7 @@ object AnswerEx109:
     findMember(memberMap, id).map(member => member.flatMap(memberResult => checkPoint(memberResult, usePoint)))
 
 
-  def message(result: Future[Either[Error, Int]]): String =
+  def message(result: Either[Error, Int]): String =
     result match
       case Right(points)
         => s"残高 $points ポイント"
@@ -56,3 +55,6 @@ object AnswerEx109:
         => s"ポイントが足りません($point）"
       case Left(Error.NonMember(id))
         => s"ID:${id}の会員はいません"
+
+  def totalDo(orders: Seq[(Int, Int)]): Future[Seq[Either[Error, Int]]] =
+    Future.sequence(orders.map { (id, usePoint) => balance(id, usePoint) })
