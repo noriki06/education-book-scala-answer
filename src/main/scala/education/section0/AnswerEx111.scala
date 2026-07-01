@@ -74,7 +74,7 @@ object AnswerEx111:
 
   def totalapply(applys: Seq[(Apply)]): Future[Seq[Either[Error, Int]]] =
     Future.sequence(applys
-      .map((name, email, phone) => message(Apply(name, email, phone))))
+      .map(apply => total(apply)))
 
 
 
