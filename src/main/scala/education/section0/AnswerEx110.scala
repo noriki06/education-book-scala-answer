@@ -51,8 +51,18 @@ object AnswerEx110:
         }
     }
 
+  def message(result: Either[Error, (Int, Int)]): String =
+    result match
+      case Left(Error.NonPrice(money)) => s"振込金額が正しくない${money}"
+      case Left(Error.NonBalance(balance)) => s"残高が足りない${balance}"
+      case Left(Error.NonAccount(id)) => s"口座が見つからない(ID:${id})"
+      case Right(senbal, recbal) => s"振込完了（送金元残高 ${senbal} / 送金先残高 ${recbal}）"
 
+  def hurihuri(rrr: Seq[(Int, Int, Int)]): Future[Seq[Either[Error, (Int, Int)]]] =
+    Future.sequence(rrr.map { (senderId: Int, receiverId: Int, money: Int) =>
+      hurikomi(senderId: Int, receiverId: Int, money: Int) })
 
 
   def main(args: Array[String]): Unit =
-    println(Await.result(hurikomi(1, 3, 3000), Duration.Inf))
+    val result7: Seq[Either[Error, (Int, Int)]] = Await.result(hurihuri(Seq((1, 2, 5000), (3, 2, 1000), (1, 3, 10000))), Duration.Inf)
+    result7.foreach(result => println(message(result)))
