@@ -1,6 +1,6 @@
 package education.section0
 
-object AnswerEx121:
+object AnswerEx124:
 
   sealed trait MyOption[A]
   case class MySome[A](value: A) extends MyOption[A]   // 値がある
@@ -9,11 +9,20 @@ object AnswerEx121:
   def parseInt(s: String): MyOption[Int] =
     s.toIntOption match
       case Some(s) => MySome(s)
-      case None() => MyNone[Int]()
+      case None => MyNone[Int]()
 
+  def myOptionQuestion2[A](opt: MyOption[A], default: A): A =
+    opt match
+      case MySome(a) => a
+      case MyNone() => default
+
+  def myOptionQuestion3[A, B](opt: MyOption[A], f: A => B): MyOption[B] =
+    opt match
+      case MySome(v) => MySome(f(v))
+      case MyNone() => MyNone()
 
   def myOptionQuestion4(s: String): Int =
-    parseInt(s)
+    myOptionQuestion2((myOptionQuestion3(parseInt(s), (x: Int) => x * 2)), 0)
 
 
 
