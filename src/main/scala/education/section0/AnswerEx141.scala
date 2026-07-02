@@ -49,7 +49,7 @@ object AnswerEx141:
     val customers: Map[Int, Customer] =
       Map(
         (1, Customer(a, "田中")),
-        (2, Customer(b, ""佐藤))
+        (2, Customer(b, "佐藤"))
       )
 
     val products: Map[Int, Product] =
@@ -57,28 +57,28 @@ object AnswerEx141:
         (10, Product(10, "ノート", 300))
       )
 
-    val result2: Either[NonEmptyList[Error], Details] = Await.result(detail(100, orders, customers, products), Duration.Inf)
+    val result2: Either[Error, Detail] = Await.result(detail(100, orders, customers, products), Duration.Inf)
     println(result2)
-    val result3: Either[NonEmptyList[Error], Details] = Await.result(detail(101, orders, customers, products), Duration.Inf)
+    val result3: Either[Error, Detail] = Await.result(detail(101, orders, customers, products), Duration.Inf)
     println(result3)
-    val result4: Either[NonEmptyList[Error], Details] = Await.result(detail(999, orders, customers, products), Duration.Inf)
+    val result4: Either[Error, Detail] = Await.result(detail(999, orders, customers, products), Duration.Inf)
     println(result4)
 
 
 
 
 
-  def checkOrder(id: Int): Future[Either[Error, Order]] =
+  def checkOrder(id: Int, orders: Order): Future[Either[Error, Order]] =
     Future { Thread.sleep(500)
       orders.get(id).toRight(Error.Nonorder)
     }
 
-  def checkCustomer(id: Int): Future[Either[Error, Customer]] =
+  def checkCustomer(id: Int, customers: Customer): Future[Either[Error, Customer]] =
     Future { Thread.sleep(500)
       customers.get(id).toRight(Error.Noncustomer)
     }
 
-  def checkProduct(id: Int): Future[Either[Error, Product]] =
+  def checkProduct(id: Int, products: Product): Future[Either[Error, Product]] =
     Future { Thread.sleep(500)
       products.get(id).toRight(Error.Monproduct)
     }
