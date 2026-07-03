@@ -64,6 +64,42 @@ object AnswerEx142:
       ))
     )
 
+  val satoshi = Trainer("サトシ", Seq(
+        Pokemon("ピカチュウ", "ぴかちゅう", 35, 35, Seq(
+          Skill("電光石火", "でんこうせっか", "攻撃", 40),
+          Skill("自己再生", "じこさいせい", "回復", 50)
+        )),
+        Pokemon("リザードン", "りざーどん", 78 , 78, Seq(
+          Skill("火炎放射", "かえんほうしゃ", "攻撃", 90),
+          Skill("破壊光線", "はかいこうせん", "攻撃", 150)
+        )),
+        Pokemon("カビゴン", "かびごん", 160	, 160, Seq(
+          Skill("地震", "じしん", "攻撃", 100),
+          Skill("回復", "かいふく", "回復", 60)
+        ))))
+  val kasumi = Trainer("カスミ", Seq(
+        Pokemon("ゼニガメ", "ぜにがめ", 44, 44, Seq(
+          Skill("水鉄砲", "みずでっぽう", "攻撃", 45),
+          Skill("甲羅休め", "こうらやすめ", "回復", 40)
+        )),
+        Pokemon("フシギバナ", "ふしぎばな", 80 , 80, Seq(
+          Skill("草結び", "くさむすび", "攻撃", 65),
+          Skill("光合成", "こうごうせい", "回復", 70)
+      ))))
+  val takashi = Trainer("タケシ", Seq(
+        Pokemon("ゼニガメ", "ぜにがめ", 44, 44, Seq(
+          Skill("電光石火", "でんこうせっか", "攻撃", 40),
+          Skill("自己再生", "じこさいせい", "回復", 50)
+        )),
+        Pokemon("イワーク", "いわーく", 55 , 55, Seq(
+          Skill("岩石封じ", "がんせきふうじ", "攻撃", 60),
+          Skill("地割れ", "じわれ", "攻撃", 120)
+        )),
+        Pokemon("イシツブテ", "いしつぶて", 40 , 40, Seq(
+          Skill("落石", "らくせき", "攻撃", 50),
+          Skill("治療", "ちりょう", "回復", 30)
+      ))))
+
   def showAllSkills(trainers: Seq[Trainer]): Unit =
     val skills =
       for {
@@ -109,19 +145,20 @@ object AnswerEx142:
         )
     )
 
+  def swapPokemon(a: Trainer, b: Trainer, indexA: Int, indexB: Int): (Trainer, Trainer) =
+    val changePokemonA = a.pokemons(indexA)
+    val changePokemonB = b.pokemons(indexB)
+
+    val newTeamA = a.pokemons.updated(indexA, changePokemonB)
+    val newTeamB = b.pokemons.updated(indexB, changePokemonA)
+
+    (a.copy(pokemons = newTeamA), b.copy(pokemons = newTeamB))
+
+
+
+
+
   def main(args: Array[String]): Unit =
-    println(randomDamage(Trainer("サトシ", Seq(
-        Pokemon("ピカチュウ", "ぴかちゅう", 35, 35, Seq(
-          Skill("電光石火", "でんこうせっか", "攻撃", 40),
-          Skill("自己再生", "じこさいせい", "回復", 50)
-        )),
-        Pokemon("リザードン", "りざーどん", 78 , 78, Seq(
-          Skill("火炎放射", "かえんほうしゃ", "攻撃", 90),
-          Skill("破壊光線", "はかいこうせん", "攻撃", 150)
-        )),
-        Pokemon("カビゴン", "かびごん", 160	, 160, Seq(
-          Skill("地震", "じしん", "攻撃", 100),
-          Skill("回復", "かいふく", "回復", 60)
-        ))))))
+    println(swapPokemon(satoshi, kasumi, 1, 1))
 
   val MATH_RANDOM = new scala.util.Random(256)
