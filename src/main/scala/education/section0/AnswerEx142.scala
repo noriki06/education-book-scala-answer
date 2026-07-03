@@ -73,43 +73,29 @@ object AnswerEx142:
       } yield skill
 
     skills
-      .sortBy(skill => skill.yomigana)
+      .sortBy(_.yomigana)
       .distinct
-      .map(skill => skill.name)
+      .map(_.name)
       .foreach(println)
 
   def showHierarchy(trainers: Seq[Trainer]): Unit =
-    trainers
-      .sortBy(_.name)
-      .foreach { trainer =>
-        println(trainer.name)
-        val sortPokemon = trainer.pokemons.sortBy(_.yomigana)
-        sortPokemon.zipWithIndex
-        .foreach{ case (pokemon, index) =>
-          if index == (sortPokemon.size - 1) then
-            println(s"└─ ${pokemon.name} (HP${pokemon.hpMax})")
-            val sortSkill = pokemon.skills.sortBy(-_.power)
-            sortSkill.zipWithIndex
-            .foreach { case (skill, index) =>
-              if index == (sortSkill.size - 1) then
-                println(s"   └─ ${skill.name} (${skill.kind} / 威力${skill.power})")
-              else
-                println(s"   ├─ ${skill.name} (${skill.kind} / 威力${skill.power})")
-            }
-
-          else
-            println(s"├─ ${pokemon.name} (HP${pokemon.hpMax})")
-            val sortSkill = pokemon.skills.sortBy(-_.power)
-            sortSkill.zipWithIndex
-            .foreach { case (skill, index) =>
-              if index == (sortSkill.size - 1) then
-                println(s"│  └─ ${skill.name} (${skill.kind} / 威力${skill.power})")
-              else
-                println(s"│  ├─ ${skill.name} (${skill.kind} / 威力${skill.power})")
-            }
-
+    trainers.sortBy(_.name).foreach { trainer => // トレーナー名でソート
+      println(trainer.name) // トレーナ名を出力
+      val sortPokemon = trainer.pokemons.sortBy(_.yomigana) // 読み仮名でソートしたポケモンの並び
+      sortPokemon.zipWithIndex.foreach { (pokemon, pIdx) => // index付けしたポケモンの並び
+        val isPokemonLast = pIdx == sortPokemon.size - 1 // indexがラストかどうかの判定
+        val pBranch       = if isPokemonLast then "└─ " else "├─ " //
+        val childPrefix   = if isPokemonLast then "   " else "│  "
+        println(s"$pBranch${pokemon.name} (HP${pokemon.hpMax})")
+        val sortSkill = pokemon.skills.sortBy(-_.power)
+        sortSkill.zipWithIndex.foreach { (skill, sIdx) =>
+          val isSkillLast = sIdx == sortSkill.size - 1
+          val sBranch     = if isSkillLast then "└─ " else "├─ "
+          println(s"$childPrefix$sBranch${skill.name} (${skill.kind} / 威力${skill.power})")
         }
       }
+    }
+
 
   def main(args: Array[String]): Unit =
     showHierarchy(trainers)
