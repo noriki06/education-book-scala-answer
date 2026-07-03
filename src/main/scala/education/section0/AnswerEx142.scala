@@ -33,7 +33,7 @@ object AnswerEx142:
           Skill("火炎放射", "かえんほうしゃ", "攻撃", 90),
           Skill("破壊光線", "はかいこうせん", "攻撃", 150)
         )),
-        Pokemon("カビゴン", "かびごん", 160	, 160, Seq(
+        Pokemon("カビゴン", "かびごん", 160, 160, Seq(
           Skill("地震", "じしん", "攻撃", 100),
           Skill("回復", "かいふく", "回復", 60)
         ))
@@ -110,7 +110,7 @@ object AnswerEx142:
     )
 
   def main(args: Array[String]): Unit =
-    println(Trainer("サトシ", Seq(
+    println(randomDamage(Trainer("サトシ", Seq(
         Pokemon("ピカチュウ", "ぴかちゅう", 35, 35, Seq(
           Skill("電光石火", "でんこうせっか", "攻撃", 40),
           Skill("自己再生", "じこさいせい", "回復", 50)
@@ -122,6 +122,6 @@ object AnswerEx142:
         Pokemon("カビゴン", "かびごん", 160	, 160, Seq(
           Skill("地震", "じしん", "攻撃", 100),
           Skill("回復", "かいふく", "回復", 60)
-        )))))
+        ))))))
 
   val MATH_RANDOM = new scala.util.Random(256)
