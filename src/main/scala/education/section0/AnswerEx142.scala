@@ -85,22 +85,20 @@ object AnswerEx142:
         println(trainer.name)
         trainer.pokemons.sortBy(_.yomigana)
         .zipWithIndex
-        .foreach{ pokemons match
-          case (_, index) if index >= pokemon.size =>
+        .foreach{ case (pokemon, index) =>
+          if index >= (pokemon.size - 1) then
             println(s"└─${pokemon.name} (HP${pokemon.hpMax})")
-          case (_, index) else                     =>
+          else
             println(s"├─${pokemon.name} (HP${pokemon.hpMax})")
-          pokemon.skills.sortBy(-_.power)
-          .foreach { skill =>
-            println(s"    ${skill.name} (${skill.kind} / 威力${skill.power})")
-          }
+            pokemon.skills.sortBy(-_.power)
+            .foreach { case (skill, index) =>
+              if index >= skill.size - 1 then
+                println(s"   └─ ${skill.name} (${skill.kind} / 威力${skill.power})")
+              else
+                println(s"   ├─ ${skill.name} (${skill.kind} / 威力${skill.power})")
+            }
         }
       }
-
-
-
-
-
 
   def main(args: Array[String]): Unit =
     showHierarchy(trainers)
