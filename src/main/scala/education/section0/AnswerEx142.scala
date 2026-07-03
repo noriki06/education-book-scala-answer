@@ -65,19 +65,38 @@ object AnswerEx142:
     )
 
   def showAllSkills(trainers: Seq[Trainer]): Unit =
-    val skill =
+    val skills =
       for {
         trainer <- trainers
         pokemon <- trainer.pokemons
         skill   <- pokemon.skills
       } yield skill
 
-    skill
-      .sortBy(skill => skill.name)
+    skills
+      .sortBy(skill => skill.yomigana)
       .distinct
       .map(skill => skill.name)
       .foreach(println)
 
+  def showHierarchy(trainers: Seq[Trainer]): Unit =
+    trainers
+      .sortBy(_.name)
+      .foreach { trainer =>
+        println(trainer.name)
+        trainer.pokemons.sortBy(_.yomigana)
+        .foreach{ pokemon =>
+          println(s"  ${pokemon.name} (HP${pokemon.hpMax})")
+          pokemon.skills.sortBy(-_.power)
+          .foreach { skill =>
+            println(s"    ${skill.kind} (${skill.kind} / 威力${skill.power})")
+          }
+        }
+      }
+
+
+
+
+
 
   def main(args: Array[String]): Unit =
-    println(showAllSkills(trainers))
+    showHierarchy(trainers)
