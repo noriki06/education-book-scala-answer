@@ -4,15 +4,15 @@ object AnswerEx142:
   // トレーナクラス
   case class Trainer(
     name: String,           // トレーナー名
-    pokemon: Seq[Pokemon] // 手持ちポケモン
+    pokemons: Seq[Pokemon]  // 手持ちポケモン
   )
   // ポケモンクラス
   case class Pokemon(
-    name: String,     // ポケモン名
-    yomigana: String, // よみがな
-    hp: Int,          // 現在HP
-    hpMax: Int,       // 最大HP
-    skill: Seq[Skill] // 覚えている技
+    name: String,      // ポケモン名
+    yomigana: String,  // よみがな
+    hp: Int,           // 現在HP
+    hpMax: Int,        // 最大HP
+    skills: Seq[Skill] // 覚えている技
   )
   // スキルクラス
   case class Skill(
@@ -65,14 +65,15 @@ object AnswerEx142:
     )
 
   def showAllSkills(trainers: Seq[Trainer]): Unit =
-    trainers
-      .flatMap(trainer => trainer.pokemon
-      .flatMap(pokemon => pokemon.skill
-      .map(skill => skill.name)))
-      .sorted
-      .distinct
+    val skills =
+      trainers
+        .flatMap(trainer => trainer.pokemons.flatMap(
+          pokemons => pokemons.skills.map(
+            skills => skills.name)))
+        .sortBy(skills => skills.yomigana)
+        .distinct
 
-
+    foreach(println(skills))
 
   def main(args: Array[String]): Unit =
     println(showAllSkills(trainers))
