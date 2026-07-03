@@ -1,10 +1,10 @@
-package education.section3
+package education.section0
 
-object AnswerEx3_6:
+object AnswerEx142:
   // トレーナクラス
   case class Trainer(
     name: String,           // トレーナー名
-    myPokemon: Seq[Pokemon] // 手持ちポケモン
+    pokemon: Seq[Pokemon] // 手持ちポケモン
   )
   // ポケモンクラス
   case class Pokemon(
@@ -64,6 +64,15 @@ object AnswerEx3_6:
       ))
     )
 
+  def showAllSkills(trainers: Seq[Trainer]): Unit =
+    trainers
+      .flatMap(trainer => trainer.pokemon
+      .flatMap(pokemon => pokemon.skill
+      .map(skill => skill.name)))
+      .sorted
+      .distinct
+
 
 
   def main(args: Array[String]): Unit =
+    println(showAllSkills(trainers))
