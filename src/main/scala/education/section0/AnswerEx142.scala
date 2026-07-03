@@ -84,11 +84,15 @@ object AnswerEx142:
       .foreach { trainer =>
         println(trainer.name)
         trainer.pokemons.sortBy(_.yomigana)
-        .foreach{ pokemon =>
-          println(s"  ${pokemon.name} (HP${pokemon.hpMax})")
+        .zipWithIndex
+        .foreach{ pokemons match
+          case (_, index) if index >= pokemon.size =>
+            println(s"└─${pokemon.name} (HP${pokemon.hpMax})")
+          case (_, index) else                     =>
+            println(s"├─${pokemon.name} (HP${pokemon.hpMax})")
           pokemon.skills.sortBy(-_.power)
           .foreach { skill =>
-            println(s"    ${skill.kind} (${skill.kind} / 威力${skill.power})")
+            println(s"    ${skill.name} (${skill.kind} / 威力${skill.power})")
           }
         }
       }
