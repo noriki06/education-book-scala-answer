@@ -65,15 +65,11 @@ object AnswerEx142:
     )
 
   def showAllSkills(trainers: Seq[Trainer]): Unit =
-    val skills =
-      trainers
-        .flatMap(trainer => trainer.pokemons.flatMap(
-          pokemons => pokemons.skills.map(
-            skills => skills.name)))
-        .sortBy(skills => skills.yomigana)
-        .distinct
-
-    foreach(println(skills))
+    for {
+      a <- trainers.pokemons
+      b <- a.skills
+      c <- b.name.sortBy(name => name.yomigana).distinct
+    } yield c.foreach(println)
 
   def main(args: Array[String]): Unit =
     println(showAllSkills(trainers))
