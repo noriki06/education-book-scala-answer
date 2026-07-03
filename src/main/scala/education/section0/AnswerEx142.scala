@@ -83,20 +83,22 @@ object AnswerEx142:
       .sortBy(_.name)
       .foreach { trainer =>
         println(trainer.name)
-        trainer.pokemons.sortBy(_.yomigana)
-        .zipWithIndex
+        val sortPokemon = trainer.pokemons.sortBy(_.yomigana)
+        sortPokemon.zipWithIndex
         .foreach{ case (pokemon, index) =>
-          if index >= (pokemon.size - 1) then
+          if index == (sortPokemon.size - 1) then
             println(s"└─${pokemon.name} (HP${pokemon.hpMax})")
           else
             println(s"├─${pokemon.name} (HP${pokemon.hpMax})")
-            pokemon.skills.sortBy(-_.power)
+            val sortSkill = pokemon.skills.sortBy(-_.power)
+            sortSkill.zipWithIndex
             .foreach { case (skill, index) =>
-              if index >= skill.size - 1 then
-                println(s"   └─ ${skill.name} (${skill.kind} / 威力${skill.power})")
+              if index == (sortSkill.size - 1) then
+                println(s"│ └─ ${skill.name} (${skill.kind} / 威力${skill.power})")
               else
-                println(s"   ├─ ${skill.name} (${skill.kind} / 威力${skill.power})")
+                println(s"│ ├─ ${skill.name} (${skill.kind} / 威力${skill.power})")
             }
+
         }
       }
 
