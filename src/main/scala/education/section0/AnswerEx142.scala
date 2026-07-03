@@ -84,18 +84,44 @@ object AnswerEx142:
       val sortPokemon = trainer.pokemons.sortBy(_.yomigana) // 読み仮名でソートしたポケモンの並び
       sortPokemon.zipWithIndex.foreach { (pokemon, pIdx) => // index付けしたポケモンの並び
         val isPokemonLast = pIdx == sortPokemon.size - 1 // indexがラストかどうかの判定
-        val pBranch       = if isPokemonLast then "└─ " else "├─ " //
-        val childPrefix   = if isPokemonLast then "   " else "│  "
-        println(s"$pBranch${pokemon.name} (HP${pokemon.hpMax})")
+        val poketree       = if isPokemonLast then "└─ " else "├─ " //
+        val pokeend   = if isPokemonLast then "   " else "│  "
+        println(s"$poketree${pokemon.name} (HP${pokemon.hpMax})")
         val sortSkill = pokemon.skills.sortBy(-_.power)
         sortSkill.zipWithIndex.foreach { (skill, sIdx) =>
           val isSkillLast = sIdx == sortSkill.size - 1
-          val sBranch     = if isSkillLast then "└─ " else "├─ "
-          println(s"$childPrefix$sBranch${skill.name} (${skill.kind} / 威力${skill.power})")
+          val skitree     = if isSkillLast then "└─ " else "├─ "
+          println(s"$pokeend$skitree${skill.name} (${skill.kind} / 威力${skill.power})")
         }
       }
     }
 
+  def randomDamage(trainer: Trainer): Trainer =
+    val damage = MATH_RANDOM.nextInt(100) // ランダムなダメージ（0〜99 ）
+    val pokeIndex = MATH_RANDOM.nextInt(trainer.pokemons.size)
+    val target = trainer.pokemons(pokeIndex) // ポケモンを１体ランダムに選ぶ
+    trainer.copy(pokemons =
+      trainer
+        .pokemons
+        .updated(pokeIndex, target.copy(
+          hp =
+            math.max(0, target.hp - damage))
+        )
+    )
 
   def main(args: Array[String]): Unit =
-    showHierarchy(trainers)
+    println(Trainer("サトシ", Seq(
+        Pokemon("ピカチュウ", "ぴかちゅう", 35, 35, Seq(
+          Skill("電光石火", "でんこうせっか", "攻撃", 40),
+          Skill("自己再生", "じこさいせい", "回復", 50)
+        )),
+        Pokemon("リザードン", "りざーどん", 78 , 78, Seq(
+          Skill("火炎放射", "かえんほうしゃ", "攻撃", 90),
+          Skill("破壊光線", "はかいこうせん", "攻撃", 150)
+        )),
+        Pokemon("カビゴン", "かびごん", 160	, 160, Seq(
+          Skill("地震", "じしん", "攻撃", 100),
+          Skill("回復", "かいふく", "回復", 60)
+        )))))
+
+  val MATH_RANDOM = new scala.util.Random(256)
