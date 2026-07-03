@@ -131,7 +131,6 @@ object AnswerEx142:
         }
       }
     }
-
   def randomDamage(trainer: Trainer): Trainer =
     val damage = MATH_RANDOM.nextInt(100) // ランダムなダメージ（0〜99 ）
     val pokeIndex = MATH_RANDOM.nextInt(trainer.pokemons.size)
@@ -153,47 +152,40 @@ object AnswerEx142:
     (a.copy(pokemons = newTeamA), b.copy(pokemons = newTeamB))
 
   def takeTurn(attacker: Seq[Pokemon], defender: Seq[Pokemon]): (Seq[Pokemon], Seq[Pokemon]) =
-    val attackerPokemon = // 攻撃するポケモンの選定（生きてる中の、先頭）
-      attacker
-        .filter(pokemon => pokemon.hp > 0)
-        .head
-
     def randomAliveIndex(team: Seq[Pokemon]): Int =
-      val index = MATH_RANDOM.nextInt(team.size)
+      val aliveIndex =
+        team.zipWithIndex
+          .filter(_._1.hp > 0)
+          .map(_._2)
 
-      if team(index).hp > 0 then
-        index
-      else
-        randomAliveIndex(team)
+      aliveIndex(MATH_RANDOM.nextInt(aliveIndex.size))
+
+    attacker.find(_.hp > 0) match
+      case None =>
+        (attacker, defender)
+      case Some(attackerPokemon) =>
+        val skill =
+          attackerPokemon.skills(
+            MATH_RANDOM.nextInt(attackerPokemon.skills.size)
+          )
+
+        skill.kind match
+          case "攻撃" =>
+            val index = randomAliveIndex(defender)
+            val target = defender(index)
+            (attacker, defender.updated(index, target.copy(hp = math.max(0, target.hp - skill.power))))
+          case "回復" =>
+            val index = randomAliveIndex(attacker)
+            val target = attacker(index)
+            (attacker.updated(index, target.copy(hp = math.min(target.hpMax, target.hp + skill.power))), defender)
 
 
-    attackerPokemon.skills(MATH_RANDOM.nextInt(attackerPokemon.skills.size)).kind match // 技の種類で表示を場合分け
-      case "攻撃" =>
-        (attacker,
-          defender
-            .updated(
-              randomAliveIndex(defender),
-              defender(randomAliveIndex(defender))
-                .copy(
-                  hp = scala
-                    .math
-                    .max(
-                      0,
-                      defender(randomAliveIndex(defender)).hp - attackerPokemon.skills(
-                        MATH_RANDOM.nextInt(attackerPokemon.skills.size)).power))))
-      case "回復" =>
-        (attacker
-          .updated(
-            randomAliveIndex(attacker),
-            attacker(randomAliveIndex(attacker))
-              .copy(
-                hp = scala
-                  .math
-                  .min(
-                    attacker(randomAliveIndex(attacker)).hpMax,
-                    attacker(randomAliveIndex(attacker)).hp + attackerPokemon.skills(
-                      MATH_RANDOM.nextInt(attackerPokemon.skills.size)).power)))
-              ,defender)
+
+
+
+
+
+
 
   /*
    * 決着: どちらかのチームの 全ポケモンの体力が 0（ひんし） になったら、もう一方の勝ち。
