@@ -148,17 +148,66 @@ object AnswerEx142:
   def swapPokemon(a: Trainer, b: Trainer, indexA: Int, indexB: Int): (Trainer, Trainer) =
     val changePokemonA = a.pokemons(indexA)
     val changePokemonB = b.pokemons(indexB)
-
     val newTeamA = a.pokemons.updated(indexA, changePokemonB)
     val newTeamB = b.pokemons.updated(indexB, changePokemonA)
-
     (a.copy(pokemons = newTeamA), b.copy(pokemons = newTeamB))
 
+  def takeTurn(attacker: Seq[Pokemon], defender: Seq[Pokemon]): (Seq[Pokemon], Seq[Pokemon]) =
+    val attackerPokemon = // 攻撃するポケモンの選定（生きてる中の、先頭）
+      attacker
+        .filter(pokemon => pokemon.hp > 0)
+        .head
+
+    def randomAliveIndex(team: Seq[Pokemon]): Int =
+      val index = MATH_RANDOM.nextInt(team.size)
+
+      if team(index).hp > 0 then
+        index
+      else
+        randomAliveIndex(team)
 
 
+    attackerPokemon.skills(MATH_RANDOM.nextInt(attackerPokemon.skills.size)).kind match // 技の種類で表示を場合分け
+      case "攻撃" =>
+        (attacker,
+          defender
+            .updated(
+              randomAliveIndex(defender),
+              defender(randomAliveIndex(defender))
+                .copy(
+                  hp = scala
+                    .math
+                    .max(
+                      0,
+                      defender(randomAliveIndex(defender)).hp - attackerPokemon.skills(
+                        MATH_RANDOM.nextInt(attackerPokemon.skills.size)).power))))
+      case "回復" =>
+        (attacker
+          .updated(
+            randomAliveIndex(attacker),
+            attacker(randomAliveIndex(attacker))
+              .copy(
+                hp = scala
+                  .math
+                  .min(
+                    attacker(randomAliveIndex(attacker)).hpMax,
+                    attacker(randomAliveIndex(attacker)).hp + attackerPokemon.skills(
+                      MATH_RANDOM.nextInt(attackerPokemon.skills.size)).power)))
+              ,defender)
 
+  /*
+   * 決着: どちらかのチームの 全ポケモンの体力が 0（ひんし） になったら、もう一方の勝ち。
+   * 引き分け: 決着がつかないまま 20 ターン を超えたら引き分け（回復ばかりで終わらない場合の保険）。
+   */
+  def battle(a: Seq[Pokemon], b: Seq[Pokemon], aTurn: Boolean, turn: Int): String =
+    if      a.forall(a => a.hp <= 0) then s"決着: トレーナーBの勝ち！" // b の勝ち
+    else if b.forall(b => b.hp <= 0) then s"決着: トレーナーAの勝ち！" // a の勝ち
+    else if turn > 20 then "引き分け"                         // 決着がつかないまま 20 ターン を超えたら引き分け
+    else
+      val (na, nb) = if aTurn then takeTurn(a, b) else takeTurn(b, a).swap
+      battle(na, nb, !aTurn, turn + 1)
 
   def main(args: Array[String]): Unit =
-    println(swapPokemon(satoshi, kasumi, 1, 1))
+    println(battle(satoshi.pokemons, kasumi.pokemons, true, 1))
 
   val MATH_RANDOM = new scala.util.Random(256)
