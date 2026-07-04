@@ -115,7 +115,7 @@ object AnswerEx142:
       .foreach(println)
 
   def showHierarchy(trainers: Seq[Trainer]): Unit =
-    trainers.sortBy(_.name).foreach { trainer => // トレーナー名でソート
+    trainers.sortBy(_.name).foreach { trainer =>       // トレーナー名でソート
       println(trainer.name) // トレーナ名を出力
       val sortPokemon = trainer.pokemons.sortBy(_.yomigana) // 読み仮名でソートしたポケモンの並び
       sortPokemon.zipWithIndex.foreach { (pokemon, pIdx) => // index付けしたポケモンの並び
