@@ -179,18 +179,6 @@ object AnswerEx142:
             val target = attacker(index)
             (attacker.updated(index, target.copy(hp = math.min(target.hpMax, target.hp + skill.power))), defender)
 
-
-
-
-
-
-
-
-
-  /*
-   * 決着: どちらかのチームの 全ポケモンの体力が 0（ひんし） になったら、もう一方の勝ち。
-   * 引き分け: 決着がつかないまま 20 ターン を超えたら引き分け（回復ばかりで終わらない場合の保険）。
-   */
   def battle(a: Seq[Pokemon], b: Seq[Pokemon], aTurn: Boolean, turn: Int): String =
     if      a.forall(a => a.hp <= 0) then s"決着: トレーナーBの勝ち！" // b の勝ち
     else if b.forall(b => b.hp <= 0) then s"決着: トレーナーAの勝ち！" // a の勝ち
