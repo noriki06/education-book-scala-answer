@@ -9,7 +9,7 @@ object Answer1:
     type Id = Id.Repr                    // User.Id という ID 型に名前を付ける
 
   def main(args: Array[String]): Unit =
-    val id: Member.Id = MemberId(1001L)         // apply で生成
+    val id: Member.Id = Member.Id(1001L)         // apply で生成
 
     println(Member.Id(1001L).value)
     println(Member.Id(1001L).asString)
