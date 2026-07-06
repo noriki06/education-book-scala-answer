@@ -29,11 +29,11 @@ object Answer8:
     val first = Member(
       id = None,
       name = "Alice",
-      email = EmailAddress("alice@example.com")
+      email = EmailAddress("alice@example.com"),
       state = Member.Status.Active
-    ).WithNoId
+    ).toWithNoId
 
-    val member = first.v.copy(id = Some(Member.Id(1L)))
+    val member = first.v.copy(id = Some(Member.Id(1L))).toEmbeddedId
 
     val withdrawn = member.map(_.copy(state = Member.Status.Withdrawn))
 

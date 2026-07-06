@@ -1,8 +1,8 @@
-package education.part2.section2-2
+package education.part2.section2
 
 import ixias.core.model.*          // 状態の find / of を使う問題では ixias.core.model.syntax.* も
 
-object Answer5:
+object JoinAnswer5:
 
   case class Member(
     id: Int,
@@ -32,6 +32,12 @@ object Answer5:
       member.copy(postCount = posts.count(_.memberId == member.id))
 
   def main(args: Array[String]): Unit =
+    val members = Seq(
+      Member(1, "Alice", 10),
+      Member(2, "Bob", 20)
+    )
+
+
     val allGroups = Seq(
       Group(10, "営業"),
       Group(20, "開発")

@@ -18,7 +18,6 @@ object Answer6:
     type EmbeddedId = Entity.EmbeddedId[Id, Member]
 
   def main(args: Array[String]): Unit =
-    Member(id = None, name = "Alice").toWithNoId         // apply で生成
     val draft = Member(id = None, name = "Alice").toWithNoId
     val saved = draft.v.copy(id = Some(Member.Id(1L))).toEmbeddedId
 

@@ -1,11 +1,11 @@
-package education.part2.section2-3
+package education.part2.section2
 
 import ixias.core.model.*
 import ixias.core.model.syntax.*
 
-object Answer2:
+object AnswerOrdering2:
 
-  val xs = List(Some(3), Some(2), Some(1), None)
+  val xs = List(Some(3), None, Some(1), Some(2))
 
   def main(args: Array[String]): Unit =
     println(xs.sorted(using summon[Ordering[Int]].noneLastDesc))

@@ -1,14 +1,14 @@
-package education.part2.section2-2
+package education.part2.section2
 
 import ixias.core.model.*          // 状態の find / of を使う問題では ixias.core.model.syntax.* も
 
-object Answer1:
+object JoinAnswer3:
 
   case class Member(
     id: Int,
     name: String,
     groupId: Int,
-    groupName: Option[String] = None
+    groupName: Option[String] = None,
     postCount: Int = 0
   ) extends JoinSyntax[Member]
 
@@ -25,7 +25,7 @@ object Answer1:
 
   given JoinWith[Member, Post] =
     (member, posts) =>
-      member.copy(postCount = posts.count(_.memberId == member.id))\
+      member.copy(postCount = posts.count(_.memberId == member.id))
 
   given JoinWith[Member, Group] =
       (member, groups) =>

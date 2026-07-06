@@ -10,9 +10,9 @@ object Answer4:
     type Id = Id.Repr
 
     enum Status(val code: Int) extends EnumStatus[Int]:
-    case Active    extends Status(1) // 有効
-    case Suspended extends Status(2) // 一時停止中
-    case Withdrawn extends Status(3) // 退会
+      case Active    extends Status(1) // 有効
+      case Suspended extends Status(2) // 一時停止中
+      case Withdrawn extends Status(3) // 退会
 
   def main(args: Array[String]): Unit =
     import ixias.core.model.syntax.*

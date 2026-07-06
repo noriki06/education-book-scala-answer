@@ -1,9 +1,9 @@
-package education.part2.section2-3
+package education.part2.section2
 
 import ixias.core.model.*
 import ixias.core.model.syntax.*
 
-object Answer3:
+object AnswerOrdering3:
 
   case class Member(
     name: String,
@@ -13,7 +13,7 @@ object Answer3:
   val members = List(
     Member("Alice", Some(30)),
     Member("Bob",   None),
-    Member("Carol", Some(25)),
+    Member("Carol", Some(25))
   )
 
   def main(args: Array[String]): Unit =

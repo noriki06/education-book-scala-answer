@@ -31,7 +31,7 @@ object Answer7:
       state = Member.Status.Active
     ).toEmbeddedId
 
-  val suspended = saved.map(_.copy(state = Member.Status.Suspended))
+    val suspended = saved.map(_.copy(state = Member.Status.Suspended))
 
     println(suspended.id.asString)
     println(suspended.v.state)

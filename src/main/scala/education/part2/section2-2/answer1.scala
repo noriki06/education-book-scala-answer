@@ -1,8 +1,8 @@
-package education.part2.section2-2
+package education.part2.section2
 
 import ixias.core.model.*          // 状態の find / of を使う問題では ixias.core.model.syntax.* も
 
-object Answer1:
+object JoinAnswer1:
 
   case class Member(
     id: Int,
@@ -10,10 +10,6 @@ object Answer1:
     groupId: Int,
     groupName: Option[String] = None
   ) extends JoinSyntax[Member]
-
-  object Member:
-    object Id extends EntityId[Long]     // Long を土台にした「会員IDの工場」
-    type Id = Id.Repr                    // User.Id という ID 型に名前を付ける
 
     given JoinWith[Member, Group] =
       (member, groups) =>

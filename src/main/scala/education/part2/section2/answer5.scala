@@ -17,6 +17,6 @@ object Answer5:
     type WithNoId = Entity.WithNoId[Id, Member]
 
   def main(args: Array[String]): Unit =
-    Member(id = None, name = "Alice").toWithNoId         // apply で生成
+    val draft = Member(id = None, name = "Alice").toWithNoId         // apply で生成
 
     println(draft.v.name)
