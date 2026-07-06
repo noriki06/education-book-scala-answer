@@ -21,11 +21,11 @@ object Answer2:
       member.copy(postCount = posts.count(_.memberId == member.id))
 
   def main(args: Array[String]): Unit =
-    println(Member(1, "Alice", 10)
-      .join(
-        Seq(
-          Post(10, 1, "これ"),
-          Post(20, 1, "それ"),
-          Post(30, 1, "あれ"),
-          Post(40, 2, "違う")
-          )))
+    val posts = Seq(
+      Post(10, 1, "これ"),
+      Post(20, 1, "それ"),
+      Post(30, 1, "あれ"),
+      Post(40, 2, "違う")
+    )
+
+    println(Member(1, "Alice").join(posts))
