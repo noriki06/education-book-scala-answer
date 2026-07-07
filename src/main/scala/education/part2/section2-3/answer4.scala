@@ -1,7 +1,7 @@
 package education.part2.section2
 
-import ixias.core.model.*
-import ixias.core.model.syntax.*
+import ixias.core.model.*          // LocalDateTime などの型名（問題 5 で使う）
+import ixias.core.model.syntax.*   // noneFirstAsc / withLocale / Locales / 日付・派生の Ordering
 
 object AnswerOrdering4:
 

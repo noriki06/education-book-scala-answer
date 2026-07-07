@@ -1,6 +1,7 @@
 package education.part2.section2
 
 import ixias.core.model.*          // 状態の find / of を使う問題では ixias.core.model.syntax.* も
+import ixias.core.model.syntax.*
 
 object Answer8:
 
@@ -26,12 +27,13 @@ object Answer8:
 
 
   def main(args: Array[String]): Unit =
-    val first = Member(
-      id = None,
-      name = "Alice",
-      email = EmailAddress("alice@example.com"),
-      state = Member.Status.Active
-    ).toWithNoId
+    val first: Member.WithNoId =
+      Member(
+        id = None,
+        name = "Alice",
+        email = EmailAddress("alice@example.com"),
+        state = Member.Status.Active
+      ).toWithNoId
 
     val member = first.v.copy(id = Some(Member.Id(1L))).toEmbeddedId
 

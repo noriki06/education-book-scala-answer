@@ -1,6 +1,6 @@
 package education.part2.section2
 
-import ixias.core.model.*          // 状態の find / of を使う問題では ixias.core.model.syntax.* も
+import ixias.core.model.syntax.*
 
 object JoinAnswer1:
 
@@ -11,9 +11,9 @@ object JoinAnswer1:
     groupName: Option[String] = None
   ) extends JoinSyntax[Member]
 
-    given JoinWith[Member, Group] =
-      (member, groups) =>
-        member.copy(groupName = groups.find(_.id == member.groupId).map(_.name))
+  given JoinWith[Member, Group] =
+    (member, groups) =>
+      member.copy(groupName = groups.find(_.id == member.groupId).map(_.name))
 
 
   case class Group(

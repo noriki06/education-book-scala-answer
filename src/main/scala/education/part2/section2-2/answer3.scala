@@ -1,6 +1,6 @@
 package education.part2.section2
 
-import ixias.core.model.*          // 状態の find / of を使う問題では ixias.core.model.syntax.* も
+import ixias.core.model.syntax.*          // 状態の find / of を使う問題では ixias.core.model.syntax.* も
 
 object JoinAnswer3:
 
