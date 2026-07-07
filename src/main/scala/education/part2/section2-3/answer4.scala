@@ -10,6 +10,8 @@ object AnswerOrdering4:
     y: Int
   )
 
+  given Ordering[Point] = OrderingSyntax.derived
+
 
   def main(args: Array[String]): Unit =
     println(List(Point(1, 2), Point(1, 1), Point(0, 3)).sorted)
