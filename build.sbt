@@ -11,10 +11,6 @@ organization := "net.ixias"
 name         := "education-book-scala-answer"
 scalaVersion := "3.6.4"
 
-resolvers ++= Seq(
-  "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases/",
-  "Sonatype Release"  at "https://oss.sonatype.org/content/repositories/releases/"
-)
 
 scalacOptions ++= Seq(
   "-deprecation",       // Emit warning and location for usages of deprecated APIs.
