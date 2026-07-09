@@ -14,7 +14,7 @@ import education.part2.section3.persistence.EduRepositoryFacade
 object Answer2:
   def main(args: Array[String]): Unit =
     val controller = DIContainer.getInstance(classOf[Answer1Controller])
-    val result: Seq[User.Id] = Await.result(controller.invoke(), 30.seconds)
+    val result: Option[User.EmbeddedId] = Await.result(controller.invoke(), 30.seconds)
     println(result)
 
 
@@ -23,27 +23,34 @@ object Answer2:
  */
 @Singleton
 class Answer1Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionContext):
-  def invoke(): Future[Seq[User.Id]] =
+  def invoke(): Future[Option[User.EmbeddedId]] =
+    val alice = User(
+                  None,
+                  "Alice",
+                  EmailAddress("alice@example.com"),
+                  User.Status.Active
+                  ).toWithNoId
+    val bob = User(
+                None,
+                "Bob",
+                EmailAddress("bob@example.com"),
+                User.Status.Active
+                ).toWithNoId
+    val noriki = User(
+                   None,
+                   "noriki",
+                   EmailAddress("noriki@example.com"),
+                   User.Status.Active
+                   ).toWithNoId
+    val seq = Seq(alice, bob, noriki)
     for {
-    // ① 追加：WithNoId を渡し、採番された ID を受け取る
-      alice = User(
-               None,
-               "Alice",
-               EmailAddress("alice@example.com"),
-               User.Status.Active
-               ).toWithNoId
-      bob = User(
-               None,
-               "Bob",
-               EmailAddress("bob@example.com"),
-               User.Status.Active
-               ).toWithNoId
-      noriki = User(
-               None,
-               "noriki",
-               EmailAddress("noriki@example.com"),
-               User.Status.Active
-               ).toWithNoId
-      seq = Seq(alice, bob, noriki)
-      ids <- Future.sequence(seq.map(edu.user.add))
-    } yield ids
+      id <- Future.sequence(seq.map(edu.user.add))
+
+    // ② 取得：ID を持つ EmbeddedId が Option で返る
+      found   <- edu.user.find(User.Id(6))
+
+      // ③ 更新：取得できていれば、中の User を書き換えて渡す。戻り値は「更新前」の値
+      before  <- found match
+                 case Some(u) => edu.user.update(u.map(_.copy(state = User.Status.Withdrawn)))
+                 case None    => Future.successful(None)
+    } yield before.map(_.v.state)
