@@ -26,24 +26,24 @@ class Answer1Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
   def invoke(): Future[Seq[User.Id]] =
     for {
     // ① 追加：WithNoId を渡し、採番された ID を受け取る
-      id1 <- User(
+      alice = User(
                None,
                "Alice",
                EmailAddress("alice@example.com"),
                User.Status.Active
                ).toWithNoId
-      id2 <- User(
+      bob = User(
                None,
                "Bob",
                EmailAddress("bob@example.com"),
                User.Status.Active
                ).toWithNoId
-      id3 <- User(
+      noriki = User(
                None,
                "noriki",
                EmailAddress("noriki@example.com"),
                User.Status.Active
                ).toWithNoId
-      seq = Seq(id1, id2, id3)
+      seq = Seq(alice, bob, noriki)
       ids <- Future.sequence(seq.map(edu.user.add))
     } yield ids
