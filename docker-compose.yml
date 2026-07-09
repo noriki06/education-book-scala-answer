@@ -1,0 +1,21 @@
+# docker-compose.yml
+services:
+  mysql:
+    image: mysql:8.4                      # MySQL 8.4（LTS）のイメージ
+    container_name: education-mysql
+    ports:
+      - "13306:3306"                      # ホスト:コンテナ。ローカルの 13306 で繋がる
+    environment:
+      MYSQL_ROOT_PASSWORD: pass           # root のパスワード
+      MYSQL_DATABASE: education           # 起動時に作るデータベース名
+      MYSQL_USER: ixias                   # アプリ用ユーザー
+      MYSQL_PASSWORD: pass                # アプリ用ユーザーのパスワード
+      TZ: Asia/Tokyo
+    command:
+      - --character-set-server=utf8mb4    # 文字コードを utf8mb4 に
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - education-mysql-data:/var/lib/mysql   # データを名前付きボリュームに永続化
+
+volumes:
+  education-mysql-data:
