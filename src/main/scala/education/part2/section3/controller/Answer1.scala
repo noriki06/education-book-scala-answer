@@ -24,26 +24,25 @@ object Answer1:
 @Singleton
 class Answer1Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionContext):
   def invoke(): Future[Seq[User.Id]] =
+    val alice = User(
+                  None,
+                  "Alice",
+                  EmailAddress("alice@example.com"),
+                  User.Status.Active
+                  ).toWithNoId
+    val bob = User(
+                None,
+                "Bob",
+                EmailAddress("bob@example.com"),
+                User.Status.Active
+                ).toWithNoId
+    val noriki = User(
+                   None,
+                   "noriki",
+                   EmailAddress("noriki@example.com"),
+                   User.Status.Active
+                   ).toWithNoId
+    val seq = Seq(alice, bob, noriki)
     for {
-    // ① 追加：WithNoId を渡し、採番された ID を受け取る
-      alice = User(
-               None,
-               "Alice",
-               EmailAddress("alice@example.com"),
-               User.Status.Active
-               ).toWithNoId
-      bob = User(
-               None,
-               "Bob",
-               EmailAddress("bob@example.com"),
-               User.Status.Active
-               ).toWithNoId
-      noriki = User(
-               None,
-               "noriki",
-               EmailAddress("noriki@example.com"),
-               User.Status.Active
-               ).toWithNoId
-      seq = Seq(alice, bob, noriki)
       ids <- Future.sequence(seq.map(edu.user.add))
     } yield ids
