@@ -24,7 +24,7 @@ object Answer1:
 @Singleton
 class Answer1Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionContext):
   def invoke(): Future[Seq[User.Id]] =
-    for
+    for {
     // ① 追加：WithNoId を渡し、採番された ID を受け取る
       id      <- edu.user.add(
                    User(
@@ -48,4 +48,4 @@ class Answer1Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
                  )
       ids        <- Future.sequence(seq.map(id))
 
-    yield (println(id))
+    } yield ids
