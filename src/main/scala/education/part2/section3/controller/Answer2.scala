@@ -13,7 +13,7 @@ import education.part2.section3.persistence.EduRepositoryFacade
  */
 object Answer2:
   def main(args: Array[String]): Unit =
-    val controller = DIContainer.getInstance(classOf[Answer1Controller])
+    val controller = DIContainer.getInstance(classOf[Answer2Controller])
     val result: Option[User.EmbeddedId] = Await.result(controller.invoke(), 30.seconds)
     println(result.map(_.v.state))
 
@@ -22,7 +22,7 @@ object Answer2:
  * 問1 の処理本体（依存はコンストラクタ注入）
  */
 @Singleton
-class Answer1Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionContext):
+class Answer2Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionContext):
   def invoke(): Future[Option[User.EmbeddedId]] =
     val alice = User(
                   None,
@@ -44,10 +44,10 @@ class Answer1Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
                    ).toWithNoId
     val seq = Seq(alice, bob, noriki)
     for {
-      id <- Future.sequence(seq.map(edu.user.add))
+      ids <- Future.sequence(seq.map(edu.user.add))
 
     // ② 取得：ID を持つ EmbeddedId が Option で返る
-      found   <- edu.user.find(id)
+      found   <- edu.user.find(ids.head)
 
       // ③ 更新：取得できていれば、中の User を書き換えて渡す。戻り値は「更新前」の値
       before  <- found match
