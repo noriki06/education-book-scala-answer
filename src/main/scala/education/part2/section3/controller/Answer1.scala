@@ -47,7 +47,5 @@ class Answer1Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
                      EmailAddress("noriki@example.com"),
                      User.Status.Active
                    ).toWithNoId)
-      seq <- Seq(id1, id2, id3)
-      ids <- Future.sequence(seq.map(edu.user.add))
-
-    } yield ids
+      seq = Seq(id1, id2, id3)
+    } yield seq
