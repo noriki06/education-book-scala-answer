@@ -15,7 +15,7 @@ object Answer2:
   def main(args: Array[String]): Unit =
     val controller = DIContainer.getInstance(classOf[Answer1Controller])
     val result: Option[User.EmbeddedId] = Await.result(controller.invoke(), 30.seconds)
-    println(result)
+    println(result.map(_.v.state))
 
 
 /**
@@ -47,10 +47,10 @@ class Answer1Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
       id <- Future.sequence(seq.map(edu.user.add))
 
     // ② 取得：ID を持つ EmbeddedId が Option で返る
-      found   <- edu.user.find(User.Id(6))
+      found   <- edu.user.find(id)
 
       // ③ 更新：取得できていれば、中の User を書き換えて渡す。戻り値は「更新前」の値
       before  <- found match
                  case Some(u) => edu.user.update(u.map(_.copy(state = User.Status.Withdrawn)))
                  case None    => Future.successful(None)
-    } yield before.map(_.v.state)
+    } yield before
