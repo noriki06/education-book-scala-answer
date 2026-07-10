@@ -15,7 +15,6 @@ object Answer4:
   def main(args: Array[String]): Unit =
     val controller = DIContainer.getInstance(classOf[Answer4Controller])
     val result: Unit = Await.result(controller.invoke(), 30.seconds)
-    println(result)
 
 
 /**
