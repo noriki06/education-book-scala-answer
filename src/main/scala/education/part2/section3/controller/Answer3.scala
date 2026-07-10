@@ -14,8 +14,8 @@ import education.part2.section3.persistence.EduRepositoryFacade
 object Answer3:
   def main(args: Array[String]): Unit =
     val controller = DIContainer.getInstance(classOf[Answer3Controller])
-    val result: Option[User.EmbeddedId] = Await.result(controller.invoke(), 30.seconds)
-    println(result.map(_.v.state))
+    val result: Int = Await.result(controller.invoke(), 30.seconds)
+    println(result)
 
 
 /**
@@ -23,7 +23,7 @@ object Answer3:
  */
 @Singleton
 class Answer3Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionContext):
-  def invoke(): Future[Option[User.EmbeddedId]] =
+  def invoke(): Future[Int] =
     val alice = User(
                   None,
                   "Alice",
@@ -44,17 +44,18 @@ class Answer3Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
                    ).toWithNoId
     val seq = Seq(alice, bob, noriki)
     for {
-      id <- Future.sequence(seq.map(edu.user.add))
+      ids <- Future.sequence(seq.map(edu.user.add))
 
     // ② 取得：ID を持つ EmbeddedId が Option で返る
-      found   <- edu.user.find(id)
+      found   <- edu.user.find(ids.head)
 
       // ③ 更新：取得できていれば、中の User を書き換えて渡す。戻り値は「更新前」の値
       before  <- found match
                  case Some(u) => edu.user.update(u.map(_.copy(state = User.Status.Withdrawn)))
                  case None    => Future.successful(None)
 
+
       // ④ 再取得：更新後を確認
-      after   <- edu.user.filter(id)
+      after   <- edu.user.filter(ids)
       count = after.count(_.v.state == User.Status.Active)
     } yield count
