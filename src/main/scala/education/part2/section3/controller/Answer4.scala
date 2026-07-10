@@ -14,7 +14,7 @@ import education.part2.section3.persistence.EduRepositoryFacade
 object Answer4:
   def main(args: Array[String]): Unit =
     val controller = DIContainer.getInstance(classOf[Answer4Controller])
-    val result: Option[User.EmbeddedId] = Await.result(controller.invoke(), 30.seconds)
+    val result: Unit = Await.result(controller.invoke(), 30.seconds)
     println(result)
 
 
@@ -23,7 +23,7 @@ object Answer4:
  */
 @Singleton
 class Answer4Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionContext):
-  def invoke(): Future[Option[User.EmbeddedId]] =
+  def invoke(): Future[Unit] =
     val alice = User(
                   None,
                   "Alice",
@@ -48,7 +48,9 @@ class Answer4Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
 
     // ② 取得：ID を持つ EmbeddedId が Option で返る
       found   <- edu.user.find(User.Id(999999L))
+      f = println(found)
 
       deleted <- edu.user.delete(User.Id(999999L))
+      d = println(deleted)
 
-    } yield deleted
+    } yield (f, d)
