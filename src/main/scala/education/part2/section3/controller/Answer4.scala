@@ -48,9 +48,9 @@ class Answer4Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
 
     // ② 取得：ID を持つ EmbeddedId が Option で返る
       found   <- edu.user.find(User.Id(999999L))
-      f = println(found)
+      _ = println(found)
 
       deleted <- edu.user.delete(User.Id(999999L))
-      d = println(deleted)
+      _ = println(deleted)
 
-    } yield (f, d)
+    } yield ()
