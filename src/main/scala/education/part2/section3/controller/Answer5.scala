@@ -9,7 +9,7 @@ import education.part2.section3.model.User
 import education.part2.section3.persistence.EduRepositoryFacade
 
 /**
- * 問1 の入口：コントローラを 1 個取り出して invoke() を呼ぶ
+ * 問1 の入口：コントローラを 1 個取り出して invoke を呼ぶ
  */
 object Answer5:
   def main(args: Array[String]): Unit =
