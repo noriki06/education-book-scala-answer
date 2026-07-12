@@ -45,7 +45,7 @@ class Answer5Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
     for {
       ids <- Future.sequence(seq.map(edu.user.add))
 
-    // ② 取得：ID を持つ EmbeddedId が Option で返る
+      // ② 取得：ID を持つ EmbeddedId が Option で返る
       found   <- edu.user.find(ids.head)
 
       // ③ 更新：取得できていれば、中の User を書き換えて渡す。戻り値は「更新前」の値
