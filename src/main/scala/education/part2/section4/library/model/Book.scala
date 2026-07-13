@@ -7,10 +7,12 @@ import ixias.core.model.*
  **/
 case class Book(
   id:       Option[Book.Id],
-  title:    String,             // タイトル
-  category: Book.Category,      // カテゴリー
-  loanFlag: Book.Status         // 貸出フラグ（初期）
-)
+  title:    String,                 // タイトル
+  category: Book.Category,          // カテゴリー
+  state: Book.State                 // 貸出フラグ（初期）
+  updatedAt: LocalDateTime = Now,   // 更新日時
+  createdAt: LocalDateTime = Now,   // 作成日時
+)extends EntityModel[Book.Id]
 
 object Book:
   object Id extends EntityId[Long]
@@ -22,6 +24,6 @@ object Book:
     case Technical extends Category(3)
     case Magazine  extends Category(4)
 
-  enum Status(val code: Int) extends EnumStatus[Int]:
-    case Possible    extends Status(1)
-    case Inpossible  extends Status(2)
+  enum State(val code: Int) extends EnumStatus[Int]:
+    case Possible    extends State(1)
+    case Inpossible  extends State(2)

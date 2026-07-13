@@ -15,14 +15,14 @@ case class Loan(
   createdAt: LocalDateTime = Now,   // 作成日時
 )extends EntityModel[Loan,Title]
 
-  object Loan:
-    object Title extends EntityId[Long]
-    type Title         = Title.Repr
+object Loan:
+  object Title extends EntityId[Long]
+  type Title         = Title.Repr
 
   enum Status(val code: Int) extends EnumStatus[Int]:
     case Rent   extends Status(1)
     case Return extends Status(2)
 
-  enum Result(val code: Int) extends EnumResult[Int]:
+  enum Result(val code: Int) extends EnumStatus[Int]:
     case Success extends Result(1)
     case Failure extends Result(2)
