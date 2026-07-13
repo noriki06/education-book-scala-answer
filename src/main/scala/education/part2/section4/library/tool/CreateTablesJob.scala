@@ -20,7 +20,7 @@ object CreateTables:
     // ② テーブルを作成（既にあれば何もしない）
     Await.result(EducationTableManager.createTable(bookTable), 30.seconds)
 
-    val loanTable = DIContainer.getInstance(classOf[BookTable])
+    val loanTable = DIContainer.getInstance(classOf[LoanTable])
 
     // ① まず実行される CREATE 文を確認（DB は変えない）
     Await.result(EducationTableManager.showCreateTable(loanTable), 30.seconds)

@@ -15,7 +15,7 @@ import education.part2.section4.library.model.Book
 @Singleton
 class BookTable @Inject()(ctx: SlickDatabaseContext)
   extends SlickTable[Book.Id, Book, JdbcProfile](ctx):
-  import api.{ *, given }
+  import api.*
 
   // --[ データソース ]--------------------------------------------------
   // どの接続を使うか。DSN は "path://hostspec/database" 形式（02章の application.conf と対応）
@@ -33,7 +33,7 @@ class BookTable @Inject()(ctx: SlickDatabaseContext)
     import Book.*
 
     @pk  def id        = column[Id]           ("id",         O.UInt64, O.PrimaryKey, O.AutoInc)
-    @col def title     = column[String] ("status",      O.Varchar(64))
+    @col def title     = column[String] ("title",      O.Varchar(64))
     @col def category  = column[Book.Category] ("category", O.UInt8)
     @col def state    = column[Book.State]      ("state",  O.UInt8)
     @col def updatedAt = column[LocalDateTime]("updated_at", O.Timestamp(onUpdate = true))
