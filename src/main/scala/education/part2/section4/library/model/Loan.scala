@@ -6,18 +6,21 @@ import ixias.core.model.*
  * 貸出エンティティ（前章で定義。DB を何も知らない純粋な case class）
  */
 case class Loan(
-  date:     Strign,                 // 日時
+  id:       Option[Loan.Id],
+  date:     String,                 // 日時
   status:   Loan.Status,            // 操作
-  bookTitle: Option[Loan.Title] ,   // 対象の蔵書
-  user:     String,       　　　　　// 利用者
-  loanResult: Loan.Result 　　　　　// 貸出／返却APIの挙動
+  bookTitle: String ,   // 対象の蔵書
+  user:      String,                 // 利用者
+  loanResult: Loan.Result,           // 貸出／返却APIの挙動
   updatedAt: LocalDateTime = Now,   // 更新日時
   createdAt: LocalDateTime = Now,   // 作成日時
-) extends EntityModel[Loan,Title]
+) extends EntityModel[Loan.Id]
 
 object Loan:
   object Title extends EntityId[Long]
-  type Title         = Title.Repr
+  type Id         = Id.Repr
+  type WithNoId   = Entity.WithNoId[Id, Loan]
+  type EmbeddedId = Entity.EmbeddedId[Id, Loan]
 
   enum Status(val code: Int) extends EnumStatus[Int]:
     case Rent   extends Status(1)
