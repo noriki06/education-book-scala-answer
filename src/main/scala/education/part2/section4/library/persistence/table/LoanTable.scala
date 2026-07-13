@@ -33,9 +33,11 @@ class LoanTable @Inject()(ctx: SlickDatabaseContext)
     import Loan.*
 
     @pk  def id        = column[Id]           ("id",         O.UInt64, O.PrimaryKey, O.AutoInc)
-    @col def title     = column[String]       ("title",      O.Varchar(64))
-    @col def category  = column[Status]     ("category",   O.UInt8)
-    @col def state     = column[Status]        ("state",      O.Varchar(191))
+    @col def status     = column[Loan.Status] ("status",      O.UInt8)
+    @col def user  = column[String]           ("user",   O.Varchar(64))
+    @col def loanResult = column[Loan.Result] ("loan_result", O.UInt8)
+    @col def bookId    = column[Book.Id]      ("book_id",         O.UInt64, O.PrimaryKey, O.AutoInc)
+    @col def loanedAt = column[LocalDateTime] ("loaned_at", O.Timestamp)
     @col def updatedAt = column[LocalDateTime]("updated_at", O.Timestamp(onUpdate = true))
     @col def createdAt = column[LocalDateTime]("created_at", O.Timestamp)
 
