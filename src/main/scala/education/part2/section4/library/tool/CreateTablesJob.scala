@@ -12,12 +12,20 @@ import education.part2.section4.library.persistence.table.LoanTable
 object CreateTables:
   def main(args: Array[String]): Unit =
     // 04章の DI から UserTable を取り出す（new はしない）
-    val table = DIContainer.getInstance(classOf[UserTable])
+    val bookTable = DIContainer.getInstance(classOf[BookTable])
 
     // ① まず実行される CREATE 文を確認（DB は変えない）
-    Await.result(EducationTableManager.showCreateTable(table), 30.seconds)
+    Await.result(EducationTableManager.showCreateTable(bookTable), 30.seconds)
 
     // ② テーブルを作成（既にあれば何もしない）
-    Await.result(EducationTableManager.createTable(table), 30.seconds)
+    Await.result(EducationTableManager.createTable(bookTable), 30.seconds)
+
+    val loanTable = DIContainer.getInstance(classOf[BookTable])
+
+    // ① まず実行される CREATE 文を確認（DB は変えない）
+    Await.result(EducationTableManager.showCreateTable(loanTable), 30.seconds)
+
+    // ② テーブルを作成（既にあれば何もしない）
+    Await.result(EducationTableManager.createTable(loanTable), 30.seconds)
 
     println("[OK] user テーブルを作成しました")
