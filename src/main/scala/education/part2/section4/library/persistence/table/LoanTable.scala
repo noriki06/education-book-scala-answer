@@ -8,6 +8,8 @@ import ixias.core.persistence.HostSpec
 import ixias.db.slick.{ SlickDatabaseContext, SlickTable }
 import ixias.db.slick.backend.SlickDataSource
 import education.part2.section4.library.model.Loan
+import education.part2.section4.library.model.Book
+
 
 /**
  * User エンティティ ⇄ `user` テーブル の対応表

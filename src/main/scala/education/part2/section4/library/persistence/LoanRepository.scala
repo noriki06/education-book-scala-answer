@@ -10,5 +10,5 @@ import education.part2.section4.library.persistence.table.LoanTable
  * 自動で提供する（実装を書く必要はない）。
  */
 @Singleton
-class UserRepository @Inject()(table: LoanTable, ctx: SlickDatabaseContext)
+class LoanRepository @Inject()(table: LoanTable, ctx: SlickDatabaseContext)
   extends SlickBaseRepository(table, ctx)
