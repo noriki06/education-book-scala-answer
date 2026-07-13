@@ -12,11 +12,13 @@ case class Book(
   state:     Book.State,                 // 貸出フラグ（初期）
   updatedAt: LocalDateTime = Now,   // 更新日時
   createdAt: LocalDateTime = Now   // 作成日時
-)extends EntityModel[Book.Id]
+) extends EntityModel[Book.Id]
 
 object Book:
   object Id extends EntityId[Long]
   type Id         = Id.Repr
+  type WithNoId   = Entity.WithNoId[Id, Book]
+  type EmbeddedId = Entity.EmbeddedId[Id, Book]
 
   enum Category(val code: Int) extends EnumStatus[Int]:
     case Novel     extends Category(1)

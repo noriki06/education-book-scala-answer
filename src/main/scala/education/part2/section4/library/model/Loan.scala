@@ -13,7 +13,7 @@ case class Loan(
   loanResult: Loan.Result 　　　　　// 貸出／返却APIの挙動
   updatedAt: LocalDateTime = Now,   // 更新日時
   createdAt: LocalDateTime = Now,   // 作成日時
-)extends EntityModel[Loan,Title]
+) extends EntityModel[Loan,Title]
 
 object Loan:
   object Title extends EntityId[Long]
