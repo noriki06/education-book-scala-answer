@@ -7,17 +7,16 @@ import ixias.core.model.*
  */
 case class Loan(
   id:       Option[Loan.Id],
-  date:     String,                 // 日時
   status:   Loan.Status,            // 操作
-  bookTitle: String ,   // 対象の蔵書
   user:      String,                 // 利用者
   loanResult: Loan.Result,           // 貸出／返却APIの挙動
+  bookId: Option[Book.Id]
   updatedAt: LocalDateTime = Now,   // 更新日時
   createdAt: LocalDateTime = Now,   // 作成日時
 ) extends EntityModel[Loan.Id]
 
 object Loan:
-  object Title extends EntityId[Long]
+  object Id extends EntityId[Long]
   type Id         = Id.Repr
   type WithNoId   = Entity.WithNoId[Id, Loan]
   type EmbeddedId = Entity.EmbeddedId[Id, Loan]
