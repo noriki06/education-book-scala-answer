@@ -3,8 +3,10 @@ package education.part2.section4.library.controller
 import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.concurrent.duration.*
+import ixias.core.model.*
 import education.part2.section4.library.DIContainer
 import education.part2.section4.library.model.Book
+import education.part2.section4.library.model.Loan
 import education.part2.section4.library.persistence.EduRepositoryFacade
 
 /**
@@ -34,6 +36,74 @@ class EduController @Inject()(edu: EduRepositoryFacade)(using ExecutionContext):
         Book(None, "リファクタリング", Book.Category.Technical, Book.State.Available).toWithNoId
       )
 
-    for {
-      ids <- Future.sequence(books.map(edu.book.add))
-    } yield ids
+    val loans =
+      Seq(
+        Loan(
+          None,
+          Loan.Status.Rent,
+          "Alice",
+          Loan.Result.Success,
+          None,
+          LocalDateTime.of(2026,1,10,0,0)).toWithNoId,
+        Loan(
+          None,
+          Loan.Status.Rent,
+          "Bob",
+          Loan.Result.Success,
+          None,
+          LocalDateTime.of(2026,1,12,0,0)).toWithNoId,
+        Loan(
+          None,
+          Loan.Status.Return,
+          "Alice",
+          Loan.Result.Success,
+          None,
+          LocalDateTime.of(2026,1,20,0,0)).toWithNoId,
+       Loan(
+          None,
+          Loan.Status.Rent,
+          "Carol",
+          Loan.Result.Success,
+          None,
+          LocalDateTime.of(2026,2,3,0,0)).toWithNoId,
+       Loan(
+          None,
+          Loan.Status.Rent,
+          "Dave",
+          Loan.Result.Failure,
+          None,
+          LocalDateTime.of(2026,2,8,0,0)).toWithNoId,
+       Loan(
+          None,
+          Loan.Status.Return,
+          "Carol",
+          Loan.Result.Success,
+          None,
+          LocalDateTime.of(2026,2,15,0,0)).toWithNoId,
+       Loan(
+          None,
+          Loan.Status.Rent,
+          "Alice",
+          Loan.Result.Success,
+          None,
+          LocalDateTime.of(2026,2,20,0,0)).toWithNoId,
+        Loan(
+          None,
+          Loan.Status.Rent,
+          "Bob",
+          Loan.Result.Success,
+          None,
+          LocalDateTime.of(2026,3,5,0,0)).toWithNoId,
+        Loan(
+          None,
+          Loan.Status.Rent,
+          "Bob",
+          Loan.Result.Success,
+          None,
+          LocalDateTime.of(2026,3,10,0,0)).toWithNoId,
+
+      for {
+        ids <- Future.sequence(books.map(edu.book.add))
+
+
+      } yield ids
