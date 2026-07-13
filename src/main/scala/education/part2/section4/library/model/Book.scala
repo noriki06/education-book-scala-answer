@@ -1,4 +1,4 @@
-package education.part2.section4.library
+package education.part2.section4.library.model
 
 import ixias.core.model.*
 

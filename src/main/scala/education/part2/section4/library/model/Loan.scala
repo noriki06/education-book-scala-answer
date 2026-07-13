@@ -10,7 +10,8 @@ case class Loan(
   status:   Loan.Status,            // 操作
   user:      String,                 // 利用者
   loanResult: Loan.Result,           // 貸出／返却APIの挙動
-  bookId: Option[Book.Id]
+  bookId: Book.Id,
+  loanedAt: LocalDateTime = Now,
   updatedAt: LocalDateTime = Now,   // 更新日時
   createdAt: LocalDateTime = Now,   // 作成日時
 ) extends EntityModel[Loan.Id]
