@@ -13,7 +13,7 @@ import education.part2.section4.library.persistence.EduRepositoryFacade
  * 入口（Play を使わない学習ジョブ）。
  * DI コンテナから EduController を 1 個取り出して invoke() を呼ぶだけ。
  */
-object AnswerN:
+object Answer3:
   def main(args: Array[String]): Unit =
     val controller = DIContainer.getInstance(classOf[Answer3Controller])
     println(Await.result(controller.invoke(), 60.seconds))
