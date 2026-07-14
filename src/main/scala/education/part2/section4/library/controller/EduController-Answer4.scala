@@ -43,47 +43,28 @@ class Answer4Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
     val loan8 = (Loan(None, Loan.Status.Rent, "Bob", Loan.Result.Success, "名探偵コナン1", LocalDateTime.of(2026,3,5,0,0))).toWithNoId,
     val loan9 = (Loan(None, Loan.Status.Rent, "Bob", Loan.Result.Success, "Scala入門", LocalDateTime.of(2026,3,10,0,0)).toWithNoId
 
+    val books = Seq(scala, conan, neko, jamp, refa)
+    val loans = Seq(loan1, loan2, loan3, loan4, loan5, loan6, loan7, loan8, loan9)
 
     for {
-      idScala <- edu.book.add(scala)
-      idConan <- edu.book.add(conan)
-      idNeko <- edu.book.add(neko)
-      idJamp <- edu.book.add(jamp)
-      idRefa <- edu.book.add(refa)
+      idbooks <- Future.sequence(books.map(edu.book.add))
+      idloans <- Future.sequence(loans.map(edu.;loan.add))
+    } yield ids
 
-      idloan1 <- pedu.book.add(loan1)
-      idloan2 <- pedu.book.add(loan2)
-      idloan3 <- pedu.book.add(loan3)
-      idloan4 <- pedu.book.add(loan4)
-      idloan5 <- pedu.book.add(loan5)
-      idloan6 <- pedu.book.add(loan6)
-      idloan7 <- pedu.book.add(loan7)
-      idloan8 <- pedu.book.add(loan8)
-      idloan9 <- pedu.book.add(loan9)
 
-      fScala <- edu.user.find(idScala)
-      fConan <- edu.user.find(idConan)
-      fNeko <- edu.user.find(idNeko)
-      fJamp <- edu.user.find(idJamp)
-      fRefa <- edu.user.find(idRefa)
+  def lend(bookId: Book.Id, user: String, books: Seq[Book], loans: Seq[Loan]):
+    if books.find(bookId).state == Book,State.Available
+      then books.find(bookId).map(_.copy(state = Book.State.OnLoan))
+           update
+    else
 
-      reloan1 <-
+
+  def return
 
 
 
-              before  <- found match
-                   case Some(u) => edu.user.update(u.map(_.copy(state = User.Status.Withdrawn)))
-                   case None    => Future.successful(None)
-      _        = println(s"更新：更新前の状態 = ${before.map(_.v.state)}")
 
 
 貸出：指定した蔵書を、指定した利用者に貸し出す。ただし すでに貸出中の蔵書は貸し出せない（二重貸出の禁止）。成功したら、蔵書を「貸出中」に更新し、貸出ログに「貸出」を 1 件追記する。貸し出せない場合は、その理由が呼び出し側に分かる こと（状態も履歴も変化させない）。
 返却：指定した蔵書を返却する。蔵書を「貸出可能」に戻し、貸出ログに「返却」を 1 件追記する。
 どちらの操作も、発生日時を指定できること（過去日時での記録も可能にする。問5 のシナリオで必要）。
-      theScala <-
-      theConan <-
-      theNeko <-
-      theJamp <-
-      theRefa <-
-
-    } yield ids
