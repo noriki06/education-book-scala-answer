@@ -44,8 +44,9 @@ class Answer4Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
             case Book.State.Available => val restate: Book.EmbeddedId = book.map(_.copy(state = Book.State.OnLoan))
                                          for {
                                            a <- edu.book.update(restate)
-                                           loanId <- edu.loan.add
-                                         } yield a
+                                           loanId <- edu.loan.add(
+                                             Loan(None, Loan.Status.Rent, user, Loan.Result.Success, book.v.title, date).toWithNoId)
+                                         } yield Right(loanId)
         }
       }
     }
@@ -55,5 +56,5 @@ class Answer4Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
     Future[Either[Error, Option[Loan.EmbeddedId]]] =
     for {
       a <- edu.book.find(bookId).update(book.map(_.copy(state = Book.State.Available)))
-      b <- edu.book.add(Loans)
-    } yield a
+      b <- edu.loan.add(Loan(None, Loan.Status.Rent, user, Loan.Result.Success, book.v.title, date).toWithNoId)
+    } yield Right(b)
