@@ -8,9 +8,6 @@ import education.part2.section4.library.DIContainer
 import education.part2.section4.library.model.Book
 import education.part2.section4.library.model.Loan
 import education.part2.section4.library.persistence.EduRepositoryFacade
-import scala.concurrent.ExecutionContext.Implicits.global
-import cats.data.EitherT
-import cats.syntax.all.*
 
 
 /**
@@ -63,21 +60,23 @@ class Answer4Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
 
   def lend(bookId: Book.Id, user: String, date: LocalDateTime):
     Future[Either[Error, Option[Loan.EmbeddedId]]] =
-    edu.books.find(bookId) match {
-      case None       => Left(Error.NonId)
-      case Some(book) => book.state
-        case OnLoan    => Left(Error.NonBook)
+    edu.book.find(bookId).map match {
+      case None       => Future.successful(Left(Error.NonId))
+      case Some(book) => book.v.state match {
+        case OnLoan    => Future.successful(Left(Error.NonBook))
         case Available => val restate: Book.EmbeddedId = book.map(_.copy(state = Book.State.OnLoan))
-                          Right((
+                          Right(
                             for {
-                              _ <- EitherT(book.update(restate))
-                              _ <- EitherT(edu.loan.add(loans))
-                            } yield ()).value)
+                              _ <- book.update(restate)
+                              _ <- edu.loan.add(loans)
+                            } yield ())
+      }
+    }
 
 
   def return(bookId: Book.Id):
     Future[Either[Error, Option[Loan.EmbeddedId]]] =
-    (for {
-      _ <- EitherT(edu.books.find(bookId).update(book.map(_.copy(state = Book.State.Available))))
-      _ <- EitherT(edu.book.add(Loans))
-    } yield ()).value
+    for {
+      a <- edu.book.find(bookId).update(book.map(_.copy(state = Book.State.Available)))
+      b <- edu.book.add(Loans)
+    } yield
