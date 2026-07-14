@@ -15,8 +15,8 @@ import education.part2.section4.library.persistence.EduRepositoryFacade
  */
 object AnswerN:
   def main(args: Array[String]): Unit =
-    val controller = DIContainer.getInstance(classOf[AnswerNController])
-    Await.result(controller.invoke(), 60.seconds)
+    val controller = DIContainer.getInstance(classOf[Answer3Controller])
+    println(Await.result(controller.invoke(), 60.seconds))
 
 
 /**
@@ -24,8 +24,8 @@ object AnswerN:
  * 依存はすべてコンストラクタ注入で受け取る（edu も ExecutionContext も注入された値）。
  */
 @Singleton
-class AnswerNController @Inject()(edu: EduRepositoryFacade)(using ExecutionContext):
-  def invoke(): Future[Unit] =  /** add → find → update → delete を 1 本の流れで実行する */
+class Answer3Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionContext):
+  def invoke(): Future[Seq[Book.Id]] =  /** add → find → update → delete を 1 本の流れで実行する */
 
     val books =
       Seq(
@@ -103,11 +103,6 @@ class AnswerNController @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
           LocalDateTime.of(2026,3,10,0,0)).toWithNoId
     )
 
-      for {
-        ids <- Future.sequence(books.map(edu.book.add))
-        found <- edu.book.find(ids)
-        bookMap = ids.v.map(id => books.title -> id).toMap
-
-
-
-      } yield()
+    for {
+      ids <- Future.sequence(books.map(edu.book.add))
+    } yield ids

@@ -1,6 +1,6 @@
 package education.part2.section4.library.model
 
-import ixias.core.model.{ *, Title }
+import ixias.core.model.*
 
 /**
  * 貸出エンティティ（前章で定義。DB を何も知らない純粋な case class）
@@ -10,7 +10,7 @@ case class Loan(
   status:   Loan.Status,            // 操作
   user:      String,                 // 利用者
   loanResult: Loan.Result,           // 貸出／返却APIの挙動
-  bookTitle: Title,
+  bookTitle: String,
   loanedAt: LocalDateTime = Now,
   updatedAt: LocalDateTime = Now,   // 更新日時
   createdAt: LocalDateTime = Now,   // 作成日時
