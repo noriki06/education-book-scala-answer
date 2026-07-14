@@ -26,7 +26,7 @@ object Demo:
 class EduController @Inject()(edu: EduRepositoryFacade)(using ExecutionContext):
 
   /** add → find → update → delete を 1 本の流れで実行する */
-  def invoke(): Future[Seq[Book.Id]] =
+  def invoke(): Unit =
     val books =
       Seq(
         Book(None, "Scala入門",        Book.Category.Technical, Book.State.Available).toWithNoId,
@@ -43,67 +43,71 @@ class EduController @Inject()(edu: EduRepositoryFacade)(using ExecutionContext):
           Loan.Status.Rent,
           "Alice",
           Loan.Result.Success,
-          None,
+          "Scala入門",
           LocalDateTime.of(2026,1,10,0,0)).toWithNoId,
         Loan(
           None,
           Loan.Status.Rent,
           "Bob",
           Loan.Result.Success,
-          None,
+          "名探偵コナン1",
           LocalDateTime.of(2026,1,12,0,0)).toWithNoId,
         Loan(
           None,
           Loan.Status.Return,
           "Alice",
           Loan.Result.Success,
-          None,
+          "Scala入門",
           LocalDateTime.of(2026,1,20,0,0)).toWithNoId,
        Loan(
           None,
           Loan.Status.Rent,
           "Carol",
           Loan.Result.Success,
-          None,
+          "Scala入門",
           LocalDateTime.of(2026,2,3,0,0)).toWithNoId,
        Loan(
           None,
           Loan.Status.Rent,
           "Dave",
           Loan.Result.Failure,
-          None,
+          "Scala入門",
           LocalDateTime.of(2026,2,8,0,0)).toWithNoId,
        Loan(
           None,
           Loan.Status.Return,
           "Carol",
           Loan.Result.Success,
-          None,
+          "Scala入門",
           LocalDateTime.of(2026,2,15,0,0)).toWithNoId,
        Loan(
           None,
           Loan.Status.Rent,
           "Alice",
           Loan.Result.Success,
-          None,
+          "吾輩は猫である",
           LocalDateTime.of(2026,2,20,0,0)).toWithNoId,
         Loan(
           None,
           Loan.Status.Rent,
           "Bob",
           Loan.Result.Success,
-          None,
+          "名探偵コナン1",
           LocalDateTime.of(2026,3,5,0,0)).toWithNoId,
         Loan(
           None,
           Loan.Status.Rent,
           "Bob",
           Loan.Result.Success,
-          None,
-          LocalDateTime.of(2026,3,10,0,0)).toWithNoId,
+          "Scala入門",
+          LocalDateTime.of(2026,3,10,0,0)).toWithNoId
+    )
 
       for {
         ids <- Future.sequence(books.map(edu.book.add))
+        found <- edu.book.find(ids)
+        bookMap = ids.v.map(id => books.title -> id).toMap
 
 
-      } yield ids
+
+      } yield()
