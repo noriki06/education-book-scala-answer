@@ -67,9 +67,9 @@ class Answer4Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
         case Available => val restate: Book.EmbeddedId = book.map(_.copy(state = Book.State.OnLoan))
                           Right(
                             for {
-                              _ <- book.update(restate)
+                              a <- book.update(restate)
                               _ <- edu.loan.add(loans)
-                            } yield ())
+                            } yield a)
       }
     }
 
@@ -79,4 +79,4 @@ class Answer4Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
     for {
       a <- edu.book.find(bookId).update(book.map(_.copy(state = Book.State.Available)))
       b <- edu.book.add(Loans)
-    } yield
+    } yield a
