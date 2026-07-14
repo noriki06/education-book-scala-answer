@@ -35,7 +35,7 @@ class Answer4Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
 
 
   def lend(bookId: Book.Id, user: String, date: LocalDateTime):
-    Future[Either[Error, Option[Loan.EmbeddedId]]] =
+    Future[Either[Error, Loan.Id]] =
       edu.book.find(bookId).flatMap {
         found => found match {
           case None       => Future.successful(Left(Error.NonId))
@@ -52,9 +52,19 @@ class Answer4Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
     }
 
 
-  def returnBook(bookId: Book.Id):
-    Future[Either[Error, Option[Loan.EmbeddedId]]] =
-    for {
-      a <- edu.book.find(bookId).update(book.map(_.copy(state = Book.State.Available)))
-      b <- edu.loan.add(Loan(None, Loan.Status.Rent, user, Loan.Result.Success, book.v.title, date).toWithNoId)
-    } yield Right(b)
+  def returnBook(bookId: Book.Id, user: String, date: LocalDateTime):
+    Future[Either[Error, Loan.Id]] =
+      edu.book.find(bookId).flatMap {
+        found => found match {
+          case None       => Future.successful(Left(Error.NonId))
+          case Some(book) => book.v.state match {
+            case Book.State.Available    => Future.successful(Left(Error.NonBook))
+            case Book.State.OnLoan => val restate: Book.EmbeddedId = book.map(_.copy(state = Book.State.Available))
+                                         for {
+                                           a <- edu.book.update(restate)
+                                           loanId <- edu.loan.add(
+                                             Loan(None, Loan.Status.Return, user, Loan.Result.Success, book.v.title, date).toWithNoId)
+                                         } yield Right(loanId)
+        }
+      }
+    }
