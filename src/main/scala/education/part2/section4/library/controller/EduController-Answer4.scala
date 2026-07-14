@@ -8,6 +8,10 @@ import education.part2.section4.library.DIContainer
 import education.part2.section4.library.model.Book
 import education.part2.section4.library.model.Loan
 import education.part2.section4.library.persistence.EduRepositoryFacade
+import scala.concurrent.ExecutionContext.Implicits.global
+import cats.data.EitherT
+import cats.syntax.all.*
+
 
 /**
  * 入口（Play を使わない学習ジョブ）。
@@ -52,11 +56,18 @@ class Answer4Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
     } yield ids
 
 
-  def lend(bookId: Book.Id, user: String, books: Seq[Book], loans: Seq[Loan]):
-    if books.find(bookId).state == Book,State.Available
-      then books.find(bookId).map(_.copy(state = Book.State.OnLoan))
-           update
-    else
+  enum Error:
+    case nonId
+    case nonBook
+
+
+  def lend(bookId: Book.Id, user: String, date: LocalDateTime):Either[Error, Future[Option[Loan.EmbeddedId]]]
+    edu.books.find(bookId) match {
+      case None       => Left(Error.nonId)
+      case Some(book) => book.state
+        case OnLoan    => Left(Error.nonBook)
+        case Available => val restate: Book.EmbeddedId = book.map(_.copy(state = Book.State.Available))
+                          Right(book.update(restate))
 
 
   def return
