@@ -26,7 +26,7 @@ object Answer4:
  */
 @Singleton
 class Answer4Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionContext):
-  def invoke(): Future[Seq[Book.Id]] = ??? /** add → find → update → delete を 1 本の流れで実行する */
+  def invoke(): Future[Seq[Book.Id]] =  /** add → find → update → delete を 1 本の流れで実行する */
 
 
   enum Error:
