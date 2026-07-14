@@ -1,6 +1,6 @@
 package education.part2.section4.library.model
 
-import ixias.core.model.*
+import ixias.core.model.{ *, Title }
 
 /**
  * 貸出エンティティ（前章で定義。DB を何も知らない純粋な case class）
