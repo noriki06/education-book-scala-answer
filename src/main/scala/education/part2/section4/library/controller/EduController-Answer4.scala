@@ -52,30 +52,32 @@ class Answer4Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
 
     for {
       idbooks <- Future.sequence(books.map(edu.book.add))
-      idloans <- Future.sequence(loans.map(edu.;loan.add))
+      idloans <- Future.sequence(loans.map(edu.loan.add))
     } yield ids
 
 
   enum Error:
-    case nonId
-    case nonBook
+    case NonId
+    case NonBook
 
 
-  def lend(bookId: Book.Id, user: String, date: LocalDateTime):Either[Error, Future[Option[Loan.EmbeddedId]]]
+  def lend(bookId: Book.Id, user: String, date: LocalDateTime):
+    Future[Either[Error, Option[Loan.EmbeddedId]]] =
     edu.books.find(bookId) match {
-      case None       => Left(Error.nonId)
+      case None       => Left(Error.NonId)
       case Some(book) => book.state
-        case OnLoan    => Left(Error.nonBook)
-        case Available => val restate: Book.EmbeddedId = book.map(_.copy(state = Book.State.Available))
-                          Right(book.update(restate))
+        case OnLoan    => Left(Error.NonBook)
+        case Available => val restate: Book.EmbeddedId = book.map(_.copy(state = Book.State.OnLoan))
+                          Right((
+                            for {
+                              _ <- EitherT(book.update(restate))
+                              _ <- EitherT(edu.loan.add(loans))
+                            } yield ()).value)
 
 
-  def return
-
-
-
-
-
-貸出：指定した蔵書を、指定した利用者に貸し出す。ただし すでに貸出中の蔵書は貸し出せない（二重貸出の禁止）。成功したら、蔵書を「貸出中」に更新し、貸出ログに「貸出」を 1 件追記する。貸し出せない場合は、その理由が呼び出し側に分かる こと（状態も履歴も変化させない）。
-返却：指定した蔵書を返却する。蔵書を「貸出可能」に戻し、貸出ログに「返却」を 1 件追記する。
-どちらの操作も、発生日時を指定できること（過去日時での記録も可能にする。問5 のシナリオで必要）。
+  def return(bookId: Book.Id):
+    Future[Either[Error, Option[Loan.EmbeddedId]]] =
+    (for {
+      _ <- EitherT(edu.books.find(bookId).update(book.map(_.copy(state = Book.State.Available))))
+      _ <- EitherT(edu.book.add(Loans))
+    } yield ()).value
