@@ -24,8 +24,9 @@ object Answer5:
  * 依存はすべてコンストラクタ注入で受け取る（edu も ExecutionContext も注入された値）。
  */
 @Singleton
-class Answer5Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionContext):
-  def invoke(): Future[Seq[Either[Error, Loan.Id]]] =
+class Answer5Controller @Inject()
+  (edu: EduRepositoryFacade, val ans4C: Answer4Controller)(using ExecutionContext):
+  def invoke(): Future[Seq[Either[ans4C.Error, Loan.Id]]] =
     for
       // ① 追加：WithNoId を渡し、採番された ID を受け取る
       idScala <- edu.book.add(Book(None, "Scala入門",        Book.Category.Technical, Book.State.Available).toWithNoId)
