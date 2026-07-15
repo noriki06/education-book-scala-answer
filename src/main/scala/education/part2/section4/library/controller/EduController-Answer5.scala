@@ -16,45 +16,15 @@ import education.part2.section4.library.persistence.EduRepositoryFacade
  */
 object Answer5:
   def main(args: Array[String]): Unit =
-    val controller = DIContainer.getInstance(classOf[Answer5Controller])
-    println(Await.result(controller.invoke(), 60.seconds))
+    val ans5C = DIContainer.getInstance(classOf[Answer5Controller])
+    val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
+    println(Await.result(an5C.invoke(), 60.seconds))
 /**
  * 処理の入口クラス（Play で言うコントローラ相当）。
  * 依存はすべてコンストラクタ注入で受け取る（edu も ExecutionContext も注入された値）。
  */
 @Singleton
 class Answer5Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionContext):
-  enum Error:
-    case NonId
-    case NonBook
-
-  def lend(bookId: Book.Id, user: String, date: LocalDateTime):
-    Future[Either[Error, Loan.Id]] =
-      edu.book.find(bookId).flatMap:
-        found => found match
-          case None       => Future.successful(Left(Error.NonId))
-          case Some(book) => book.v.state match
-            case Book.State.OnLoan    => Future.successful(Left(Error.NonBook))
-            case Book.State.Available => val restate: Book.EmbeddedId = book.map(_.copy(state = Book.State.OnLoan))
-                                         for
-                                           a <- edu.book.update(restate)
-                                           loanId <- edu.loan.add(
-                                             Loan(None, Loan.Status.Rent, user, Loan.Result.Success, book.v.title, date).toWithNoId)
-                                         yield Right(loanId)
-
-  def returnBook(bookId: Book.Id, user: String, date: LocalDateTime):
-    Future[Either[Error, Loan.Id]] =
-      edu.book.find(bookId).flatMap:
-        found => found match
-          case None       => Future.successful(Left(Error.NonId))
-          case Some(book) => book.v.state match
-            case Book.State.Available    => Future.successful(Left(Error.NonBook))
-            case Book.State.OnLoan => val restate: Book.EmbeddedId = book.map(_.copy(state = Book.State.Available))
-                                         for
-                                           a <- edu.book.update(restate)
-                                           loanId <- edu.loan.add(
-                                             Loan(None, Loan.Status.Return, user, Loan.Result.Success, book.v.title, date).toWithNoId)
-                                         yield Right(loanId)
   def invoke(): Future[Seq[Either[Error, Loan.Id]]] =
     for
       // ① 追加：WithNoId を渡し、採番された ID を受け取る

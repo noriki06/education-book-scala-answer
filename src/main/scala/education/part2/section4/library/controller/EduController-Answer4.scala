@@ -16,9 +16,7 @@ import education.part2.section4.library.persistence.EduRepositoryFacade
  */
 object Answer4:
   def main(args: Array[String]): Unit =
-
     println()
-
 
 /**
  * 処理の入口クラス（Play で言うコントローラ相当）。
