@@ -87,6 +87,5 @@ class Answer7Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
         .groupBy(_.v.loanedAt.getMonthValue)
         .view
         .mapValues(_.size)
-        .toMap
         .toSeq
         .sorted
