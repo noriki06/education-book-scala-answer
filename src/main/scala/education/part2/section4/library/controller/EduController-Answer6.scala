@@ -105,8 +105,10 @@ class Answer6Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
   String =
     val allTitle =
       for
+        ids <- bookIds
         books <- edu.book.filter(ids)
-        titles <- books.map(_.map.title)
+        titles <- books.map(_.v.title)
+      yield Future(titles)
 
     val lendTitle =
       for
