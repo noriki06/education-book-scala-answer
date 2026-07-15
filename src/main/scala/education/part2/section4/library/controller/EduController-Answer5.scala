@@ -18,7 +18,7 @@ object Answer5:
   def main(args: Array[String]): Unit =
     val ans5C = DIContainer.getInstance(classOf[Answer5Controller])
     val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
-    println(Await.result(an5C.invoke(), 60.seconds))
+    println(Await.result(ans5C.invoke(), 60.seconds))
 /**
  * 処理の入口クラス（Play で言うコントローラ相当）。
  * 依存はすべてコンストラクタ注入で受け取る（edu も ExecutionContext も注入された値）。
@@ -34,14 +34,14 @@ class Answer5Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
       idJamp  <- edu.book.add(Book(None, "週刊ジャンプ",     Book.Category.Magazine,  Book.State.Available).toWithNoId)
       idRefa  <- edu.book.add(Book(None, "リファクタリング", Book.Category.Technical, Book.State.Available).toWithNoId)
 
-      loan1 <- lend(idScala, "Alice", LocalDateTime.of(2026,1,10,0,0))
-      loan2 <- lend(idConan, "Bob",   LocalDateTime.of(2026,1,12,0,0))
-      loan3 <- returnBook(idScala, "Alice", LocalDateTime.of(2026,1,20,0,0))
-      loan4 <- lend(idScala, "Carol", LocalDateTime.of(2026,2,3,0,0))
-      loan5 <- lend(idScala, "Dave",  LocalDateTime.of(2026,2,8,0,0))
-      loan6 <- returnBook(idScala, "Carol", LocalDateTime.of(2026,2,15,0,0))
-      loan7 <- lend(idNeko,  "Alice", LocalDateTime.of(2026,2,20,0,0))
-      loan8 <- returnBook(idConan, "Bob",   LocalDateTime.of(2026,3,5,0,0))
-      loan9 <- lend(idScala, "Bob",   LocalDateTime.of(2026,3,10,0,0))
+      loan1 <- ans4C.lend(idScala, "Alice", LocalDateTime.of(2026,1,10,0,0))
+      loan2 <- ans4C.lend(idConan, "Bob",   LocalDateTime.of(2026,1,12,0,0))
+      loan3 <- ans4C.returnBook(idScala, "Alice", LocalDateTime.of(2026,1,20,0,0))
+      loan4 <- ans4C.lend(idScala, "Carol", LocalDateTime.of(2026,2,3,0,0))
+      loan5 <- ans4C.lend(idScala, "Dave",  LocalDateTime.of(2026,2,8,0,0))
+      loan6 <- ans4C.returnBook(idScala, "Carol", LocalDateTime.of(2026,2,15,0,0))
+      loan7 <- ans4C.lend(idNeko,  "Alice", LocalDateTime.of(2026,2,20,0,0))
+      loan8 <- ans4C.returnBook(idConan, "Bob",   LocalDateTime.of(2026,3,5,0,0))
+      loan9 <- ans4C.lend(idScala, "Bob",   LocalDateTime.of(2026,3,10,0,0))
 
     yield Seq(loan1, loan2, loan3, loan4, loan5, loan6, loan7, loan8, loan9)
