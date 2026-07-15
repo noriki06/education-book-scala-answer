@@ -17,7 +17,6 @@ import education.part2.section4.library.persistence.EduRepositoryFacade
 object Answer5:
   def main(args: Array[String]): Unit =
     val ans5C = DIContainer.getInstance(classOf[Answer5Controller])
-    val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
     println(Await.result(ans5C.invoke(), 60.seconds))
 /**
  * 処理の入口クラス（Play で言うコントローラ相当）。

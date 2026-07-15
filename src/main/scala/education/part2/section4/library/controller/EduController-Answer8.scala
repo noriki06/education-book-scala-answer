@@ -20,9 +20,9 @@ object Answer8:
     val ans8C = DIContainer.getInstance(classOf[Answer8Controller])
 
     println(Await.result(ans5C.invoke(), 60.seconds))
-    println(Await.result(ans6C.totalBook(ans5C.invoke()), 60.seconds))
-    println(Await.result(ans6C.neverLend(ans5C.invoke(), ans3C.invoke()), 60.seconds))
-    println(Await.result(ans7C.totalMonth(ans5C.invoke()), 60.seconds))
+    println(Await.result(ans6C.totalBook(), 60.seconds))
+    println(Await.result(ans6C.neverLend(), 60.seconds))
+    println(Await.result(ans7C.totalMonth(), 60.seconds))
     println(Await.result(ans8C.invoke(), 60.seconds))
 
 @Singleton

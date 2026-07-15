@@ -4,7 +4,6 @@ import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.concurrent.duration.*
 import education.part2.section4.library.DIContainer
-import education.part2.section4.library.model.Book
 import education.part2.section4.library.model.Loan
 import education.part2.section4.library.persistence.EduRepositoryFacade
 
@@ -16,17 +15,14 @@ import education.part2.section4.library.persistence.EduRepositoryFacade
 object Answer7:
   def main(args: Array[String]): Unit =
     val ans7C = DIContainer.getInstance(classOf[Answer7Controller])
-    val ans5C = DIContainer.getInstance(classOf[Answer5Controller])
-    println(Await.result(ans7C.totalMonth(ans5C.invoke()), 60.seconds))
-/**
- * 処理の入口クラス（Play で言うコントローラ相当）。
- * 依存はすべてコンストラクタ注入で受け取る（edu も ExecutionContext も注入された値）。
- */
+    println(Await.result(ans7C.totalMonth(), 60.seconds))
+
 @Singleton
-class Answer7Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionContext):
-  def totalMonth(loanIds: Future[Seq[Either[Book.ErrorType, Loan.Id]]]): Future[Seq[(Int, Int)]] =
+class Answer7Controller @Inject()
+  (edu: EduRepositoryFacade, ans5C: Answer5Controller)(using ExecutionContext):
+  def totalMonth(): Future[Seq[(Int, Int)]] =
     for
-      seqId <- loanIds
+      seqId <- ans5C.invoke()
       onlysec = seqId.collect { case Right(v) => v}
       loans <- edu.loan.filter(onlysec)
     yield
