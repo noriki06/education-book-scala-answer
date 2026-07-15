@@ -3,7 +3,6 @@ package education.part2.section4.library.controller
 import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.concurrent.duration.*
-import ixias.core.model.*
 import education.part2.section4.library.DIContainer
 import education.part2.section4.library.model.Book
 import education.part2.section4.library.model.Loan
@@ -17,7 +16,8 @@ import education.part2.section4.library.persistence.EduRepositoryFacade
 object Answer7:
   def main(args: Array[String]): Unit =
     val ans7C = DIContainer.getInstance(classOf[Answer7Controller])
-    println(Await.result(controller.totalMonth(ans7C.totalMonth()), 60.seconds))
+    val ans5C = DIContainer.getInstance(classOf[Answer5Controller])
+    println(Await.result(ans7C.totalMonth(ans5C.invoke()), 60.seconds))
 /**
  * 処理の入口クラス（Play で言うコントローラ相当）。
  * 依存はすべてコンストラクタ注入で受け取る（edu も ExecutionContext も注入された値）。

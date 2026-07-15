@@ -1,11 +1,10 @@
 package education.part2.section4.library.controller
-
-import scala.concurrent.Await
+import javax.inject.{ Inject, Singleton }
+import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.concurrent.duration.*
 import education.part2.section4.library.DIContainer
-// import education.part2.section4.library.model.Book
-// import education.part2.section4.library.model.Loan
-// import education.part2.section4.library.persistence.EduRepositoryFacade
+import education.part2.section4.library.model.Book
+import education.part2.section4.library.persistence.EduRepositoryFacade
 
 
 /**
@@ -14,11 +13,23 @@ import education.part2.section4.library.DIContainer
  */
 object Answer8:
   def main(args: Array[String]): Unit =
+    val ans3C = DIContainer.getInstance(classOf[Answer3Controller])
     val ans5C = DIContainer.getInstance(classOf[Answer5Controller])
     val ans6C = DIContainer.getInstance(classOf[Answer6Controller])
     val ans7C = DIContainer.getInstance(classOf[Answer7Controller])
+    val ans8C = DIContainer.getInstance(classOf[Answer8Controller])
 
     println(Await.result(ans5C.invoke(), 60.seconds))
-    println(Await.result(ans6C.totalBook(ans6C.invokeLoan()), 60.seconds))
-    println(Await.result(ans6C.neverLend(ans6C.invokeLoan(), ans6C.invokeBook()), 60.seconds))
-    println(Await.result(ans7C.totalMonth(ans7C.invoke()), 60.seconds))
+    println(Await.result(ans6C.totalBook(ans5C.invoke()), 60.seconds))
+    println(Await.result(ans6C.neverLend(ans5C.invoke(), ans3C.invoke()), 60.seconds))
+    println(Await.result(ans7C.totalMonth(ans5C.invoke()), 60.seconds))
+    println(Await.result(ans8C.invoke(), 60.seconds))
+
+@Singleton
+class Answer8Controller @Inject()
+(edu: EduRepositoryFacade, val ans3C: Answer3Controller)(using ExecutionContext):
+  def invoke(): Future[Seq[(String, Book.Category, Book.State)]] =
+    for
+      bookIds <- ans3C.invoke()
+      books <- edu.book.filter(bookIds)
+    yield books.map(book => (book.v.title, book.v.category, book.v.state))
