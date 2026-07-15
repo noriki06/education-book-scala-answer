@@ -102,13 +102,12 @@ class Answer6Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
       loans.filter(_.v.status == Loan.Status.Rent).groupBy(_.v.bookTitle).view.mapValues(_.size).toMap
 
   def neverLend(loanIds: Future[Seq[Either[Error, Loan.Id]]], bookIds: Future[Seq[Book.Id]]):
-  String =
+    Future[Seq[String]] =
     val allTitle =
       for
         ids <- bookIds
         books <- edu.book.filter(ids)
-        titles <- books.map(_.v.title)
-      yield Future(titles)
+      yield books.map(_.v.title)
 
     val lendTitle =
       for
@@ -117,6 +116,8 @@ class Answer6Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
         loans <- edu.loan.filter(onlysec)
       yield
         loans.filter(_.v.status == Loan.Status.Rent).map(_.v.bookTitle)
+
     for
-      result <- allTitle.diff(lendTitle)
-    yield result
+      all <- allTitle
+      lend <- lendTitle
+    yield all.diff(lend)
