@@ -77,5 +77,6 @@ class Answer6Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
     yield Seq(loan1, loan2, loan3, loan4, loan5, loan6, loan7, loan8, loan9)
 
   def toal(loanIds: Future[Seq[Either[Error, Loan.Id]]]): Map(Loan.Id, Int) =
-    val rentSeq loanIds.collect { case Right(v) => v}.filter(_.status == Loan.Status.Rent)
+    loanIds.map{
+      val rentSeq = _.collect { case Right(v) => v}.filter(_.status == Loan.Status.Rent))
     rentSeq.groupBy()
