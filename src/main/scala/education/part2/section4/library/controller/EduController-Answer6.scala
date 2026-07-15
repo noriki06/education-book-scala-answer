@@ -17,7 +17,9 @@ import education.part2.section4.library.persistence.EduRepositoryFacade
 object Answer6:
   def main(args: Array[String]): Unit =
     val controller = DIContainer.getInstance(classOf[Answer6Controller])
-    println(Await.result(controller.total(controller.invoke()), 60.seconds))
+    println(Await.result(controller.totalBook(controller.invokeBook()), 60.seconds))
+    println(Await.result(controller.neverLend(controller.invokeBook()), 60.seconds))
+
 /**
  * 処理の入口クラス（Play で言うコントローラ相当）。
  * 依存はすべてコンストラクタ注入で受け取る（edu も ExecutionContext も注入された値）。
@@ -55,7 +57,7 @@ class Answer6Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
                                            loanId <- edu.loan.add(
                                              Loan(None, Loan.Status.Return, user, Loan.Result.Success, book.v.title, date).toWithNoId)
                                          yield Right(loanId)
-  def invoke(): Future[Seq[Either[Error, Loan.Id]]] =
+  def invokeLoan(): Future[Seq[Either[Error, Loan.Id]]] =
     for
       // ① 追加：WithNoId を渡し、採番された ID を受け取る
       idScala <- edu.book.add(Book(None, "Scala入門",        Book.Category.Technical, Book.State.Available).toWithNoId)
@@ -76,10 +78,40 @@ class Answer6Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
 
     yield Seq(loan1, loan2, loan3, loan4, loan5, loan6, loan7, loan8, loan9)
 
-  def total(loanIds: Future[Seq[Either[Error, Loan.Id]]]): Future[Map[String, Int]] =
+  def invokeBook(): Future[Seq[Book.Id]] =  /** add → find → update → delete を 1 本の流れで実行する */
+
+    val books =
+      Seq(
+        Book(None, "Scala入門",        Book.Category.Technical, Book.State.Available).toWithNoId,
+        Book(None, "名探偵コナン1",    Book.Category.Manga,     Book.State.Available).toWithNoId,
+        Book(None, "吾輩は猫である",   Book.Category.Novel,     Book.State.Available).toWithNoId,
+        Book(None, "週刊ジャンプ",     Book.Category.Magazine,  Book.State.Available).toWithNoId,
+        Book(None, "リファクタリング", Book.Category.Technical, Book.State.Available).toWithNoId
+      )
+
+    for {
+      ids <- Future.sequence(books.map(edu.book.add))
+    } yield ids
+
+  def totalBook(loanIds: Future[Seq[Either[Error, Loan.Id]]]): Future[Map[String, Int]] =
     for
       seqId <- loanIds
-      onlysec = seqId.collect { case Right(v) => v}
+      onlysec = seqId.collect { case Right(v) => v }
       loans <- edu.loan.filter(onlysec)
     yield
       loans.filter(_.v.status == Loan.Status.Rent).groupBy(_.v.bookTitle).view.mapValues(_.size).toMap
+
+  def neverLend(loanIds: Future[Seq[Either[Error, Loan.Id]]], bookIds: Future[Seq[Book.Id]]):
+  String =
+    val allTitle = bookIds.map(_.map.title)
+
+    val lendTitle =
+      for
+        seqId <- loanIds
+        onlysec = seqId.collect { case Right(v) => v }
+        loans <- edu.loan.filter(onlysec)
+      yield
+        loans.filter(_.v.status == Loan.Status.Rent).map(_.v.bookTitle)
+    for
+      result <- allTitle.diff(lendTitle)
+    yield result

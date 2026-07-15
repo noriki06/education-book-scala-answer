@@ -17,7 +17,14 @@ import education.part2.section4.library.persistence.EduRepositoryFacade
 object Answer8:
   def main(args: Array[String]): Unit =
     val controller = DIContainer.getInstance(classOf[Answer8Controller])
-    println(Await.result(controller.totalMonth(controller.invoke()), 60.seconds))
+    println(Await.result(controller.invoke(), 60.seconds))
+    println(Await.result(controller.totalBook(controller.invoke()), 60.seconds))
+
+
+
+
+
+
 /**
  * 処理の入口クラス（Play で言うコントローラ相当）。
  * 依存はすべてコンストラクタ注入で受け取る（edu も ExecutionContext も注入された値）。
@@ -72,9 +79,35 @@ class Answer8Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
       loan6 <- returnBook(idScala, "Carol", LocalDateTime.of(2026,2,15,0,0))
       loan7 <- lend(idNeko,  "Alice", LocalDateTime.of(2026,2,20,0,0))
       loan8 <- returnBook(idConan, "Bob",   LocalDateTime.of(2026,3,5,0,0))
-      loan9 <- lend(idScala, "Bob",   LocalDateTim：wqe.of(2026,3,10,0,0))
+      loan9 <- lend(idScala, "Bob",   LocalDateTime.of(2026,3,10,0,0))
 
     yield Seq(loan1, loan2, loan3, loan4, loan5, loan6, loan7, loan8, loan9)
+
+  def idBooks(): Future[Seq[Book.Id]] =
+    val books =
+      Seq(
+        Book(None, "Scala入門",        Book.Category.Technical, Book.State.Available).toWithNoId,
+        Book(None, "名探偵コナン1",    Book.Category.Manga,     Book.State.Available).toWithNoId,
+        Book(None, "吾輩は猫である",   Book.Category.Novel,     Book.State.Available).toWithNoId,
+        Book(None, "週刊ジャンプ",     Book.Category.Magazine,  Book.State.Available).toWithNoId,
+        Book(None, "リファクタリング", Book.Category.Technical, Book.State.Available).toWithNoId
+      )
+
+    for {
+      ids <- Future.sequence(books.map(edu.book.add))
+    } yield ids
+
+  def totalBook(loanIds: Future[Seq[Either[Error, Loan.Id]]]): Future[Map[String, Int]] =
+    for
+      seqId <- loanIds
+      onlysec = seqId.collect { case Right(v) => v }
+      loans <- edu.loan.filter(onlysec)
+    yield
+      loans.filter(_.v.status == Loan.Status.Rent).groupBy(_.v.bookTitle).view.mapValues(_.size).toMap
+
+
+  // def neverLoan(bookIds:Future[Seq[Book.Id]], loanIds:)
+
 
   def totalMonth(loanIds: Future[Seq[Either[Error, Loan.Id]]]): Future[Seq[(Int, Int)]] =
     for
@@ -87,6 +120,5 @@ class Answer8Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
         .groupBy(_.v.loanedAt.getMonthValue)
         .view
         .mapValues(_.size)
-        .toMap
         .toSeq
         .sorted
