@@ -24,7 +24,7 @@ object Answer5:
  */
 @Singleton
 class Answer5Controller @Inject()
-  (edu: EduRepositoryFacade, val ans4C: Answer4Controller)(using ExecutionContext):
+  (edu: EduRepositoryFacade, ans4C: Answer4Controller)(using ExecutionContext):
   def invoke(): Future[Seq[Either[Book.ErrorType, Loan.Id]]] =
     for
       // ① 追加：WithNoId を渡し、採番された ID を受け取る

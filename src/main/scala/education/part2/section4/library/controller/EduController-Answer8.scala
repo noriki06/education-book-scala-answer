@@ -27,7 +27,7 @@ object Answer8:
 
 @Singleton
 class Answer8Controller @Inject()
-(edu: EduRepositoryFacade, val ans3C: Answer3Controller)(using ExecutionContext):
+(edu: EduRepositoryFacade, ans3C: Answer3Controller)(using ExecutionContext):
   def invoke(): Future[Seq[(String, Book.Category, Book.State)]] =
     for
       bookIds <- ans3C.invoke()

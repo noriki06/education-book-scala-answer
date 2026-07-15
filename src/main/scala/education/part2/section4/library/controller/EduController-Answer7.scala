@@ -23,7 +23,7 @@ class Answer7Controller @Inject()
   def totalMonth(): Future[Seq[(Int, Int)]] =
     for
       seqId <- ans5C.invoke()
-      onlysec = seqId.collect { case Right(v) => v}
+      onlysec = seqId.collect { case Right(v) => v }
       loans <- edu.loan.filter(onlysec)
     yield
       loans
