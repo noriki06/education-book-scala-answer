@@ -3,7 +3,6 @@ package education.part2.section4.library.controller
 import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.concurrent.duration.*
-import ixias.core.model.*
 import education.part2.section4.library.DIContainer
 import education.part2.section4.library.model.Book
 import education.part2.section4.library.model.Loan
@@ -29,7 +28,7 @@ object Answer6:
  */
 @Singleton
 class Answer6Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionContext):
-  def totalBook(loanIds: Future[Seq[Either[Error, Loan.Id]]]): Future[Map[String, Int]] =
+  def totalBook(loanIds: Future[Seq[Either[Book.ErrorType, Loan.Id]]]): Future[Map[String, Int]] =
     for
       seqId <- loanIds
       onlysec = seqId.collect { case Right(v) => v }
@@ -37,7 +36,7 @@ class Answer6Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
     yield
       loans.filter(_.v.status == Loan.Status.Rent).groupBy(_.v.bookTitle).view.mapValues(_.size).toMap
 
-  def neverLend(loanIds: Future[Seq[Either[Error, Loan.Id]]], bookIds: Future[Seq[Book.Id]]):
+  def neverLend(loanIds: Future[Seq[Either[Book.ErrorType, Loan.Id]]], bookIds: Future[Seq[Book.Id]]):
     Future[Seq[String]] =
     val allTitle =
       for

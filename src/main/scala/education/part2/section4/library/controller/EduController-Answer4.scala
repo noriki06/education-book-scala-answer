@@ -24,18 +24,13 @@ object Answer4:
  */
 @Singleton
 class Answer4Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionContext):
-  enum ErrorType:
-    case NonId
-    case NonBook
-
-
   def lend(bookId: Book.Id, user: String, date: LocalDateTime):
-    Future[Either[ErrorType, Loan.Id]] =
+    Future[Either[Book.ErrorType, Loan.Id]] =
       edu.book.find(bookId).flatMap:
         found => found match
-          case None       => Future.successful(Left(ErrorType.NonId))
+          case None       => Future.successful(Left(Book.ErrorType.NonId))
           case Some(book) => book.v.state match
-            case Book.State.OnLoan    => Future.successful(Left(ErrorType.NonBook))
+            case Book.State.OnLoan    => Future.successful(Left(Book.ErrorType.NonBook))
             case Book.State.Available => val restate: Book.EmbeddedId = book.map(_.copy(state = Book.State.OnLoan))
                                          for
                                            a <- edu.book.update(restate)
@@ -44,12 +39,12 @@ class Answer4Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
                                          yield Right(loanId)
 
   def returnBook(bookId: Book.Id, user: String, date: LocalDateTime):
-    Future[Either[ErrorType, Loan.Id]] =
+    Future[Either[Book.ErrorType, Loan.Id]] =
       edu.book.find(bookId).flatMap:
         found => found match
-          case None       => Future.successful(Left(ErrorType.NonId))
+          case None       => Future.successful(Left(Book.ErrorType.NonId))
           case Some(book) => book.v.state match
-            case Book.State.Available    => Future.successful(Left(ErrorType.NonBook))
+            case Book.State.Available    => Future.successful(Left(Book.ErrorType.NonBook))
             case Book.State.OnLoan => val restate: Book.EmbeddedId = book.map(_.copy(state = Book.State.Available))
                                          for
                                            a <- edu.book.update(restate)

@@ -29,3 +29,7 @@ object Book:
   enum State(val code: Int) extends EnumStatus[Int]:
     case Available extends State(1)
     case OnLoan    extends State(2)
+
+  enum ErrorType:
+    case NonId
+    case NonBook
