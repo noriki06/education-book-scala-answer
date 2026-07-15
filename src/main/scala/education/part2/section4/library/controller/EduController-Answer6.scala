@@ -17,8 +17,8 @@ import education.part2.section4.library.persistence.EduRepositoryFacade
 object Answer6:
   def main(args: Array[String]): Unit =
     val controller = DIContainer.getInstance(classOf[Answer6Controller])
-    println(Await.result(controller.totalBook(controller.invokeBook()), 60.seconds))
-    println(Await.result(controller.neverLend(controller.invokeBook()), 60.seconds))
+    println(Await.result(controller.totalBook(controller.invokeLoan()), 60.seconds))
+    println(Await.result(controller.neverLend(controller.invokeLoan(), controller.invokeBook()), 60.seconds))
 
 /**
  * 処理の入口クラス（Play で言うコントローラ相当）。
@@ -103,7 +103,10 @@ class Answer6Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
 
   def neverLend(loanIds: Future[Seq[Either[Error, Loan.Id]]], bookIds: Future[Seq[Book.Id]]):
   String =
-    val allTitle = bookIds.map(_.map.title)
+    val allTitle =
+      for
+        books <- edu.book.filter(ids)
+        titles <- books.map(_.map.title)
 
     val lendTitle =
       for
