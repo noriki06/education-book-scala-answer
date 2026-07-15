@@ -82,4 +82,9 @@ class Answer7Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
       onlysec = seqId.collect { case Right(v) => v}
       loans <- edu.loan.filter(onlysec)
     yield
-      loans.filter(_.v.status == Loan.Status.Rent).groupBy(_.v.loanedAt.getMonthValue).view.mapValues(_.size).toMap
+      loans
+        .filter(_.v.status == Loan.Status.Rent)
+        .groupBy(_.v.loanedAt.getMonthValue)
+        .view
+        .mapValues(_.size)
+        .sorted
