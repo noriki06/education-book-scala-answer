@@ -17,7 +17,7 @@ import education.part2.section4.library.persistence.EduRepositoryFacade
 object Answer6:
   def main(args: Array[String]): Unit =
     val controller = DIContainer.getInstance(classOf[Answer6Controller])
-    println(Await.result(controller.invoke(), 60.seconds))
+    println(Await.result(controller.total(invoke()), 60.seconds))
 /**
  * 処理の入口クラス（Play で言うコントローラ相当）。
  * 依存はすべてコンストラクタ注入で受け取る（edu も ExecutionContext も注入された値）。
@@ -82,4 +82,4 @@ class Answer6Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
       onlysec <- seqId.collect { case Right(v) => v}
       loans <- edu.loan.filter(onlysec)
     yield loans
-     loans.filter(_.status == Loan.Status.Rent)groupBy(_.v.title).view.mapValues(_.size).toMap
+     loans.filter(_.v.status == Loan.Status.Rent)groupBy(_.v.title).view.mapValues(_.size).toMap
