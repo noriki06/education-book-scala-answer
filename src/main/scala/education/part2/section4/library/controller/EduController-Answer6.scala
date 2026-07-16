@@ -26,6 +26,9 @@ object Answer6:
 @Singleton
 class Answer6Controller @Inject()
 (edu: EduRepositoryFacade, ans5C: Answer5Controller, ans3C: Answer3Controller)(using ExecutionContext):
+  /**
+   * 本ごとの貸し出し回数のメソッド
+   */
   def totalBook(): Future[Map[String, Int]] =
     for
       seqId <- ans5C.invoke()
@@ -33,7 +36,9 @@ class Answer6Controller @Inject()
       loans <- edu.loan.filter(onlysec)
     yield
       loans.filter(_.v.status == Loan.Status.Rent).groupBy(_.v.bookTitle).view.mapValues(_.size).toMap
-
+  /**
+   * 一度も貸し出されていない蔵書
+   */
   def neverLend(): Future[Seq[String]] =
     val allTitle =
       for

@@ -24,6 +24,9 @@ object Answer4:
  */
 @Singleton
 class Answer4Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionContext):
+  /**
+   * 本の貸し出しフローのメソッド
+   */
   def lend(bookId: Book.Id, user: String, date: LocalDateTime):
     Future[Either[Book.ErrorType, Loan.Id]] =
       edu.book.find(bookId).flatMap:
@@ -37,7 +40,9 @@ class Answer4Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
                                            loanId <- edu.loan.add(
                                              Loan(None, Loan.Status.Rent, user, Loan.Result.Success, book.v.title, date).toWithNoId)
                                          yield Right(loanId)
-
+  /**
+   * 本の返却フローのメソッド
+   */
   def returnBook(bookId: Book.Id, user: String, date: LocalDateTime):
     Future[Either[Book.ErrorType, Loan.Id]] =
       edu.book.find(bookId).flatMap:

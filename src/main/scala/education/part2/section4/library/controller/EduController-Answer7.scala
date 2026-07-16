@@ -20,6 +20,9 @@ object Answer7:
 @Singleton
 class Answer7Controller @Inject()
   (edu: EduRepositoryFacade, ans5C: Answer5Controller)(using ExecutionContext):
+  /**
+   * 月ごとの貸出件数メソッド
+   */
   def totalMonth(): Future[Seq[(Int, Int)]] =
     for
       seqId <- ans5C.invoke()

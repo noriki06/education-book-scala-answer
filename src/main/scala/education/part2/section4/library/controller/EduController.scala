@@ -23,6 +23,9 @@ object Answer3:
  */
 @Singleton
 class Answer3Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionContext):
+  /**
+   * 本idの取得メソッド
+   */
   def invoke(): Future[Seq[Book.Id]] =  /** add → find → update → delete を 1 本の流れで実行する */
 
     val books =
