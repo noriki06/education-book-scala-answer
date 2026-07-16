@@ -14,10 +14,6 @@ import education.part2.section4.library.persistence.EduRepositoryFacade
  */
 object Answer6:
   def main(args: Array[String]): Unit =
-    val ans6C = DIContainer.getInstance(classOf[Answer6Controller])
-
-    println(Await.result(ans6C.totalBook(), 60.seconds))
-    println(Await.result(ans6C.neverLend(), 60.seconds))
 
 /**
  * 処理の入口クラス（Play で言うコントローラ相当）。
@@ -25,7 +21,7 @@ object Answer6:
  */
 @Singleton
 class Answer6Controller @Inject()
-(edu: EduRepositoryFacade, ans5C: Answer5Controller, ans3C: Answer3Controller)(using ExecutionContext):
+(edu: EduRepositoryFacade)(using ExecutionContext):
   /**
    * 本ごとの貸し出し回数のメソッド
    */
@@ -37,7 +33,7 @@ class Answer6Controller @Inject()
     yield
       loans.filter(_.v.status == Loan.Status.Rent).groupBy(_.v.bookTitle).view.mapValues(_.size).toMap
   /**
-   * 一度も貸し出されていない蔵書
+   *
    */
   def neverLend(): Future[Seq[String]] =
     val allTitle =
