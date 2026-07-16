@@ -38,7 +38,7 @@ class Answer4Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
                                          for
                                            a <- edu.book.update(restate)
                                            loanId <- edu.loan.add(
-                                             Loan(None, Loan.Status.Rent, user, Loan.Result.Success, book.v.title, date).toWithNoId)
+                                             Loan(None, Loan.Status.Rent, user, book.v.title, date).toWithNoId)
                                          yield Right(loanId)
   /**
    * 本の返却フローのメソッド
@@ -54,5 +54,5 @@ class Answer4Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
                                          for
                                            a <- edu.book.update(restate)
                                            loanId <- edu.loan.add(
-                                             Loan(None, Loan.Status.Return, user, Loan.Result.Success, book.v.title, date).toWithNoId)
+                                             Loan(None, Loan.Status.Return, user, book.v.title, date).toWithNoId)
                                          yield Right(loanId)
