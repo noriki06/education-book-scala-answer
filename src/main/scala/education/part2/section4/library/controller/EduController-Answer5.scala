@@ -6,7 +6,6 @@ import scala.concurrent.duration.*
 import ixias.core.model.*
 import education.part2.section4.library.DIContainer
 import education.part2.section4.library.model.Book
-import education.part2.section4.library.model.Loan
 import education.part2.section4.library.persistence.EduRepositoryFacade
 
 
@@ -15,7 +14,7 @@ import education.part2.section4.library.persistence.EduRepositoryFacade
  * DI コンテナから EduController を 1 個取り出して invoke() を呼ぶだけ。
  */
 object Answer5:
-  def main(args: Array[String]): Unit =
+  def main(args: Array[String])(using ExecutionContext): Unit =
     val ans5C = DIContainer.getInstance(classOf[Answer5Controller])
     val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
     val fm = ans5C.invoke().flatMap { ids =>
