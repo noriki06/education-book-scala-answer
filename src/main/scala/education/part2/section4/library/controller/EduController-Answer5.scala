@@ -18,7 +18,7 @@ object Answer5:
   def main(args: Array[String]): Unit =
     val ans5C = DIContainer.getInstance(classOf[Answer5Controller])
     val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
-    for
+    val fm = for
       ids <- ans5C.invoke()
       idScala = ids(0)
       idConan = ids(1)
@@ -35,6 +35,8 @@ object Answer5:
       loan8 <- ans4C.returnBook(idConan, "Bob",   LocalDateTime.of(2026,3,5,0,0))
       loan9 <- ans4C.lend(idScala, "Bob",   LocalDateTime.of(2026,3,10,0,0))
     yield pritnln(loan1, loan2, loan3, loan4, loan5, loan6, loan7, loan8, loan9)
+
+    println(Await.result(fm, 60.seconds))
 
 /**
  * 処理の入口クラス（Play で言うコントローラ相当）。
