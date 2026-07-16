@@ -28,8 +28,8 @@ class Answer5Controller @Inject()
   /**
    * 貸し出し表のメソッド
    */
-  def invoke(): Future[Seq[(Book.Id)]] =
-    val fm = ans5C.invoke().flatMap { ids =>
+  def invoke(seqBooks: Future[Seq[Book.Id]]): Future[Seq[(Book.Id)]] =
+    val fm = seqBooks.flatMap { ids =>
       val idScala = ids(0)
       val idConan = ids(1)
       val idNeko = ids(2)
