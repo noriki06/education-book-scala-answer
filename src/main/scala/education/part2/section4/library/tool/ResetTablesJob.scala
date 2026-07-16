@@ -2,7 +2,7 @@ package education.part2.section4.library.tool
 
 import scala.concurrent.Await
 import scala.concurrent.duration.*
-import education.part2.section3.DIContainer
+import education.part2.section4.DIContainer
 import education.part2.section4.library.persistence.table.BookTable
 import education.part2.section4.library.persistence.table.LoanTable
 
