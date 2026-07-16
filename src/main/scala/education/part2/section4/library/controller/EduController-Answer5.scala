@@ -17,27 +17,9 @@ import education.part2.section4.library.persistence.EduRepositoryFacade
 object Answer5:
   def main(args: Array[String]): Unit =
     val ans5C = DIContainer.getInstance(classOf[Answer5Controller])
-    println(Await.result(ans5C.invoke(), 60.seconds))
-/**
- * 処理の入口クラス（Play で言うコントローラ相当）。
- * 依存はすべてコンストラクタ注入で受け取る（edu も ExecutionContext も注入された値）。
- */
-@Singleton
-class Answer5Controller @Inject()
-  (edu: EduRepositoryFacade, ans4C: Answer4Controller)(using ExecutionContext):
-  /**
-   * 貸し出し表のメソッド
-   */
-  def invoke(): Future[Seq[Either[Book.ErrorType, Loan.Id]]] =
+    val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
     for
-      // ① 追加：WithNoId を渡し、採番された ID を受け取る
-      idScala <- edu.book.add(Book(None, "Scala入門",        Book.Category.Technical, Book.State.Available).toWithNoId)
-      idConan <- edu.book.add(Book(None, "名探偵コナン1",    Book.Category.Manga,     Book.State.Available).toWithNoId)
-      idNeko  <- edu.book.add(Book(None, "吾輩は猫である",   Book.Category.Novel,     Book.State.Available).toWithNoId)
-      idJamp  <- edu.book.add(Book(None, "週刊ジャンプ",     Book.Category.Magazine,  Book.State.Available).toWithNoId)
-      idRefa  <- edu.book.add(Book(None, "リファクタリング", Book.Category.Technical, Book.State.Available).toWithNoId)
-
-      loan1 <- ans4C.lend(idScala, "Alice", LocalDateTime.of(2026,1,10,0,0))
+      loan1 <- ans4C.lend(ans5C.invoke.map(_._1), "Alice", LocalDateTime.of(2026,1,10,0,0))
       loan2 <- ans4C.lend(idConan, "Bob",   LocalDateTime.of(2026,1,12,0,0))
       loan3 <- ans4C.returnBook(idScala, "Alice", LocalDateTime.of(2026,1,20,0,0))
       loan4 <- ans4C.lend(idScala, "Carol", LocalDateTime.of(2026,2,3,0,0))
@@ -46,5 +28,24 @@ class Answer5Controller @Inject()
       loan7 <- ans4C.lend(idNeko,  "Alice", LocalDateTime.of(2026,2,20,0,0))
       loan8 <- ans4C.returnBook(idConan, "Bob",   LocalDateTime.of(2026,3,5,0,0))
       loan9 <- ans4C.lend(idScala, "Bob",   LocalDateTime.of(2026,3,10,0,0))
+    yield pritnln(loan1, loan2, loan3, loan4, loan5, loan6, loan7, loan8, loan9)
 
-    yield Seq(loan1, loan2, loan3, loan4, loan5, loan6, loan7, loan8, loan9)
+/**
+ * 処理の入口クラス（Play で言うコントローラ相当）。
+ * 依存はすべてコンストラクタ注入で受け取る（edu も ExecutionContext も注入された値）。
+ */
+@Singleton
+class Answer5Controller @Inject()
+  (edu: EduRepositoryFacade)(using ExecutionContext):
+  /**
+   * 貸し出し表のメソッド
+   */
+  def invoke(): Future[Seq[(Book.Id)]] =
+    for
+      // ① 追加：WithNoId を渡し、採番された ID を受け取る
+      idScala <- edu.book.add(Book(None, "Scala入門",        Book.Category.Technical, Book.State.Available).toWithNoId)
+      idConan <- edu.book.add(Book(None, "名探偵コナン1",    Book.Category.Manga,     Book.State.Available).toWithNoId)
+      idNeko  <- edu.book.add(Book(None, "吾輩は猫である",   Book.Category.Novel,     Book.State.Available).toWithNoId)
+      idJamp  <- edu.book.add(Book(None, "週刊ジャンプ",     Book.Category.Magazine,  Book.State.Available).toWithNoId)
+      idRefa  <- edu.book.add(Book(None, "リファクタリング", Book.Category.Technical, Book.State.Available).toWithNoId)
+    yield Seq(idScala, idConan, idNeko, idJamp, idRefa)
