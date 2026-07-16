@@ -37,6 +37,5 @@ class Answer3Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
         Book(None, "リファクタリング", Book.Category.Technical, Book.State.Available).toWithNoId
       )
 
-    for {
-      ids <- Future.sequence(books.map(edu.book.add))
-    } yield ids
+
+    Future.sequence(books.map(edu.book.add))
