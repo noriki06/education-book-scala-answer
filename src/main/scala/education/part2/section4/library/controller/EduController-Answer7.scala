@@ -12,7 +12,13 @@ import education.part2.section4.library.persistence.EduRepositoryFacade
  */
 object Answer7:
   def main(args: Array[String]): Unit =
-    println()
+    val ans3C = DIContainer.getInstance(classOf[Answer3Controller])
+    val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
+    val ans5C = DIContainer.getInstance(classOf[Answer5Controller])
+    val ans6C = DIContainer.getInstance(classOf[Answer6Controller])
+    val ans7C = DIContainer.getInstance(classOf[Answer7Controller])
+    Await.result(ans7C.totalMonth(ans5C, ans4C, ans3C), 60.seconds)
+    println("[OK] demo 完了")
 
 
 @Singleton
