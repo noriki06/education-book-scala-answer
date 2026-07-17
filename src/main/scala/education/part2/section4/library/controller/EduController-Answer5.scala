@@ -1,8 +1,10 @@
 package education.part2.section4.library.controller
-import scala.concurrent.{ Await, ExecutionContext }
-import scala.concurrent.duration.*
-import ixias.core.model.*
+import scala.concurrent.{ ExecutionContext, Future }
 import education.part2.section4.library.DIContainer
+import education.part2.section4.library.model.Book
+import education.part2.section4.library.model.Loan
+import scala.concurrent.ExecutionContext.Implicits.global
+import ixias.core.model.*
 
 
 /**
@@ -10,7 +12,17 @@ import education.part2.section4.library.DIContainer
  * DI コンテナから EduController を 1 個取り出して invoke() を呼ぶだけ。
  */
 object Answer5:
-  def main(args: Array[String])(using ExecutionContext): Unit =
+  def main(args: Array[String]): Unit =
+    val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
+    val ans3C = DIContainer.getInstance(classOf[Answer3Controller])
+    val bookIds = ans3C.invoke()
+
+    println("[OK] demo 完了")
+
+  /**
+   * 貸し出し表のメソッド
+   */
+  def invoke(): Future[Seq[Either[Book.ErrorType, Loan.Id]]] =
     val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
     val ans3C = DIContainer.getInstance(classOf[Answer3Controller])
     val bookIds = ans3C.invoke()
@@ -34,5 +46,4 @@ object Answer5:
       yield Seq(loan1, loan2, loan3, loan4, loan5, loan6, loan7, loan8, loan9)
     }
 
-    Await.result(results, 60.seconds)
-    println("[OK] demo 完了")
+    results
