@@ -23,7 +23,7 @@ object Answer8:
     val bookIds = ans3C.invoke()
     val loans = ans5C.invoke(bookIds, ans4C)
 
-    println(Await.result(ans5C.invoke(bookIds, ans4C), 60.seconds))
+    println(Await.result(loans, 60.seconds))
     println(Await.result(ans6C.totalBook(loans), 60.seconds))
     println(Await.result(ans6C.neverLend(loans, bookIds), 60.seconds))
     println(Await.result(ans7C.totalMonth(loans), 60.seconds))
