@@ -4,6 +4,7 @@ import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.concurrent.duration.*
 import education.part2.section4.library.DIContainer
 import education.part2.section4.library.model.Loan
+import education.part2.section4.library.model.Book
 import education.part2.section4.library.persistence.EduRepositoryFacade
 
 
@@ -19,7 +20,8 @@ object Answer7:
     val ans5C = DIContainer.getInstance(classOf[Answer5Controller])
     val ans6C = DIContainer.getInstance(classOf[Answer6Controller])
     val ans7C = DIContainer.getInstance(classOf[Answer7Controller])
-    Await.result(ans7C.totalMonth(ans5C, ans4C, ans3C), 60.seconds)
+    val bookIds = ans3C.invoke()
+    Await.result(ans7C.totalMonth(ans5C, ans4C, bookIds), 60.seconds)
     println("[OK] demo 完了")
 
 
@@ -29,9 +31,9 @@ class Answer7Controller @Inject()
   /**
    * 月ごとの貸出件数メソッド
    */
-  def totalMonth(ans5C: Answer5Controller, ans4C: Answer4Controller, ans3C: Answer3Controller): Future[Seq[(Int, Int)]] =
+  def totalMonth(ans5C: Answer5Controller, ans4C: Answer4Controller, bookIds: Future[Seq[Book.Id]]): Future[Seq[(Int, Int)]] =
     for
-      seqId <- ans5C.invoke(ans3C.invoke(), ans4C)
+      seqId <- ans5C.invoke(bookIds, ans4C)
       onlysec = seqId.collect { case Right(v) => v }
       loans <- edu.loan.filter(onlysec)
     yield

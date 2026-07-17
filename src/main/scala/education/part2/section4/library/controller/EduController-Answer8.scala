@@ -34,8 +34,8 @@ class Answer8Controller @Inject()
   /**
    * 各蔵書の「タイトル・カテゴリ・現在貸出中か」を出す。
    */
-  def invoke(ans3C: Answer3Controller): Future[Seq[(String, Book.Category, Book.State)]] =
+  def invoke(bookIds: Future[Seq[Book.Id]]): Future[Seq[(String, Book.Category, Book.State)]] =
     for
-      bookIds <- ans3C.invoke()
+      bookIds <- bookIds
       books <- edu.book.filter(bookIds)
     yield books.map(book => (book.v.title, book.v.category, book.v.state))

@@ -4,6 +4,7 @@ import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.concurrent.duration.*
 import education.part2.section4.library.DIContainer
 import education.part2.section4.library.model.Loan
+import education.part2.section4.library.model.Book
 import education.part2.section4.library.persistence.EduRepositoryFacade
 
 /**
@@ -16,8 +17,9 @@ object Answer6:
     val ans5C = DIContainer.getInstance(classOf[Answer5Controller])
     val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
     val ans3C = DIContainer.getInstance(classOf[Answer3Controller])
-    Await.result(ans6C.totalBook(ans5C, ans4C, ans3C), 60.seconds)
-    Await.result(ans6C.neverLend(ans5C, ans4C, ans3C), 60.seconds)
+    val bookIds = ans3C.invoke()
+    Await.result(ans6C.totalBook(ans5C, ans4C, bookIds), 60.seconds)
+    Await.result(ans6C.neverLend(ans5C, ans4C, bookIds), 60.seconds)
     println("[OK] demo 完了")
 
 /**
@@ -30,9 +32,9 @@ class Answer6Controller @Inject()
   /**
    * 本ごとの貸し出し回数のメソッド
    */
-  def totalBook(ans5C: Answer5Controller, ans4C: Answer4Controller, ans3C: Answer3Controller): Future[Map[String, Int]] =
+  def totalBook(ans5C: Answer5Controller, ans4C: Answer4Controller, bookIds: Future[Seq[Book.Id]]): Future[Map[String, Int]] =
     for
-      seqId <- ans5C.invoke(ans3C.invoke(), ans4C)
+      seqId <- ans5C.invoke(bookIds, ans4C)
       onlysec = seqId.collect { case Right(v) => v }
       loans <- edu.loan.filter(onlysec)
     yield
@@ -40,16 +42,16 @@ class Answer6Controller @Inject()
   /**
    *
    */
-  def neverLend(ans5C: Answer5Controller, ans4C: Answer4Controller, ans3C: Answer3Controller): Future[Seq[String]] =
+  def neverLend(ans5C: Answer5Controller, ans4C: Answer4Controller, bookIds: Future[Seq[Book.Id]]): Future[Seq[String]] =
     val allTitle =
       for
-        ids <- ans3C.invoke()
+        ids <- bookIds
         books <- edu.book.filter(ids)
       yield books.map(_.v.title)
 
     val lendTitle =
       for
-        seqId <- ans5C.invoke(ans3C.invoke(), ans4C)
+        seqId <- ans5C.invoke(bookIds, ans4C)
         onlysec = seqId.collect { case Right(v) => v }
         loans <- edu.loan.filter(onlysec)
       yield
