@@ -21,7 +21,8 @@ object Answer7:
     val ans6C = DIContainer.getInstance(classOf[Answer6Controller])
     val ans7C = DIContainer.getInstance(classOf[Answer7Controller])
     val bookIds = ans3C.invoke()
-    Await.result(ans7C.totalMonth(ans5C, ans4C, bookIds), 60.seconds)
+    val loans = ans5C.invoke(bookIds, ans4C)
+    Await.result(ans7C.totalMonth(loans), 60.seconds)
     println("[OK] demo 完了")
 
 
@@ -31,9 +32,9 @@ class Answer7Controller @Inject()
   /**
    * 月ごとの貸出件数メソッド
    */
-  def totalMonth(ans5C: Answer5Controller, ans4C: Answer4Controller, bookIds: Future[Seq[Book.Id]]): Future[Seq[(Int, Int)]] =
+  def totalMonth(loans: Future[Seq[Either[Book.ErrorType, Loan.Id]]]): Future[Seq[(Int, Int)]] =
     for
-      seqId <- ans5C.invoke(bookIds, ans4C)
+      seqId <- loans
       onlysec = seqId.collect { case Right(v) => v }
       loans <- edu.loan.filter(onlysec)
     yield
