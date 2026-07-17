@@ -14,8 +14,8 @@ import education.part2.section4.library.persistence.EduRepositoryFacade
  */
 object Answer5:
   def main(args: Array[String])(using ExecutionContext): Unit =
-
-    println()
+　val ans5C = DIContainer.getInstance(classOf[Answer5Controller])
+  Await.result(ans5C.invoke(), 60.seconds)
 
 /**
  * 処理の入口クラス（Play で言うコントローラ相当）。
@@ -28,7 +28,7 @@ class Answer5Controller @Inject()
    * 貸し出し表のメソッド
    */
   def invoke(seqBooks: Future[Seq[Book.Id]], ans4C: Answer4Controller): Future[Seq[Either[Book.ErrorType, Loan.Id]]] =
-    val fm = seqBooks.flatMap { ids =>
+    val results = seqBooks.flatMap { ids =>
       val idScala = ids(0)
       val idConan = ids(1)
       val idNeko = ids(2)
@@ -47,4 +47,4 @@ class Answer5Controller @Inject()
       yield Seq(loan1, loan2, loan3, loan4, loan5, loan6, loan7, loan8, loan9)
     }
 
-    fm
+    results
