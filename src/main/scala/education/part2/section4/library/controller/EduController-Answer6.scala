@@ -2,15 +2,9 @@ package education.part2.section4.library.controller
 import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.concurrent.duration.*
-import ixias.core.model.*
 import education.part2.section4.library.DIContainer
-import education.part2.section4.library.model.Book
 import education.part2.section4.library.model.Loan
 import education.part2.section4.library.persistence.EduRepositoryFacade
-
-
-/**
-
 
 /**
  * 入口（Play を使わない学習ジョブ）。
@@ -22,7 +16,8 @@ object Answer6:
     val ans5C = DIContainer.getInstance(classOf[Answer5Controller])
     val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
     val ans3C = DIContainer.getInstance(classOf[Answer3Controller])
-    Await.result(ans5C.invoke(ans3C.invoke(), ans4C), 60.seconds)
+    Await.result(ans6C.totalBook(ans5C, ans4C, ans3C), 60.seconds)
+    Await.result(ans6C.neverLend(ans5C, ans4C, ans3C), 60.seconds)
     println("[OK] demo 完了")
 
 /**
