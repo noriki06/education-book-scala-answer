@@ -14,7 +14,7 @@ import education.part2.section4.library.persistence.EduRepositoryFacade
  * DI コンテナから EduController を 1 個取り出して invoke() を呼ぶだけ。
  */
 object Answer5:
-  def main(args: Array[String])(using ExecutionContext): Unit =
+  def main(args: Array[String]): Unit =
     val ans5C = DIContainer.getInstance(classOf[Answer5Controller])
     val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
     val ans3C = DIContainer.getInstance(classOf[Answer3Controller])
