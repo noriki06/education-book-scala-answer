@@ -1,9 +1,7 @@
 package education.part2.section4.library.controller
 
 import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ Await, ExecutionContext, Future }
-import scala.concurrent.duration.*
-import education.part2.section4.library.DIContainer
+import scala.concurrent.{ ExecutionContext, Future }
 import education.part2.section4.library.model.Loan
 import education.part2.section4.library.persistence.EduRepositoryFacade
 
@@ -14,8 +12,8 @@ import education.part2.section4.library.persistence.EduRepositoryFacade
  */
 object Answer7:
   def main(args: Array[String]): Unit =
-    val ans7C = DIContainer.getInstance(classOf[Answer7Controller])
-    println(Await.result(ans7C.totalMonth(), 60.seconds))
+    println()
+
 
 @Singleton
 class Answer7Controller @Inject()
@@ -23,9 +21,9 @@ class Answer7Controller @Inject()
   /**
    * 月ごとの貸出件数メソッド
    */
-  def totalMonth(): Future[Seq[(Int, Int)]] =
+  def totalMonth(ans5C: Answer5Controller, ans4C: Answer4Controller, ans3C: Answer3Controller): Future[Seq[(Int, Int)]] =
     for
-      seqId <- ans5C.invoke()
+      seqId <- ans5C.invoke(ans3C.invoke(), ans4C)
       onlysec = seqId.collect { case Right(v) => v }
       loans <- edu.loan.filter(onlysec)
     yield

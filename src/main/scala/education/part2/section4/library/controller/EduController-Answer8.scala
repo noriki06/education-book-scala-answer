@@ -27,7 +27,7 @@ object Answer8:
 
 @Singleton
 class Answer8Controller @Inject()
-(edu: EduRepositoryFacade, ans3C: Answer3Controller)(using ExecutionContext):
+(edu: EduRepositoryFacade)(using ExecutionContext):
   /**
    * 各蔵書の「タイトル・カテゴリ・現在貸出中か」を出す。
    */
