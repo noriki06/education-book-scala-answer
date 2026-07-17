@@ -27,7 +27,7 @@ class Answer6Controller @Inject()
   /**
    * 本ごとの貸し出し回数のメソッド
    */
-  def totalBook(): Future[Map[String, Int]] =
+  def totalBook(ans5C: Answer5Controller, ans3C: Answer3Controller): Future[Map[String, Int]] =
     for
       seqId <- ans5C.invoke()
       onlysec = seqId.collect { case Right(v) => v }
