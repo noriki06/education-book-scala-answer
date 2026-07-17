@@ -17,7 +17,7 @@ object Answer6:
     val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
     val ans3C = DIContainer.getInstance(classOf[Answer3Controller])
     val bookIds = ans3C.invoke()
-    val loans = Await.result(answer5.invoke(bookIds), 60.seconds)
+    val loans = Answer5.invoke(bookIds)
     Await.result(ans6C.totalBook(loans), 60.seconds)
     Await.result(ans6C.neverLend(loans, bookIds), 60.seconds)
     println("[OK] demo 完了")

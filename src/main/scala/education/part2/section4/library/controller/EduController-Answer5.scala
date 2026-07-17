@@ -1,5 +1,5 @@
 package education.part2.section4.library.controller
-import scala.concurrent.{ Await, ExecutionContext, Future }
+import scala.concurrent.{ ExecutionContext, Future }
 import education.part2.section4.library.DIContainer
 import education.part2.section4.library.model.Book
 import education.part2.section4.library.model.Loan
