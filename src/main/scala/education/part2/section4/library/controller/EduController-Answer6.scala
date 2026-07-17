@@ -14,12 +14,9 @@ import education.part2.section4.library.persistence.EduRepositoryFacade
  */
 object Answer6:
   def main(args: Array[String]): Unit =
-    import scala.concurrent.ExecutionContext.Implicits.global
+  println()
 
-    // 💡 インスタンス化の記述を明示的に追加（Not foundエラーの解消）
-    val ans3C = DIContainer.getInstance(classOf[Answer3Controller])
-    val ans5C = DIContainer.getInstance(classOf[Answer5Controller])
-    val ans6C = DIContainer.getInstance(classOf[Answer6Controller])
+
 /**
  * 処理の入口クラス（Play で言うコントローラ相当）。
  * 依存はすべてコンストラクタ注入で受け取る（edu も ExecutionContext も注入された値）。

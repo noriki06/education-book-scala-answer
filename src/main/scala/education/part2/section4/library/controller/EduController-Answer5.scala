@@ -28,7 +28,7 @@ class Answer5Controller @Inject()
   /**
    * 貸し出し表のメソッド
    */
-  def invoke(seqBooks: Future[Seq[Book.Id]]): Future[Seq[(Book.Id)]] =
+  def invoke(seqBooks: Future[Seq[Book.Id]], ans4C: Answer4Controller): Unit =
     val fm = seqBooks.flatMap { ids =>
       val idScala = ids(0)
       val idConan = ids(1)
@@ -45,5 +45,5 @@ class Answer5Controller @Inject()
         loan7 <- ans4C.lend(idNeko,  "Alice", LocalDateTime.of(2026,2,20,0,0))
         loan8 <- ans4C.returnBook(idConan, "Bob",   LocalDateTime.of(2026,3,5,0,0))
         loan9 <- ans4C.lend(idScala, "Bob",   LocalDateTime.of(2026,3,10,0,0))
-      yield (loan1, loan2, loan3, loan4, loan5, loan6, loan7, loan8, loan9)
+      yield ()
     }
