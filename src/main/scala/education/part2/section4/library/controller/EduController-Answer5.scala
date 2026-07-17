@@ -6,6 +6,7 @@ import scala.concurrent.duration.*
 import ixias.core.model.*
 import education.part2.section4.library.DIContainer
 import education.part2.section4.library.model.Book
+import education.part2.section4.library.model.Loan
 import education.part2.section4.library.persistence.EduRepositoryFacade
 
 
@@ -28,7 +29,7 @@ class Answer5Controller @Inject()
   /**
    * 貸し出し表のメソッド
    */
-  def invoke(seqBooks: Future[Seq[Book.Id]], ans4C: Answer4Controller): Future[Seq[(Book.Id)]] =
+  def invoke(seqBooks: Future[Seq[Book.Id]], ans4C: Answer4Controller): Future[Seq[Either[Book.ErrorType, Loan.Id]]] =
     val fm = seqBooks.flatMap { ids =>
       val idScala = ids(0)
       val idConan = ids(1)
