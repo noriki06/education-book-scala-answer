@@ -16,12 +16,11 @@ object Answer8:
   def main(args: Array[String]): Unit =
     val ans3C = DIContainer.getInstance(classOf[Answer3Controller])
     val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
-    val ans5C = DIContainer.getInstance(classOf[Answer5Controller])
     val ans6C = DIContainer.getInstance(classOf[Answer6Controller])
     val ans7C = DIContainer.getInstance(classOf[Answer7Controller])
     val ans8C = DIContainer.getInstance(classOf[Answer8Controller])
     val bookIds = ans3C.invoke()
-    val loans = ans5C.invoke(bookIds, ans4C)
+    val loans = Answer5.invoke(bookIds)
 
     println(Await.result(loans, 60.seconds))
     println(Await.result(ans6C.totalBook(loans), 60.seconds))

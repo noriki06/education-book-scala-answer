@@ -17,18 +17,17 @@ object Answer7:
   def main(args: Array[String]): Unit =
     val ans3C = DIContainer.getInstance(classOf[Answer3Controller])
     val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
-    val ans5C = DIContainer.getInstance(classOf[Answer5Controller])
     val ans6C = DIContainer.getInstance(classOf[Answer6Controller])
     val ans7C = DIContainer.getInstance(classOf[Answer7Controller])
     val bookIds = ans3C.invoke()
-    val loans = ans5C.invoke(bookIds, ans4C)
+    val loans = Answer5.invoke(bookIds)
     Await.result(ans7C.totalMonth(loans), 60.seconds)
     println("[OK] demo 完了")
 
 
 @Singleton
 class Answer7Controller @Inject()
-  (edu: EduRepositoryFacade, ans5C: Answer5Controller)(using ExecutionContext):
+  (edu: EduRepositoryFacade)(using ExecutionContext):
   /**
    * 月ごとの貸出件数メソッド
    */
