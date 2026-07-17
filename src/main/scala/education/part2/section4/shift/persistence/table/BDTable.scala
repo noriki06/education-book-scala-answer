@@ -7,14 +7,13 @@ import ixias.core.model.*
 import ixias.core.persistence.HostSpec
 import ixias.db.slick.{ SlickDatabaseContext, SlickTable }
 import ixias.db.slick.backend.SlickDataSource
-import education.part2.section3.model.BD
+import education.part2.section4.shift.model.BD
 
 /**
  * User エンティティ ⇄ `user` テーブル の対応表
  */
 @Singleton
-class BDTable @Inject()(ctx: SlickDatabaseContext)
-  extends SlickTable[BD.Id, BD, JdbcProfile](ctx):
+class BDTable @Inject()(ctx: SlickDatabaseContext):
   import api.{ *, given }
 
   // --[ データソース ]--------------------------------------------------

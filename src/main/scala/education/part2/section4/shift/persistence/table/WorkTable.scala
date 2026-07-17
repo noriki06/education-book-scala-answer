@@ -7,7 +7,7 @@ import ixias.core.model.*
 import ixias.core.persistence.HostSpec
 import ixias.db.slick.{ SlickDatabaseContext, SlickTable }
 import ixias.db.slick.backend.SlickDataSource
-import education.part2.section3.model.Work
+import education.part2.section4.shift.model.Work
 
 /**
  * User エンティティ ⇄ `user` テーブル の対応表
@@ -37,8 +37,5 @@ class WorlTable @Inject()(ctx: SlickDatabaseContext)
     @col def planStart    = column[LocalDateTime] ("plan_start",      O.Varchar(191))
     @col def planEnd     = column[LocalDateTime] ("eplan_end",      O.Varchar(191))
     @col def actualStart     = column[Status]       ("actual_start",      O.UInt8)
-    @col def actualStart = column[LocalDateTime]("actual_end", O.Timestamp(onUpdate = true))
+    @col def actualEnd = column[LocalDateTime]("actual_end", O.Timestamp(onUpdate = true))
     @col def status = column[Work.Status]      ("status",  O.UInt8)
-
-    // 行 ⇄ User の相互変換。書き込みのたびに updatedAt を現在時刻にする
-    def * = deriveColumns.mapTo[Work](onWrite = _.copy(updatedAt = LocalDateTime.now))

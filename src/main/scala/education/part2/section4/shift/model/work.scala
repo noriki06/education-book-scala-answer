@@ -3,15 +3,15 @@ package education.part2.section4.shift.model
 import ixias.core.model.*
 
 /**
- * 会員エンティティ（前章で定義。DB を何も知らない純粋な case class）
+ * 勤務実績エンティティ（前章で定義。DB を何も知らない純粋な case class）
  */
 case class Work(
-  id:        Option[User.Id],         // id
+  id:        Option[Work.Id],         // id
   name:      String,                  // 氏名
   planStart: LocalDateTime,           // 予定の開始
   planEnd: LocalDateTime,             // 予定の終了
-  actualStart: Option[localdatetime], // 実勤務の開始
-  actualEnd: Option[localdatetime],   // 実勤務の終了
+  actualStart: Option[LocalDateTime], // 実勤務の開始
+  actualEnd: Option[LocalDateTime],   // 実勤務の終了
   status: Work.Status,                // 勤務の状態
 ) extends EntityModel[Work.Id]
 
