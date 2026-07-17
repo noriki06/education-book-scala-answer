@@ -15,16 +15,17 @@ import education.part2.section4.library.persistence.EduRepositoryFacade
 object Answer8:
   def main(args: Array[String]): Unit =
     val ans3C = DIContainer.getInstance(classOf[Answer3Controller])
+    val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
     val ans5C = DIContainer.getInstance(classOf[Answer5Controller])
     val ans6C = DIContainer.getInstance(classOf[Answer6Controller])
     val ans7C = DIContainer.getInstance(classOf[Answer7Controller])
     val ans8C = DIContainer.getInstance(classOf[Answer8Controller])
 
-    println(Await.result(ans5C.invoke(ans3C.invoke()), ans4C, 60.seconds))
-    println(Await.result(ans6C.totalBook(), 60.seconds))
-    println(Await.result(ans6C.neverLend(), 60.seconds))
-    println(Await.result(ans7C.totalMonth(), 60.seconds))
-    println(Await.result(ans8C.invoke(), 60.seconds))
+    println(Await.result(ans5C.invoke(ans3C.invoke(), ans4C), 60.seconds))
+    println(Await.result(ans6C.totalBook(ans5C, ans4C, ans3C), 60.seconds))
+    println(Await.result(ans6C.neverLend(ans5C, ans4C, ans3C), 60.seconds))
+    println(Await.result(ans7C.totalMonth(ans5C, ans4C, ans3C), 60.seconds))
+    println(Await.result(ans8C.invoke(ans3C), 60.seconds))
 
 @Singleton
 class Answer8Controller @Inject()
