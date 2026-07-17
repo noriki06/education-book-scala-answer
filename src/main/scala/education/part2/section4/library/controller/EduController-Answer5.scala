@@ -1,8 +1,9 @@
 package education.part2.section4.library.controller
-
 import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ Await, ExecutionContext, Future }
+import scala.concurrent.duration.*
 import ixias.core.model.*
+import education.part2.section4.library.DIContainer
 import education.part2.section4.library.model.Book
 import education.part2.section4.library.model.Loan
 import education.part2.section4.library.persistence.EduRepositoryFacade
@@ -14,8 +15,11 @@ import education.part2.section4.library.persistence.EduRepositoryFacade
  */
 object Answer5:
   def main(args: Array[String])(using ExecutionContext): Unit =
-　val ans5C = DIContainer.getInstance(classOf[Answer5Controller])
-  Await.result(ans5C.invoke(), 60.seconds)
+    val ans5C = DIContainer.getInstance(classOf[Answer5Controller])
+    val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
+    val ans3C = DIContainer.getInstance(classOf[Answer3Controller])
+    Await.result(ans5C.invoke(ans3C.invoke(), ans4C), 60.seconds)
+    println("[OK] demo 完了")
 
 /**
  * 処理の入口クラス（Play で言うコントローラ相当）。
