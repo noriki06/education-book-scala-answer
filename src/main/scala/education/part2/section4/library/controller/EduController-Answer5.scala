@@ -18,7 +18,8 @@ object Answer5:
     val ans5C = DIContainer.getInstance(classOf[Answer5Controller])
     val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
     val ans3C = DIContainer.getInstance(classOf[Answer3Controller])
-    Await.result(ans5C.invoke(ans3C.invoke(), ans4C), 60.seconds)
+    val bookIds = ans3C.invoke()
+    Await.result(ans5C.invoke(bookIds, ans4C), 60.seconds)
     println("[OK] demo 完了")
 
 /**
@@ -31,8 +32,8 @@ class Answer5Controller @Inject()
   /**
    * 貸し出し表のメソッド
    */
-  def invoke(seqBooks: Future[Seq[Book.Id]], ans4C: Answer4Controller): Future[Seq[Either[Book.ErrorType, Loan.Id]]] =
-    val results = seqBooks.flatMap { ids =>
+  def invoke(bookIds: Future[Seq[Book.Id]], ans4C: Answer4Controller): Future[Seq[Either[Book.ErrorType, Loan.Id]]] =
+    val results = bookIds.flatMap { ids =>
       val idScala = ids(0)
       val idConan = ids(1)
       val idNeko = ids(2)
