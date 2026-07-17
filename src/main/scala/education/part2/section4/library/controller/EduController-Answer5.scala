@@ -1,5 +1,5 @@
 package education.part2.section4.library.controller
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ Await, ExecutionContext, Future }
 import education.part2.section4.library.DIContainer
 import education.part2.section4.library.model.Book
 import education.part2.section4.library.model.Loan
@@ -13,7 +13,6 @@ import ixias.core.model.*
  */
 object Answer5:
   def main(args: Array[String]): Unit =
-    val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
     val ans3C = DIContainer.getInstance(classOf[Answer3Controller])
     val bookIds = ans3C.invoke()
     val loans = invoke(bookIds)
@@ -44,5 +43,4 @@ object Answer5:
         loan9 <- ans4C.lend(idScala, "Bob",   LocalDateTime.of(2026,3,10,0,0))
       yield Seq(loan1, loan2, loan3, loan4, loan5, loan6, loan7, loan8, loan9)
     }
-
     results
