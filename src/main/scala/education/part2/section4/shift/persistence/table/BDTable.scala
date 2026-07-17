@@ -13,7 +13,8 @@ import education.part2.section4.shift.model.BD
  * User エンティティ ⇄ `user` テーブル の対応表
  */
 @Singleton
-class BDTable @Inject()(ctx: SlickDatabaseContext):
+class BDTable @Inject()(ctx: SlickDatabaseContext)
+  extends SlickTable[BD.Id, BD, JdbcProfile](ctx):
   import api.{ *, given }
 
   // --[ データソース ]--------------------------------------------------
