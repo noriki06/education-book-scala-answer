@@ -14,7 +14,6 @@ import education.part2.section4.library.persistence.EduRepositoryFacade
 object Answer6:
   def main(args: Array[String]): Unit =
     val ans6C = DIContainer.getInstance(classOf[Answer6Controller])
-    val ans5C = DIContainer.getInstance(classOf[Answer5Controller])
     val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
     val ans3C = DIContainer.getInstance(classOf[Answer3Controller])
     val bookIds = ans3C.invoke()

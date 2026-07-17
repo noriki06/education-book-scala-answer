@@ -16,16 +16,15 @@ object Answer5:
     val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
     val ans3C = DIContainer.getInstance(classOf[Answer3Controller])
     val bookIds = ans3C.invoke()
+    val loans = invoke(bookIds)
 
     println("[OK] demo 完了")
 
   /**
    * 貸し出し表のメソッド
    */
-  def invoke(): Future[Seq[Either[Book.ErrorType, Loan.Id]]] =
+  def invoke(bookIds: Future[Seq[Book.Id]]): Future[Seq[Either[Book.ErrorType, Loan.Id]]] =
     val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
-    val ans3C = DIContainer.getInstance(classOf[Answer3Controller])
-    val bookIds = ans3C.invoke()
 
     val results = bookIds.flatMap { ids =>
       val idScala = ids(0)
