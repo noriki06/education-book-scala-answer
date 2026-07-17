@@ -4,6 +4,7 @@ import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.concurrent.duration.*
 import education.part2.section4.library.DIContainer
 import education.part2.section4.library.model.Book
+
 import education.part2.section4.library.persistence.EduRepositoryFacade
 
 
@@ -19,7 +20,7 @@ object Answer8:
     val ans7C = DIContainer.getInstance(classOf[Answer7Controller])
     val ans8C = DIContainer.getInstance(classOf[Answer8Controller])
 
-    println(Await.result(ans5C.invoke(), 60.seconds))
+    println(Await.result(ans5C.invoke(ans3C.invoke()), ans4C, 60.seconds))
     println(Await.result(ans6C.totalBook(), 60.seconds))
     println(Await.result(ans6C.neverLend(), 60.seconds))
     println(Await.result(ans7C.totalMonth(), 60.seconds))
@@ -31,7 +32,7 @@ class Answer8Controller @Inject()
   /**
    * 各蔵書の「タイトル・カテゴリ・現在貸出中か」を出す。
    */
-  def invoke(): Future[Seq[(String, Book.Category, Book.State)]] =
+  def invoke(ans3C: Answer3Controller): Future[Seq[(String, Book.Category, Book.State)]] =
     for
       bookIds <- ans3C.invoke()
       books <- edu.book.filter(bookIds)
