@@ -20,12 +20,13 @@ object Answer8:
     val ans6C = DIContainer.getInstance(classOf[Answer6Controller])
     val ans7C = DIContainer.getInstance(classOf[Answer7Controller])
     val ans8C = DIContainer.getInstance(classOf[Answer8Controller])
+    val bookIds = ans3C.invoke()
 
-    println(Await.result(ans5C.invoke(ans3C.invoke(), ans4C), 60.seconds))
-    println(Await.result(ans6C.totalBook(ans5C, ans4C, ans3C), 60.seconds))
-    println(Await.result(ans6C.neverLend(ans5C, ans4C, ans3C), 60.seconds))
-    println(Await.result(ans7C.totalMonth(ans5C, ans4C, ans3C), 60.seconds))
-    println(Await.result(ans8C.invoke(ans3C), 60.seconds))
+    println(Await.result(ans5C.invoke(bookIds, ans4C), 60.seconds))
+    println(Await.result(ans6C.totalBook(ans5C, ans4C, bookIds), 60.seconds))
+    println(Await.result(ans6C.neverLend(ans5C, ans4C, bookIds), 60.seconds))
+    println(Await.result(ans7C.totalMonth(ans5C, ans4C, bookIds), 60.seconds))
+    println(Await.result(ans8C.invoke(bookIds), 60.seconds))
 
 @Singleton
 class Answer8Controller @Inject()
