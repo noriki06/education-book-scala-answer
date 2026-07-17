@@ -19,8 +19,8 @@ object Answer6:
     val ans3C = DIContainer.getInstance(classOf[Answer3Controller])
     val bookIds = ans3C.invoke()
     val loans = ans5C.invoke(bookIds, ans4C)
-    Await.result(ans6C.totalBook(ans5C, ans4C, bookIds), 60.seconds)
-    Await.result(ans6C.neverLend(ans5C, ans4C, bookIds), 60.seconds)
+    Await.result(ans6C.totalBook(loans), 60.seconds)
+    Await.result(ans6C.neverLend(loans, bookIds), 60.seconds)
     println("[OK] demo 完了")
 
 /**
@@ -33,9 +33,9 @@ class Answer6Controller @Inject()
   /**
    * 本ごとの貸し出し回数のメソッド
    */
-  def totalBook(loans: Future[Seq[Either[Book.ErrorType, Loan.Id]]], ans4C: Answer4Controller, bookIds: Future[Seq[Book.Id]]): Future[Map[String, Int]] =
+  def totalBook(loans: Future[Seq[Either[Book.ErrorType, Loan.Id]]]): Future[Map[String, Int]] =
     for
-      seqId <- ans5C.invoke(bookIds, ans4C)
+      seqId <- loans
       onlysec = seqId.collect { case Right(v) => v }
       loans <- edu.loan.filter(onlysec)
     yield
@@ -43,7 +43,7 @@ class Answer6Controller @Inject()
   /**
    *
    */
-  def neverLend(ans5C: Answer5Controller, ans4C: Answer4Controller, bookIds: Future[Seq[Book.Id]]): Future[Seq[String]] =
+  def neverLend(loans: Future[Seq[Either[Book.ErrorType, Loan.Id]]], bookIds: Future[Seq[Book.Id]]): Future[Seq[String]] =
     val allTitle =
       for
         ids <- bookIds
@@ -52,7 +52,7 @@ class Answer6Controller @Inject()
 
     val lendTitle =
       for
-        seqId <- ans5C.invoke(bookIds, ans4C)
+        seqId <- loans
         onlysec = seqId.collect { case Right(v) => v }
         loans <- edu.loan.filter(onlysec)
       yield
