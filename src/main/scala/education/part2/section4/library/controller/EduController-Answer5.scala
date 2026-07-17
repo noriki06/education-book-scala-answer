@@ -15,24 +15,10 @@ import education.part2.section4.library.persistence.EduRepositoryFacade
  */
 object Answer5:
   def main(args: Array[String]): Unit =
-    val ans5C = DIContainer.getInstance(classOf[Answer5Controller])
     val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
     val ans3C = DIContainer.getInstance(classOf[Answer3Controller])
     val bookIds = ans3C.invoke()
-    Await.result(ans5C.invoke(bookIds, ans4C), 60.seconds)
-    println("[OK] demo 完了")
 
-/**
- * 処理の入口クラス（Play で言うコントローラ相当）。
- * 依存はすべてコンストラクタ注入で受け取る（edu も ExecutionContext も注入された値）。
- */
-@Singleton
-class Answer5Controller @Inject()
-  (edu: EduRepositoryFacade)(using ExecutionContext):
-  /**
-   * 貸し出し表のメソッド
-   */
-  def invoke(bookIds: Future[Seq[Book.Id]], ans4C: Answer4Controller): Future[Seq[Either[Book.ErrorType, Loan.Id]]] =
     val results = bookIds.flatMap { ids =>
       val idScala = ids(0)
       val idConan = ids(1)
@@ -53,3 +39,4 @@ class Answer5Controller @Inject()
     }
 
     results
+    println("[OK] demo 完了")
