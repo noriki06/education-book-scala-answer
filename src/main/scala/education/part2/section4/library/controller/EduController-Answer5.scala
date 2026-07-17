@@ -1,10 +1,8 @@
 package education.part2.section4.library.controller
 
 import javax.inject.{ Inject, Singleton }
-import scala.concurrent.{ Await, ExecutionContext, Future }
-import scala.concurrent.duration.*
+import scala.concurrent.{ ExecutionContext, Future }
 import ixias.core.model.*
-import education.part2.section4.library.DIContainer
 import education.part2.section4.library.model.Book
 import education.part2.section4.library.model.Loan
 import education.part2.section4.library.persistence.EduRepositoryFacade
@@ -46,5 +44,7 @@ class Answer5Controller @Inject()
         loan7 <- ans4C.lend(idNeko,  "Alice", LocalDateTime.of(2026,2,20,0,0))
         loan8 <- ans4C.returnBook(idConan, "Bob",   LocalDateTime.of(2026,3,5,0,0))
         loan9 <- ans4C.lend(idScala, "Bob",   LocalDateTime.of(2026,3,10,0,0))
-      yield (loan1, loan2, loan3, loan4, loan5, loan6, loan7, loan8, loan9)
+      yield Seq(loan1, loan2, loan3, loan4, loan5, loan6, loan7, loan8, loan9)
     }
+
+    fm
