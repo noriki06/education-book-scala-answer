@@ -27,9 +27,9 @@ class Answer6Controller @Inject()
   /**
    * 本ごとの貸し出し回数のメソッド
    */
-  def totalBook(ans5C: Answer5Controller, ans3C: Answer3Controller): Future[Map[String, Int]] =
+  def totalBook(ans5C: Answer5Controller, ans4C: Answer4Controller, ans3C: Answer3Controller): Future[Map[String, Int]] =
     for
-      seqId <- ans5C.invoke()
+      seqId <- ans5C.invoke(ans3C.invoke(), ans4C)
       onlysec = seqId.collect { case Right(v) => v }
       loans <- edu.loan.filter(onlysec)
     yield
@@ -37,7 +37,7 @@ class Answer6Controller @Inject()
   /**
    *
    */
-  def neverLend(): Future[Seq[String]] =
+  def neverLend(ans5C: Answer5Controller, ans4C: Answer4Controller, ans3C: Answer3Controller): Future[Seq[String]] =
     val allTitle =
       for
         ids <- ans3C.invoke()
@@ -46,7 +46,7 @@ class Answer6Controller @Inject()
 
     val lendTitle =
       for
-        seqId <- ans5C.invoke()
+        seqId <- ans5C.invoke(ans3C.invoke(), ans4C)
         onlysec = seqId.collect { case Right(v) => v }
         loans <- edu.loan.filter(onlysec)
       yield
