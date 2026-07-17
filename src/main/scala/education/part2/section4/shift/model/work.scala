@@ -8,7 +8,8 @@ import ixias.core.model.*
 case class Work(
   id:        Option[User.Id],         // id
   name:      String,                  // 氏名
-  planEnd: LocalDateTime,             // 予定の開始
+  planStart: LocalDateTime,           // 予定の開始
+  planEnd: LocalDateTime,             // 予定の終了
   actualStart: Option[localdatetime], // 実勤務の開始
   actualEnd: Option[localdatetime],   // 実勤務の終了
   status: Work.Status,                // 勤務の状態
