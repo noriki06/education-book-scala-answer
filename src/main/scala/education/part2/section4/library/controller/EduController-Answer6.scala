@@ -18,6 +18,7 @@ object Answer6:
     val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
     val ans3C = DIContainer.getInstance(classOf[Answer3Controller])
     val bookIds = ans3C.invoke()
+    val loans = ans5C.invoke(bookIds, ans4C)
     Await.result(ans6C.totalBook(ans5C, ans4C, bookIds), 60.seconds)
     Await.result(ans6C.neverLend(ans5C, ans4C, bookIds), 60.seconds)
     println("[OK] demo 完了")
@@ -32,7 +33,7 @@ class Answer6Controller @Inject()
   /**
    * 本ごとの貸し出し回数のメソッド
    */
-  def totalBook(ans5C: Answer5Controller, ans4C: Answer4Controller, bookIds: Future[Seq[Book.Id]]): Future[Map[String, Int]] =
+  def totalBook(loans: Future[Seq[Either[Book.ErrorType, Loan.Id]]], ans4C: Answer4Controller, bookIds: Future[Seq[Book.Id]]): Future[Map[String, Int]] =
     for
       seqId <- ans5C.invoke(bookIds, ans4C)
       onlysec = seqId.collect { case Right(v) => v }
