@@ -22,7 +22,7 @@ object Answer5:
   /**
    * 貸し出し表のメソッド
    */
-  def invoke(bookIds: Future[Seq[Book.Id]]): Future[Seq[Either[Book.ErrorType, Loan.Id]]] =
+  def invoke(bookIds: Future[Seq[Book.Id]])(using ExecutionContext): Future[Seq[Either[Book.ErrorType, Loan.Id]]] =
     val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
 
     val results = bookIds.flatMap { ids =>
