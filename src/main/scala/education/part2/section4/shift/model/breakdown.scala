@@ -12,3 +12,7 @@ case class BD(
   overTime:     Duration,      // 超過時間
   lateNight:    Duration,      // 深夜時間
 )
+
+object BD:
+  val NormalStart: LocalTime = LocalTime.of(5, 0)
+  val NormalEnd: LocalTime = LocalTime.of(22, 0)
