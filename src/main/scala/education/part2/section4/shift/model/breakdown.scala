@@ -3,7 +3,7 @@ package education.part2.section4.shift.model
 import ixias.core.model.*
 
 /**
- * 勤務内訳エンティティ（前章で定義。DB を何も知らない純粋な case class）
+ * 勤務内訳
  */
 case class BD(
   actualStart:  LocalDateTime, // 実勤務の開始

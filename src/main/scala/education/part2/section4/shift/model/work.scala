@@ -6,8 +6,8 @@ import ixias.core.model.*
  * 勤務実績エンティティ（前章で定義。DB を何も知らない純粋な case class）
  */
 case class Work(
-  id:        Option[Work.Id],         // id
-  name:      String,                  // 氏名
+  id:        Option[Work.Id],         // 勤務id
+  name:      String,                  // シッター名
   planStart: LocalDateTime,           // 予定の開始
   planEnd: LocalDateTime,             // 予定の終了
   actualStart: Option[LocalDateTime], // 実勤務の開始

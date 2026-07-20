@@ -13,7 +13,7 @@ import education.part2.section4.shift.model.Work
  * User エンティティ ⇄ `user` テーブル の対応表
  */
 @Singleton
-class WorlTable @Inject()(ctx: SlickDatabaseContext)
+class WorkTable @Inject()(ctx: SlickDatabaseContext)
   extends SlickTable[Work.Id, Work, JdbcProfile](ctx):
   import api.{ *, given }
 
@@ -29,13 +29,13 @@ class WorlTable @Inject()(ctx: SlickDatabaseContext)
   val query = TableQuery[Table]
 
   // --[ テーブル定義 ]--------------------------------------------------
-  case class Table(tag: Tag) extends BasicTable(tag, "Work"):
+  case class Table(tag: Tag) extends BasicTable(tag, "shift"):
     import Work.*
 
     @pk  def id        = column[Id]           ("id",         O.UInt64, O.PrimaryKey, O.AutoInc)
     @col def name      = column[String]       ("name",       O.Varchar(64))
     @col def planStart    = column[LocalDateTime] ("plan_start",      O.Varchar(191))
-    @col def planEnd     = column[LocalDateTime] ("eplan_end",      O.Varchar(191))
-    @col def actualStart     = column[Status]       ("actual_start",      O.UInt8)
-    @col def actualEnd = column[LocalDateTime]("actual_end", O.Timestamp(onUpdate = true))
+    @col def planEnd     = column[LocalDateTime] ("plan_end",      O.Varchar(191))
+    @col def actualStart     = column[Option[LocalDateTime]]       ("actual_start",      O.UInt8)
+    @col def actualEnd = column[Option[LocalDateTime]]("actual_end", O.Timestamp(onUpdate = true))
     @col def status = column[Work.Status]      ("status",  O.UInt8)
