@@ -1,4 +1,4 @@
-package education.part2.section3.persistence
+package education.part2.section4.shift.persistence
 
 import javax.inject.{ Inject, Singleton }
 import ixias.db.slick.{ SlickBaseRepository, SlickDatabaseContext }

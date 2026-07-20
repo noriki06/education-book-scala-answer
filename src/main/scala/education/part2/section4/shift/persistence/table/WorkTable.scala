@@ -39,7 +39,7 @@ class WorkTable @Inject()(ctx: SlickDatabaseContext)
     @col def actualStart     = column[Option[LocalDateTime]]       ("actual_start",      O.Timestamp)
     @col def actualEnd = column[Option[LocalDateTime]]("actual_end", O.Timestamp)
     @col def status = column[Work.Status]      ("status",  O.UInt8)
-    @col def createdAt = column[LocalDateTime]("createda_t", O.Timestamp)
+    @col def createdAt = column[LocalDateTime]("created_at", O.Timestamp)
     @col def updatedAt = column[LocalDateTime]      ("updated_at",  O.Timestamp)
 
     def * = deriveColumns.mapTo[Work](onWrite = _.copy(updatedAt = LocalDateTime.now))
