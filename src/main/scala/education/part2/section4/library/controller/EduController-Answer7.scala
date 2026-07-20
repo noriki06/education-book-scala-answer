@@ -6,6 +6,7 @@ import education.part2.section4.library.DIContainer
 import education.part2.section4.library.model.Loan
 import education.part2.section4.library.model.Book
 import education.part2.section4.library.persistence.EduRepositoryFacade
+import scala.concurrent.ExecutionContext.Implicits.global
 
 
 
