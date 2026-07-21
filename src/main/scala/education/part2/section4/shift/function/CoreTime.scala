@@ -15,16 +15,9 @@ object CoreTime
 
     val lastDay = end.toLocalDate
 
-    def loop(
-        day: LocalDate,
-        total: Duration
-    ): Duration =
-
-      if day.isAfter(lastDay) then
-        total
-
+    def loop(day: LocalDate, total: Duration): Duration =
+      if day <= lastDay then total
       else
-
         val normalStart = day.atTime(5, 0)
         val normalEnd   = day.atTime(22, 0)
 

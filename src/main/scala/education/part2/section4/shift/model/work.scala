@@ -24,6 +24,6 @@ object Work:
   type EmbeddedId = Entity.EmbeddedId[Id, Work]
 
   enum Status(val code: Int) extends EnumStatus[Int]:
-    case plan    extends Status(1)
-    case active  extends Status(2)
-    case end     extends Status(3)
+    case Plan    extends Status(1)
+    case Active  extends Status(2)
+    case Finish     extends Status(3)

@@ -5,14 +5,14 @@ import ixias.core.model.*
 /**
  * 勤務内訳
  */
-case class BD(
+case class WorkBreakdown(
   actualStart:  LocalDateTime, // 実勤務の開始
   actualEnd:    LocalDateTime, // 実勤務の終了
-  allTime:      Duration,      // 総時間
-  overTime:     Duration,      // 超過時間
+  totalTime:      Duration,      // 総時間
+  overtime:     Duration,      // 超過時間
   lateNight:    Duration,      // 深夜時間
 )
 
-object BD:
+object WorkBreakdown:
   val NormalStart: LocalTime = LocalTime.of(5, 0)
   val NormalEnd: LocalTime = LocalTime.of(22, 0)
