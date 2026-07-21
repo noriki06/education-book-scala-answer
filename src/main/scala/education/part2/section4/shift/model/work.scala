@@ -13,11 +13,11 @@ case class Work(
   actualStart: Option[LocalDateTime], // 実勤務の開始
   actualEnd: Option[LocalDateTime],   // 実勤務の終了
   status: Work.Status,                // 勤務の状態
+  createdAt: LocalDateTime = Now,     // 作成日時
   updatedAt: LocalDateTime = Now,     // 更新日時
-  createdAt: LocalDateTime = Now      // 作成日時
-) extends EntityModel[Work.Id]
+  ) extends EntityModel[Work.Id]
 
-object Work:
+object Work
   object Id extends EntityId[Long]
   type Id         = Id.Repr
   type WithNoId   = Entity.WithNoId[Id, Work]

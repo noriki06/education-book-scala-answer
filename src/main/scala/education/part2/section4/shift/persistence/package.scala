@@ -20,5 +20,5 @@ package object persistence:
    */
   @Singleton
   class EduRepositoryFacade @Inject()(
-    val Work: WorkRepository,
+    val work: WorkRepository,
   )

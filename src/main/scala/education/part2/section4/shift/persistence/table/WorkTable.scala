@@ -15,7 +15,7 @@ import education.part2.section4.shift.model.Work
 @Singleton
 class WorkTable @Inject()(ctx: SlickDatabaseContext)
   extends SlickTable[Work.Id, Work, JdbcProfile](ctx):
-  import api.*
+  import api.{ *, given }
 
   // --[ データソース ]--------------------------------------------------
   // どの接続を使うか。DSN は "path://hostspec/database" 形式（02章の application.conf と対応）
@@ -40,6 +40,6 @@ class WorkTable @Inject()(ctx: SlickDatabaseContext)
     @col def actualEnd = column[Option[LocalDateTime]]("actual_end", O.Timestamp)
     @col def status = column[Work.Status]      ("status",  O.UInt8)
     @col def createdAt = column[LocalDateTime]("created_at", O.Timestamp)
-    @col def updatedAt = column[LocalDateTime]      ("updated_at",  O.Timestamp)
+    @col def updatedAt = column[LocalDateTime]      ("updated_at",  O.Timestamp(onUpdate = true))
 
     def * = deriveColumns.mapTo[Work](onWrite = _.copy(updatedAt = LocalDateTime.now))
