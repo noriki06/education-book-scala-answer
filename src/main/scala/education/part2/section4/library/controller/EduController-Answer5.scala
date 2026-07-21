@@ -27,11 +27,13 @@ object Answer5:
   def invoke(bookIds: Seq[Book.Id])(using ExecutionContext): Future[Seq[Either[Book.ErrorType, Loan.Id]]] =
     val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
 
-    val books = edu.book.filter(bookIds).map {
-      case Some(book) => book.title
-      case None       => println("見つかりませんでした")
-    }
-
+    for {
+      ids   <- bookIds
+      books <- edu.book.filter
+      idScala <- book.get("Scala入門") match {
+        case Some(book) => book.map(b => b.title -> b.id).toMap
+        case None     => Left("IDがありません")
+      }
     val results =
       for
         loan1 <- ans4C.lend(idScala, "Alice", LocalDateTime.of(2026,1,10,0,0))
