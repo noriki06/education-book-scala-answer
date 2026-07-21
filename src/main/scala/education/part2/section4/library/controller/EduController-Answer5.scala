@@ -1,10 +1,12 @@
 package education.part2.section4.library.controller
-import scala.concurrent.{ ExecutionContext, Future }
+
+import scala.concurrent.{ Await, ExecutionContext, Future }
 import education.part2.section4.library.DIContainer
 import education.part2.section4.library.model.Book
 import education.part2.section4.library.model.Loan
 import scala.concurrent.ExecutionContext.Implicits.global
 import ixias.core.model.*
+import scala.concurrent.duration.*
 
 
 /**
@@ -14,7 +16,7 @@ import ixias.core.model.*
 object Answer5:
   def main(args: Array[String]): Unit =
     val ans3C = DIContainer.getInstance(classOf[Answer3Controller])
-    val bookIds = ans3C.invoke()
+    val bookIds = Await.result(ans3C.invoke(), 60.seconds)
     val loans = invoke(bookIds)
 
     println("[OK] demo 完了")
@@ -22,15 +24,15 @@ object Answer5:
   /**
    * 貸し出し表のメソッド
    */
-  def invoke(bookIds: Future[Seq[Book.Id]])(using ExecutionContext): Future[Seq[Either[Book.ErrorType, Loan.Id]]] =
+  def invoke(bookIds: Seq[Book.Id])(using ExecutionContext): Future[Seq[Either[Book.ErrorType, Loan.Id]]] =
     val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
 
-    val results = bookIds.flatMap { ids =>
-      val idScala = ids(0)
-      val idConan = ids(1)
-      val idNeko = ids(2)
-      val idJamp = ids(3)
-      val idRefa = ids(4)
+    val books = edu.book.filter(bookIds).map {
+      case Some(book) => book.title
+      case None       => println("見つかりませんでした")
+    }
+
+    val results =
       for
         loan1 <- ans4C.lend(idScala, "Alice", LocalDateTime.of(2026,1,10,0,0))
         loan2 <- ans4C.lend(idConan, "Bob",   LocalDateTime.of(2026,1,12,0,0))
@@ -42,5 +44,5 @@ object Answer5:
         loan8 <- ans4C.returnBook(idConan, "Bob",   LocalDateTime.of(2026,3,5,0,0))
         loan9 <- ans4C.lend(idScala, "Bob",   LocalDateTime.of(2026,3,10,0,0))
       yield Seq(loan1, loan2, loan3, loan4, loan5, loan6, loan7, loan8, loan9)
-    }
+
     results
