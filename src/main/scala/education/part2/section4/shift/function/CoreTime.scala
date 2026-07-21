@@ -15,7 +15,7 @@ object CoreTime
     val lastDay  = end.toLocalDate
 
     // 開始日～終了日までの日付を作る
-    val days = Duration.between(firstDay, lastDay)
+    val days = ChronoUnit.DAYS.between(firstDay, lastDay)
 
     // 1日ずつ通常帯を計算して合計する
     days.foldLeft(Duration.ZERO) { (total, day) =>
