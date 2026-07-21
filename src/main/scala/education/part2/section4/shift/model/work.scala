@@ -17,7 +17,7 @@ case class Work(
   updatedAt: LocalDateTime = Now,     // 更新日時
   ) extends EntityModel[Work.Id]
 
-object Work
+object Work:
   object Id extends EntityId[Long]
   type Id         = Id.Repr
   type WithNoId   = Entity.WithNoId[Id, Work]
