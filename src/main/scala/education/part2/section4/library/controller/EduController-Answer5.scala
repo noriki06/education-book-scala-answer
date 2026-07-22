@@ -32,7 +32,7 @@ object Answer5:
       books <- edu.book.filter
       idScala <- book.get("Scala入門") match {
         case Some(book) => book.map(b => b.title -> b.id).toMap
-        case None     => Left("IDがありません")
+        case None     => println("IDがありません")
       }
     val results =
       for
