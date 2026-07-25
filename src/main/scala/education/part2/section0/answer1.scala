@@ -3,7 +3,7 @@ package education.part2.section0
 import ixias.core.model.*
 
 object Answer1:
-
+  // main
   object Member:
     object Id extends EntityId[Long]
     type Id = Id.Repr
