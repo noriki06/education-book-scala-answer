@@ -15,7 +15,7 @@ import education.part2.section4.shift.model.Work
 @Singleton
 class WorkTable @Inject()(ctx: SlickDatabaseContext)
   extends SlickTable[Work.Id, Work, JdbcProfile](ctx):
-  import api.{ *, given }
+  import api.*
 
   // --[ データソース ]--------------------------------------------------
   // どの接続を使うか。DSN は "path://hostspec/database" 形式（02章の application.conf と対応）

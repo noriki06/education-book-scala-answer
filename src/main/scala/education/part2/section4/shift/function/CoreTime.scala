@@ -28,4 +28,4 @@ object CoreTime extends Function2[LocalDateTime, LocalDateTime, Duration]:
         Duration.ZERO
 
     // 3. 各日の時間を計算して、すべて足し算
-    days.map(calculateDailyCoreTime).reduceOption(_.plus).getOrElse(Duration.ZERO)
+    days.foldLeft(Duration.ZERO)((acc, day) => acc.plus(calculateDailyCoreTime(day)))

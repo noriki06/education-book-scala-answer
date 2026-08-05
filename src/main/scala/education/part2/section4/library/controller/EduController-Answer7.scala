@@ -20,7 +20,7 @@ object Answer7:
     val ans4C = DIContainer.getInstance(classOf[Answer4Controller])
     val ans6C = DIContainer.getInstance(classOf[Answer6Controller])
     val ans7C = DIContainer.getInstance(classOf[Answer7Controller])
-    val bookIds = ans3C.invoke()
+    val bookIds = Await.result(ans3C.invoke(), 60.seconds)
     val loans = Answer5.invoke(bookIds)
     Await.result(ans7C.totalMonth(loans), 60.seconds)
     println("[OK] demo 完了")

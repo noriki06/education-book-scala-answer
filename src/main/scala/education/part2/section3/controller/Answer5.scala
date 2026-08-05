@@ -55,7 +55,7 @@ class Answer5Controller @Inject()(edu: EduRepositoryFacade)(using ExecutionConte
       users <- edu.user.filter(ids)
       _ = users.foreach(u => println(s"${u.v.name}：${u.v.state}"))
       deleteId = users.filter(_.v.state == User.Status.Withdrawn).map(_.id)
-      deleted <- edu.user.delete(deleteId)
+      deleted <- Future.sequence(deleteId.map(edu.user.delete))
       nowUser <- edu.user.filter(ids)
       _ = nowUser.foreach(u => println(s"${u.v.name}：${u.v.state}"))
     } yield ()
